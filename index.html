@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a4d68">
+<title>آب و فاضلاب استان فارس | جداول الگوی مصرف</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --deep:#0a4d68;
+    --deep-2:#083c52;
+    --teal:#0f8b8d;
+    --teal-light:#e6f5f4;
+    --accent:#14b8a6;
+    --bg:#f4f9f9;
+    --card:#ffffff;
+    --text:#122b33;
+    --muted:#5b7d84;
+    --border:#dbe9e9;
+    --danger:#b3441c;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Vazirmatn','Tahoma',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    -webkit-tap-highlight-color:transparent;
+  }
+  ::selection{background:var(--accent);color:#fff;}
+
+  /* ---------- Header ---------- */
+  header.appbar{
+    background:linear-gradient(135deg,var(--deep) 0%,var(--deep-2) 100%);
+    color:#fff;
+    padding:18px 20px 22px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    box-shadow:0 4px 18px rgba(10,77,104,.18);
+  }
+  .appbar-row{display:flex;align-items:center;gap:12px;}
+  .brand-mark{
+    width:42px;height:42px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.14);
+    border-radius:13px;font-size:22px;
+  }
+  .titles{flex:1;min-width:0;}
+  .titles h1{margin:0;font-size:16.5px;font-weight:800;letter-spacing:.2px;}
+  .titles p{margin:2px 0 0;font-size:11.5px;color:#cfe9ea;font-weight:500;}
+  .titles .sub-page-title{font-size:15px;font-weight:700;}
+
+  /* ---------- Layout containers ---------- */
+  main{padding:18px 16px 100px;max-width:760px;margin:0 auto;}
+  .screen{display:none;}
+  .screen.active{display:block;animation:fadeIn .25s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+  /* ---------- Home grid ---------- */
+  .home-intro{margin:4px 4px 16px;color:var(--muted);font-size:13.5px;line-height:1.9;}
+  .table-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+  .table-card{
+    display:flex;align-items:center;gap:14px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 16px;
+    cursor:pointer;
+    text-align:right;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    box-shadow:0 1px 2px rgba(10,77,104,.04);
+  }
+  .table-card:active{transform:scale(.98);}
+  .table-card:hover{border-color:var(--teal);box-shadow:0 6px 18px rgba(10,77,104,.10);}
+  .table-card .icon{
+    width:52px;height:52px;border-radius:14px;flex-shrink:0;
+    background:var(--teal-light);
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+  }
+  .table-card .info{flex:1;min-width:0;}
+  .table-card .info h3{margin:0 0 3px;font-size:14.5px;font-weight:700;line-height:1.5;}
+  .table-card .info span{font-size:11.5px;color:var(--muted);}
+  .table-card .chev{color:var(--muted);font-size:14px;flex-shrink:0;}
+
+  /* ---------- Table view ---------- */
+  .data-table-wrap{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow-x:auto;
+    overflow-y:visible;
+    margin-top:4px;
+    max-height:70vh;
+    overflow-y:auto;
+  }
+  table.data-table{width:100%;border-collapse:collapse;font-size:12.3px;}
+  table.data-table thead th{
+    background:var(--deep);
+    color:#fff;
+    font-weight:700;
+    padding:10px 8px;
+    font-size:11.5px;
+    text-align:center;
+    line-height:1.4;
+    position:sticky;
+    top:0;
+    z-index:5;
+  }
+  table.data-table tbody td{
+    padding:10px 8px;
+    border-top:1px solid var(--border);
+    text-align:center;
+    vertical-align:top;
+    line-height:1.7;
+  }
+  table.data-table tbody td:nth-child(2){text-align:right;font-weight:600;}
+  table.data-table tbody td:last-child{text-align:right;color:var(--muted);font-size:11.3px;}
+  table.data-table tbody tr:nth-child(even){background:#fafdfd;}
+  table.data-table tbody tr.composite-row td{color:var(--muted);font-style:normal;}
+  .scroll-hint{font-size:11px;color:var(--muted);text-align:center;padding:8px 0 2px;}
+
+  /* ---------- Calculator ---------- */
+  .calc-section{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .calc-section h4{margin:0 0 12px;font-size:13.5px;font-weight:700;color:var(--deep);
+    display:flex;align-items:center;gap:6px;}
+  .field{margin-bottom:12px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{display:block;font-size:12.3px;font-weight:600;color:var(--text);margin-bottom:6px;}
+  .field .hint{font-size:10.8px;color:var(--muted);font-weight:400;margin-right:4px;}
+  input[type=text], input[type=number]{
+    width:100%;
+    padding:11px 12px;
+    border:1.5px solid var(--border);
+    border-radius:11px;
+    font-family:inherit;
+    font-size:13.5px;
+    background:#fbfefe;
+    color:var(--text);
+    outline:none;
+    transition:border-color .15s;
+  }
+  input[type=text]:focus, input[type=number]:focus{border-color:var(--teal);}
+  input::placeholder{color:#a9c0c4;}
+
+  .search-box{position:relative;}
+  .search-results{
+    margin-top:8px;
+    border:1.5px solid var(--border);
+    border-radius:11px;
+    max-height:260px;
+    overflow-y:auto;
+    display:none;
+    background:#fff;
+  }
+  .search-results.show{display:block;}
+  .search-result-item{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    border-bottom:1px solid var(--border);
+  }
+  .search-result-item:last-child{border-bottom:none;}
+  .search-result-item:hover{background:var(--teal-light);}
+  .search-result-item .sr-icon{font-size:18px;flex-shrink:0;}
+  .search-result-item .sr-text{flex:1;min-width:0;}
+  .search-result-item .sr-cat{font-size:12.5px;font-weight:600;}
+  .search-result-item .sr-table{font-size:10.7px;color:var(--muted);}
+
+  .selected-row-card{
+    display:flex;align-items:center;gap:10px;
+    background:var(--teal-light);
+    border:1.5px solid var(--teal);
+    border-radius:12px;
+    padding:11px 12px;
+    margin-top:8px;
+  }
+  .selected-row-card .sr-icon{font-size:20px;}
+  .selected-row-card .sr-text{flex:1;font-size:12.5px;font-weight:600;line-height:1.6;}
+  .selected-row-card .sr-clear{
+    background:none;border:none;color:var(--danger);font-size:13px;cursor:pointer;font-weight:700;flex-shrink:0;
+  }
+  .row-info-note{
+    margin-top:8px;font-size:11.3px;color:var(--muted);
+    background:var(--teal-light);border:1px dashed var(--teal);border-radius:10px;
+    padding:9px 12px;line-height:1.9;
+  }
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+  .calc-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:13px;
+    background:linear-gradient(135deg,#ff8a3d 0%,#e2461f 100%);
+    color:#fff;
+    font-family:inherit;
+    font-size:14.5px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:6px;
+    box-shadow:0 6px 18px rgba(226,70,31,.38);
+  }
+  .calc-btn:active{transform:scale(.99);}
+
+  .results-wrap{display:grid;grid-template-columns:1fr;gap:14px;margin-top:14px;}
+  @media(min-width:520px){.results-wrap{grid-template-columns:1fr 1fr;}}
+  .result-box{
+    border-radius:var(--radius);
+    padding:22px 20px;
+    color:#fff;
+  }
+  .result-box.volume{background:linear-gradient(135deg,#0f8b8d,#0a5f60);}
+  .result-box.money{background:linear-gradient(135deg,#0a4d68,#083047);}
+  .result-box h5{margin:0 0 14px;font-size:14.5px;font-weight:700;opacity:.92;display:flex;align-items:center;gap:6px;}
+  .result-box .big{font-size:29px;font-weight:800;margin-bottom:10px;direction:ltr;text-align:right;}
+  .result-box .big small{font-size:14px;font-weight:600;opacity:.85;}
+  .result-box .breakdown{font-size:11px;line-height:2;opacity:.92;border-top:1px solid rgba(255,255,255,.2);padding-top:8px;}
+  .result-box .breakdown div{display:flex;justify-content:space-between;}
+  .vol-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .vol-part{background:rgba(255,255,255,.14);border-radius:12px;padding:14px 10px;text-align:center;}
+  .vol-part-label{font-size:12px;opacity:.92;margin-bottom:8px;line-height:1.5;}
+  .vol-part-value{font-size:20px;font-weight:800;direction:ltr;}
+
+  .note-box{
+    font-size:11.3px;color:var(--muted);
+    background:#fbfefe;border:1px dashed var(--border);border-radius:11px;
+    padding:10px 12px;margin-top:12px;line-height:1.9;
+  }
+
+  /* ---------- FAB ---------- */
+  .fab{
+    position:fixed;
+    left:18px;bottom:22px;
+    width:58px;height:58px;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--accent),var(--teal));
+    color:#fff;border:none;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 22px rgba(15,139,141,.4);
+    cursor:pointer;
+    z-index:30;
+  }
+  .fab:active{transform:scale(.94);}
+  .fab svg{width:30px;height:30px;}
+
+  .fab-back{
+    position:fixed;
+    right:18px;bottom:22px;
+    width:58px;height:58px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--deep),var(--deep-2));
+    color:#fff;border:none;
+    font-size:24px;font-weight:700;
+    display:none;align-items:center;justify-content:center;
+    box-shadow:0 8px 22px rgba(10,77,104,.4);
+    cursor:pointer;
+    z-index:30;
+  }
+  .fab-back.show{display:flex;}
+  .fab-back:active{transform:scale(.94);}
+
+  /* ---------- misc ---------- */
+  .empty-state{text-align:center;padding:30px 10px;color:var(--muted);font-size:12.5px;}
+  a.plain{color:inherit;text-decoration:none;}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-row">
+    <div class="brand-mark">💧</div>
+    <div class="titles">
+      <h1 id="headerTitle">آب و فاضلاب استان فارس</h1>
+      <p id="headerSub">جداول دهگانه الگوی مصرف و ظرفیت قراردادی</p>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== HOME SCREEN ===================== -->
+  <section class="screen active" id="screen-home">
+    <p class="home-intro">یکی از جداول زیر را برای مشاهده الگوی مصرف انتخاب کنید، یا از دکمه ماشین‌حساب برای محاسبه سریع حجم و مبلغ استفاده کنید.</p>
+    <div class="table-grid" id="tableGrid"></div>
+  </section>
+
+  <!-- ===================== TABLE VIEW SCREEN ===================== -->
+  <section class="screen" id="screen-table">
+    <div class="data-table-wrap">
+      <table class="data-table" id="dataTable"></table>
+    </div>
+    <p class="scroll-hint">◂ برای مشاهده کامل جدول، به چپ و راست بکشید ▸</p>
+  </section>
+
+  <!-- ===================== CALCULATOR SCREEN ===================== -->
+  <section class="screen" id="screen-calc">
+
+    <div class="calc-section">
+      <h4>🔍 جست‌وجو و انتخاب دسته‌بندی</h4>
+      <div class="field search-box">
+        <label>نام دسته‌بندی مصرف را جست‌وجو کنید</label>
+        <input type="text" id="searchInput" placeholder="مثلاً: هتل، رستوران، مسجد، نانوایی ...">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+      <div id="selectedRowWrap"></div>
+    </div>
+
+    <div class="calc-section">
+      <h4>📐 مقادیر مصرف</h4>
+      <div class="two-col">
+        <div class="field">
+          <label id="qtyLabel">تعداد واحد</label>
+          <input type="number" inputmode="decimal" id="qtyInput" placeholder="0">
+        </div>
+        <div class="field" id="extraQtyField" style="display:none;">
+          <label id="extraQtyLabel">تعداد واحد اضافه</label>
+          <input type="number" inputmode="decimal" id="extraQtyInput" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-section">
+      <h4>💰 پارامترهای نرخ‌گذاری</h4>
+      <div class="two-col">
+        <div class="field">
+          <label>قیمت آب آزاد <span class="hint">(ریال بر متر مکعب)</span></label>
+          <input type="number" inputmode="decimal" id="freeWaterPriceInput" placeholder="0">
+        </div>
+        <div class="field">
+          <label>ضریب شهر <span class="hint">(پیش‌فرض ۱)</span></label>
+          <input type="number" inputmode="decimal" id="cityCoefInput" placeholder="1">
+        </div>
+      </div>
+      <div class="field">
+        <label>مدت استفاده غیرمجاز <span class="hint">(<span style="font-weight:700;font-size:12.5px;">روز</span> — در صورت وجود انشعاب غیرمجاز/پلمب)</span></label>
+        <input type="number" inputmode="decimal" id="illegalDaysInput" placeholder="0 روز">
+      </div>
+    </div>
+
+    <button class="calc-btn" id="calcBtn">محاسبه حجم و مبلغ</button>
+
+    <div class="results-wrap" id="resultsWrap" style="display:none;">
+      <div class="result-box volume">
+        <h5>💧 احجام آب</h5>
+        <div class="vol-split">
+          <div class="vol-part">
+            <div class="vol-part-label">ظرفیت قراردادی</div>
+            <div class="vol-part-value" id="stdVolOut">۰ m³</div>
+          </div>
+          <div class="vol-part">
+            <div class="vol-part-label">حجم دوره غیرمجاز</div>
+            <div class="vol-part-value" id="illVolOut">۰ m³</div>
+          </div>
+        </div>
+      </div>
+      <div class="result-box money">
+        <h5>﷼ مبلغ دوره غیرمجاز</h5>
+        <div class="big" id="illCostOut">۰ <small>ریال</small></div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer style="text-align:center;padding:10px 16px 90px;color:var(--muted);font-size:11px;line-height:2;">
+  تهیه‌کننده: <span style="font-weight:700;">مجید امیری‌زاده</span> — شرکت آب و فاضلاب استان فارس
+</footer>
+
+<button class="fab" id="fabCalc" title="ماشین‌حساب">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="4" y="2" width="16" height="20" rx="3.2" stroke="white" stroke-width="1.6"/>
+    <rect x="6.3" y="4.3" width="11.4" height="4.6" rx="1" fill="white" fill-opacity="0.95"/>
+    <rect x="6.3" y="11" width="3.1" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
+    <rect x="10.45" y="11" width="3.1" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
+    <rect x="14.6" y="11" width="3.1" height="6.6" rx="0.9" fill="white" fill-opacity="0.95"/>
+    <rect x="6.3" y="14.5" width="3.1" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
+    <rect x="10.45" y="14.5" width="3.1" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
+    <rect x="6.3" y="18" width="7.25" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
+  </svg>
+</button>
+<button class="fab-back" id="backBtn" title="بازگشت">›</button>
+
+<script>
+/* =========================================================================
+   داده جداول دهگانه — ساختار قابل توسعه
+   ------------------------------------------------------------------------
+   برای افزودن جدول جدید، فقط یک آبجکت جدید با همین ساختار به آرایه
+   TABLES اضافه کنید. هیچ بخش دیگری از کد نیاز به تغییر ندارد:
+
+   {
+     id: 4,                          // شماره یکتا
+     icon: "🏭",                     // شکلک نمایشی در صفحه اول
+     title: "عنوان جدول",
+     rows: [
+       {
+         row: 1,
+         category: "نام دسته‌بندی",
+         unit: "واحد محاسبه",
+         literPerDay: 100,           // لیتر در روز به ازای واحد (یا null)
+         m3PerMonth: 3,              // متر مکعب در ماه به ازای واحد (یا null)
+         minMonthly: null,           // حداقل مصرف ماهانه (متر مکعب) یا null
+         extra: null,                // یا { label:'...', literPerDay:.., m3PerMonth:.. }
+         desc: "توضیحات",
+         composite: false            // true فقط برای ردیف‌های تجمیعی/غیرقابل‌محاسبه مستقیم
+       }
+     ]
+   }
+   ========================================================================= */
+
+const TABLES = [
+  {
+    id: 1,
+    icon: "🏨",
+    title: "هتل، مسافرخانه، مهمانسرا، خوابگاه، پانسیون",
+    rows: [
+      { row:1, category:"هتل چهار ستاره و لوکس (تمام امکانات رفاهی)", unit:"اتاق یک تا دو تخته",
+        literPerDay:450, m3PerMonth:13.5, minMonthly:null,
+        extra:{ label:"به ازای هر تخت اضافه بر دو تخت", literPerDay:200, m3PerMonth:6 },
+        desc:"شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات هتل.", composite:false },
+      { row:2, category:"هتل تا سه ستاره", unit:"اتاق یک تا دو تخته",
+        literPerDay:350, m3PerMonth:10.5, minMonthly:null,
+        extra:{ label:"به ازای هر تخت اضافه بر دو تخت", literPerDay:150, m3PerMonth:4.5 },
+        desc:"شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات هتل.", composite:false },
+      { row:3, category:"مسافرخانه و مهمان‌پذیر بدون حمام اختصاصی", unit:"تخت",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات.", composite:false },
+      { row:4, category:"پانسیون و خوابگاه دانشجویی یا دانش‌آموزی", unit:"دانشجو یا محصل",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات.", composite:false },
+      { row:5, category:"مراکز نگهداری معلولین، ایتام و آسایشگاه سالمندان", unit:"هر نفر خدمت‌گیرنده مقیم",
+        literPerDay:200, m3PerMonth:6, minMonthly:null, extra:null,
+        desc:"شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات.", composite:false },
+    ]
+  },
+  {
+    id: 2,
+    icon: "🍽️",
+    title: "رستوران، کبابی، پیتزا فروشی، بستنی فروشی و نانوائی",
+    rows: [
+      { row:1, category:"رستوران معمولی", unit:"متر مربع مساحت اعیان",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:2, category:"کبابی، حلیم فروشی، طباخی، قهوه‌خانه", unit:"متر مربع مساحت اعیان",
+        literPerDay:67, m3PerMonth:2, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:3, category:"ساندویچی، پیتزا فروشی، کافی شاپ، بستنی فروشی", unit:"متر مربع مساحت اعیان",
+        literPerDay:33, m3PerMonth:1, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:4, category:"آشپزخانه (محل طبخ و توزیع غذا)", unit:"متر مربع مساحت اعیان",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:5, category:"نانوایی سنتی", unit:"هر کیلو آرد مصرفی روزانه",
+        literPerDay:1.5, m3PerMonth:0.045, minMonthly:20, extra:null,
+        desc:"حداقل ۲۰ متر مکعب در ماه.", composite:false },
+      { row:6, category:"نانوایی فانتزی (نان ماشینی)", unit:"هر کیلو آرد مصرفی روزانه",
+        literPerDay:2, m3PerMonth:0.06, minMonthly:30, extra:null,
+        desc:"حداقل ۳۰ متر مکعب در ماه.", composite:false },
+      { row:7, category:"نانوایی صنعتی", unit:"ظرفیت تولید (کیلو در روز)",
+        literPerDay:2, m3PerMonth:0.06, minMonthly:null, extra:null,
+        desc:"طبق پروانه.", composite:false },
+      { row:8, category:"کارگاه شیرینی‌پزی", unit:"هر متر مربع فضای کارگاه",
+        literPerDay:20, m3PerMonth:0.6, minMonthly:20, extra:null,
+        desc:"حداقل ۲۰ متر مکعب در ماه.", composite:false },
+      { row:9, category:"کلوچه‌پزی", unit:"هر متر مربع فضای کارگاه",
+        literPerDay:20, m3PerMonth:0.6, minMonthly:15, extra:null,
+        desc:"حداقل ۱۵ متر مکعب در ماه.", composite:false },
+    ]
+  },
+  {
+    id: 3,
+    icon: "🕌",
+    title: "مسجد، زیارتگاه، سایر معابد، سینما و تئاتر",
+    rows: [
+      { row:1, category:"اماکن مذهبی و عبادی (مسجد، حسینیه، تکیه، زیارتگاه و معابد سایر ادیان)", unit:"متر مربع اعیان (به‌استثنای فضاهای تجاری، اقتصادی و ورزشی)",
+        literPerDay:5, m3PerMonth:0.15, minMonthly:30, extra:null,
+        desc:"حداقل ۳۰ متر مکعب در ماه.", composite:false },
+      { row:2, category:"گورستان", unit:"متر مربع مساحت عرصه",
+        literPerDay:0.5, m3PerMonth:0.015, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:3, category:"سالن‌های سینما و تئاتر", unit:"تعداد صندلی",
+        literPerDay:10, m3PerMonth:0.3, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:4, category:"موزه، کتابخانه و سایر مکان‌های فرهنگی", unit:"متر مربع اعیان",
+        literPerDay:3.3, m3PerMonth:0.1, minMonthly:null, extra:null,
+        desc:"", composite:false },
+      { row:5, category:"مجتمع‌های سینمایی", unit:"—",
+        literPerDay:null, m3PerMonth:null, minMonthly:null, extra:null,
+        desc:"ظرفیت قراردادی از تجمیع ظرفیت قراردادی سالن‌های سینما، رستوران‌ها، بوفه و سایر امکانات نظیر مراکز ورزشی مطابق جداول مربوطه محاسبه می‌شود.", composite:true },
+      { row:6, category:"فرهنگسرا", unit:"—",
+        literPerDay:null, m3PerMonth:null, minMonthly:null, extra:null,
+        desc:"ظرفیت قراردادی از تجمیع ظرفیت قراردادی سالن‌های سینما، رستوران‌ها، بوفه و سایر امکانات نظیر مراکز ورزشی مطابق جداول مربوطه محاسبه می‌شود.", composite:true },
+    ]
+  },
+
+  {
+    id: 4,
+    icon: "🎓",
+    title: "دانشگاه، دانشکده، مدارس دینی و مدارس معمولی",
+    rows: [
+      { row:1, category:"دانشگاه، دانشکده، مدارس عالی و مراکز فنی حرفه‌ای", unit:"دانشجو",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null,
+        desc:"شامل تمام مصارف تهیه و سرو ناهار، فضای سبز، مصرف کارکنان و هیئت علمی و سایر مصارف.", composite:false },
+      { row:2, category:"مدارس علوم دینی روزانه", unit:"تعداد طلبه",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null,
+        desc:"شامل تمام مصارف تهیه و سرو ناهار، فضای سبز، مصرف کارکنان، و سایر مصارف.", composite:false },
+      { row:3, category:"مدارس علوم دینی شبانه‌روزی", unit:"طلبه مقیم",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"با احتساب تمام مصارف شامل تهیه و سرو غذا، فضای سبز، مصرف کارکنان، و سایر مصارف.", composite:false },
+      { row:4, category:"مراکز فنی حرفه‌ای و سایر مدارس عالی شبانه‌روزی", unit:"دانشجوی مقیم",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"با احتساب تمام مصارف شامل تهیه و سرو غذا، فضای سبز، مصرف کارکنان، و سایر مصارف.", composite:false },
+      { row:5, category:"مدرسه و آموزشگاه غیر شبانه‌روزی", unit:"تعداد محصل",
+        literPerDay:15, m3PerMonth:0.45, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف. در مدارس چند شیفته، تعداد محصل برابر با احتساب کلیه شیفت‌ها صورت می‌پذیرد.", composite:false },
+      { row:6, category:"مدرسه و آموزشگاه شبانه‌روزی", unit:"تعداد محصل",
+        literPerDay:120, m3PerMonth:3.6, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:7, category:"آمادگی و مهد کودک", unit:"تعداد کودک",
+        literPerDay:80, m3PerMonth:2.4, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+    ]
+  },
+  {
+    id: 5,
+    icon: "🏥",
+    title: "بیمارستان، درمانگاه، آزمایشگاه، مطب و داروخانه",
+    rows: [
+      { row:1, category:"انواع بیمارستان (خصوصی، دولتی، معمولی، آموزشی، تخصصی و عمومی)", unit:"تعداد تخت",
+        literPerDay:350, m3PerMonth:10.5, minMonthly:null, extra:null,
+        desc:"شامل مصرف کلیه کارکنان، خدمه مقیم و کادر پزشکی، آتش‌نشانی و سایر مصارف.", composite:false },
+      { row:2, category:"درمانگاه، آزمایشگاه، مجتمع درمانی", unit:"مساحت اعیان به متر مربع",
+        literPerDay:10, m3PerMonth:0.3, minMonthly:null, extra:null,
+        desc:"در صورت شبانه‌روزی بودن، ۱۳ لیتر در روز محاسبه می‌شود.", composite:false },
+      { row:3, category:"مطب پزشک عمومی، تخصصی، روانپزشک و داروخانه", unit:"یک مطب مستقل",
+        literPerDay:330, m3PerMonth:10, minMonthly:null, extra:null,
+        desc:"هر واحد آپارتمان یک مطب محسوب می‌شود.", composite:false },
+      { row:4, category:"مطب دندانپزشکی", unit:"یک مطب مستقل",
+        literPerDay:660, m3PerMonth:20, minMonthly:null, extra:null,
+        desc:"هر واحد آپارتمان یک مطب محسوب می‌شود.", composite:false },
+      { row:5, category:"ساختمان پزشکان", unit:"تعداد مطب",
+        literPerDay:330, m3PerMonth:10, minMonthly:null, extra:null,
+        desc:"دندانپزشک بر اساس جدول شماره ۱۲.", composite:false },
+      { row:6, category:"توضیح تکمیلی: کلینیک، پلی‌کلینیک و دی‌کلینیک", unit:"—",
+        literPerDay:null, m3PerMonth:null, minMonthly:null, extra:null,
+        desc:"برای مراکز درمانی نظیر کلینیک، پلی‌کلینیک و دی‌کلینیک، با توجه به تعداد تخت موجود و مساحت اعیان ساختمان، با استفاده از ارقام ردیف‌های ۱ و ۲ همین جدول، ظرفیت قراردادی هر بخش محاسبه و مجموع آنها به عنوان ظرفیت قراردادی واحد منظور می‌گردد.", composite:true },
+    ]
+  },
+  {
+    id: 6,
+    icon: "🛒",
+    title: "مجتمع‌های تجاری، سوپر مارکت و فروشگاه",
+    rows: [
+      { row:1, category:"پاساژ و مجتمع‌های فقط تجاری کم‌مصرف", unit:"تعداد واحد تجاری",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:2, category:"مجتمع‌های مختلط تجاری، اداری و سایر کاربری‌ها", unit:"—",
+        literPerDay:null, m3PerMonth:null, minMonthly:null, extra:null,
+        desc:"بر حسب نوع کاربری، به‌صورت مجموع ظرفیت‌های قراردادی با احتساب ۳ متر مکعب در ماه برای واحدهای کم‌مصرف.", composite:true },
+      { row:3, category:"سوپر مارکت و فروشگاه‌های بزرگ", unit:"هر متر مربع اعیان",
+        literPerDay:10, m3PerMonth:0.3, minMonthly:5, extra:null,
+        desc:"حداقل سوپرمارکت تک‌واحدی ۵ متر مکعب در ماه.", composite:false },
+      { row:4, category:"فروشگاه گوشت قرمز و سفید (مرغ، ماهی، گوساله، گوسفند، شترمرغ، بوقلمون، بلدرچین)", unit:"متر مربع مساحت اعیان",
+        literPerDay:20, m3PerMonth:0.6, minMonthly:10, extra:null,
+        desc:"حداقل ۱۰ متر مکعب در ماه.", composite:false },
+      { row:5, category:"فروشگاه میوه و سبزی، گل و آبمیوه‌فروشی", unit:"متر مربع مساحت اعیان",
+        literPerDay:10, m3PerMonth:0.3, minMonthly:10, extra:null,
+        desc:"حداقل ۱۰ متر مکعب در ماه.", composite:false },
+      { row:6, category:"انشعاب مستقل برای انواع مغازه‌ها و واحدهای متعارف کم‌مصرف", unit:"واحد تجاری",
+        literPerDay:100, m3PerMonth:3, minMonthly:5, extra:null,
+        desc:"در صورت استفاده از انشعاب مستقل، حداقل ظرفیت قراردادی هر واحد ۵ متر مکعب در ماه.", composite:false },
+      { row:7, category:"بازار روز", unit:"—",
+        literPerDay:null, m3PerMonth:null, minMonthly:null, extra:null,
+        desc:"جمع مساحت غرفه‌ها در ۱۰ لیتر در روز ضرب شود و حداقل‌های ماهانه برای کل بازار در نظر گرفته شود، نه برای هر واحد.", composite:true },
+    ]
+  },
+  {
+    id: 7,
+    icon: "🏭",
+    title: "کارخانه و کارگاه تولیدی، تعمیرگاه، خشکشویی",
+    rows: [
+      { row:1, category:"کارخانجات", unit:"تعداد کارکنان",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null,
+        desc:"فقط برای شرب و بهداشت کارکنان. در صورت نیاز به آب در فرایند، طبق موافقت اصولی و پروانه یا کاتالوگ ماشین‌آلات محاسبه می‌شود.", composite:false },
+      { row:2, category:"انواع کارگاه‌ها نظیر قالی‌شویی و انواع گلخانه", unit:"تعداد کارکنان",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:3, category:"کارخانه شیر پاستوریزه و فرآورده‌های لبنی", unit:"هر کیلو شیر مصرفی روزانه",
+        literPerDay:2, m3PerMonth:0.06, minMonthly:null, extra:null,
+        desc:"ظرفیت طبق پروانه. شامل تمام موارد فرایندی، شرب و بهداشت کارکنان، فضای سبز و سایر مصارف.", composite:false },
+      { row:4, category:"کارگاه ماست‌بندی و پنیرسازی", unit:"هر کیلو شیر مصرفی روزانه",
+        literPerDay:2, m3PerMonth:0.06, minMonthly:null, extra:null,
+        desc:"ظرفیت طبق پروانه، شامل تمام مصارف فرایندی و جنبی.", composite:false },
+      { row:5, category:"مجتمع تعمیرگاهی", unit:"به ازای هر واحد",
+        literPerDay:133, m3PerMonth:4, minMonthly:null, extra:null,
+        desc:"ظرفیت به‌صورت حاصل‌ضرب تعداد واحدها در عدد ۴ محاسبه می‌شود.", composite:false },
+      { row:6, category:"تعمیرگاه مستقل اتومبیل", unit:"هر واحد",
+        literPerDay:300, m3PerMonth:9, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:7, category:"بنائی و کارگاه ساختمانی", unit:"متر مربع اعیان احداثی",
+        literPerDay:null, m3PerMonth:null, minMonthly:null, extra:null,
+        desc:"شامل شرب و بهداشت کارگران. کل میزان مصرف آب کارگاه ساختمانی و بنائی در طول مدت ساخت، به ازای هر متر مربع اعیانی احداثی، دو متر مکعب (۲۰۰۰ لیتر) است (رقم ثابت کل دوره، نه ماهانه).", composite:true },
+      { row:8, category:"شستشوی اتومبیل", unit:"هر جایگاه",
+        literPerDay:1000, m3PerMonth:30, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:9, category:"خشکشویی", unit:"هر ماشین خشکشویی",
+        literPerDay:1200, m3PerMonth:36, minMonthly:null, extra:null, desc:"", composite:false },
+    ]
+  },
+  {
+    id: 8,
+    icon: "🏟️",
+    title: "مصارف عمومی و مراکز خدماتی، استخر و گرمابه",
+    rows: [
+      { row:1, category:"زمین چمن ورزشگاه‌ها و فضای سبز مستقل پارک‌ها، میادین و بلوارها", unit:"متر مربع مساحت",
+        literPerDay:2, m3PerMonth:0.06, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:2, category:"آتش‌نشانی", unit:"هر تانکر فعال ایستگاه",
+        literPerDay:10000, m3PerMonth:300, minMonthly:null, extra:null,
+        desc:"برای خدمه در هر شیفت، طبق جدول اداره و دفاتر محاسبه و اضافه شود.", composite:false },
+      { row:3, category:"کمپ توریستی و پلاژهای دارای دوش و سایر سرویس‌های بهداشتی", unit:"هر واحد",
+        literPerDay:600, m3PerMonth:18, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:4, category:"کمپ توریستی محل برپایی چادر مسافرتی و پلاژهای بدون دوش", unit:"هر چادر",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:5, category:"استادیوم ورزشی", unit:"صندلی",
+        literPerDay:2, m3PerMonth:0.06, minMonthly:null, extra:null,
+        desc:"تمام مصارف غیر از زمین چمن.", composite:false },
+      { row:6, category:"سالن‌های ورزشی محلی مانند بدنسازی و بیلیارد", unit:"متر مربع اعیان",
+        literPerDay:12, m3PerMonth:0.36, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:7, category:"استخر", unit:"متر مربع مساحت استخر",
+        literPerDay:120, m3PerMonth:3.6, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف استخر و شناگران، سونا و سایر تجهیزات.", composite:false },
+      { row:8, category:"گرمابه", unit:"هر دوش",
+        literPerDay:500, m3PerMonth:15, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:9, category:"سرویس‌های بهداشتی عمومی", unit:"هر چشمه",
+        literPerDay:150, m3PerMonth:5, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:10, category:"آبخوری عمومی", unit:"هر شیر آب",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:11, category:"مصارف اشتراکی مجتمع‌های عمومی", unit:"هر واحد آپارتمان",
+        literPerDay:67, m3PerMonth:2, minMonthly:null, extra:null, desc:"", composite:false },
+    ]
+  },
+  {
+    id: 9,
+    icon: "🏛️",
+    title: "ادارات و مؤسسات دولتی و خصوصی",
+    rows: [
+      { row:1, category:"ادارات دولتی و خصوصی، دفاتر خدمات عمومی، دفاتر ازدواج و طلاق، دفاتر پستی، مراکز دولت الکترونیک، آژانس مسافرتی", unit:"تعداد کارمند",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:5, extra:null,
+        desc:"محاسبه ظرفیت قراردادی بر اساس تعداد کارمندان و افراد مقیم صورت می‌پذیرد و حداقل ۵ متر مکعب در ماه در نظر گرفته می‌شود (به استثنای مصرف فضاهای ورزشی).", composite:false },
+      { row:2, category:"مراکز نظامی و انتظامی — سرباز مقیم", unit:"هر سرباز مقیم",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:2, category:"مراکز نظامی و انتظامی — پرسنل مقیم", unit:"پرسنل مقیم",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:2, category:"مراکز نظامی و انتظامی — پرسنل غیر مقیم", unit:"پرسنل غیر مقیم",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:3, category:"زندان", unit:"هر زندانی",
+        literPerDay:150, m3PerMonth:4.5, minMonthly:null, extra:null,
+        desc:"شامل کلیه مصارف.", composite:false },
+      { row:4, category:"شهر بازی و پارک", unit:"مساحت عرصه (متر مربع)",
+        literPerDay:10, m3PerMonth:0.3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:5, category:"پایانه‌های مسافربری شهری", unit:"ظرفیت مسافر روزانه",
+        literPerDay:5, m3PerMonth:0.15, minMonthly:null, extra:null,
+        desc:"برای واحدهای تجاری و خدماتی، طبق جداول مربوطه محاسبه و اضافه شود.", composite:false },
+    ]
+  },
+  {
+    id: 10,
+    icon: "🐄",
+    title: "پرورش، نگهداری و کشتارگاه انواع دام و طیور",
+    rows: [
+      { row:1, category:"گاو شیری", unit:"رأس",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:2, category:"گوسفند", unit:"رأس",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:3, category:"اسب", unit:"رأس",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:4, category:"شترمرغ", unit:"قطعه",
+        literPerDay:10, m3PerMonth:0.3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:5, category:"بوقلمون", unit:"هر ۱۰۰ قطعه",
+        literPerDay:40, m3PerMonth:1.2, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:6, category:"مرغ و خروس", unit:"هر ۱۰۰ قطعه",
+        literPerDay:20, m3PerMonth:0.6, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:7, category:"کشتارگاه دام بزرگ", unit:"رأس دام",
+        literPerDay:200, m3PerMonth:6, minMonthly:null, extra:null,
+        desc:"تعداد کشتار بر اساس ظرفیت مشخص کشتارگاه تعیین می‌شود.", composite:false },
+      { row:8, category:"کشتارگاه دام کوچک", unit:"رأس دام",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+      { row:9, category:"کشتارگاه صنعتی مرغ و خروس", unit:"هر ۱۰۰ قطعه",
+        literPerDay:100, m3PerMonth:3, minMonthly:null, extra:null, desc:"", composite:false },
+    ]
+  },
+
+  // 👉 جداول بعدی را از همین‌جا به پایین اضافه کنید (با id، icon و title جدید)
+
+];
+
+/* ========================= توابع کمکی نمایش ========================= */
+const fa = n => Number(n).toLocaleString('fa-IR', {maximumFractionDigits:3});
+const rialFa = n => Math.round(n).toLocaleString('fa-IR');
+
+function renderHome(){
+  const grid = document.getElementById('tableGrid');
+  grid.innerHTML = '';
+  TABLES.forEach(t=>{
+    const card = document.createElement('div');
+    card.className = 'table-card';
+    card.innerHTML = `
+      <div class="icon">${t.icon}</div>
+      <div class="info">
+        <h3>${t.title}</h3>
+        <span>${t.rows.length} ردیف الگوی مصرف</span>
+      </div>
+      <div class="chev">‹</div>`;
+    card.onclick = ()=> openTable(t.id);
+    grid.appendChild(card);
+  });
+}
+
+function openTable(id){
+  const t = TABLES.find(x=>x.id===id);
+  if(!t) return;
+  const tbl = document.getElementById('dataTable');
+  tbl.innerHTML = `
+    <thead><tr>
+      <th>ردیف</th><th>دسته‌بندی</th><th>واحد محاسبه</th>
+      <th>لیتر در روز</th><th>متر مکعب در ماه</th><th>توضیحات</th>
+    </tr></thead>
+    <tbody>
+      ${t.rows.map(r=>`
+        <tr class="${r.composite?'composite-row':''}">
+          <td>${fa(r.row)}</td>
+          <td>${r.category}</td>
+          <td>${r.unit}</td>
+          <td>${r.composite?'—':(r.literPerDay!=null?fa(r.literPerDay):'—')}</td>
+          <td>${r.composite?'—':(r.m3PerMonth!=null?fa(r.m3PerMonth):'—')}</td>
+          <td>${[r.desc, r.extra?('➕ '+r.extra.label+': '+fa(r.extra.literPerDay)+' لیتر/روز ('+fa(r.extra.m3PerMonth)+' m³/ماه)'):'', r.minMonthly?('حداقل '+fa(r.minMonthly)+' m³/ماه'):''].filter(Boolean).join('<br>')}</td>
+        </tr>`).join('')}
+    </tbody>`;
+  document.getElementById('headerTitle').textContent = t.title;
+  document.getElementById('headerSub').textContent = 'جدول ' + fa(t.id);
+  showScreen('screen-table');
+}
+
+/* ========================= ناوبری بین صفحات ========================= */
+let currentScreen = 'home';
+function showScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name.replace('screen-','')).classList.add('active');
+  currentScreen = name.replace('screen-','');
+  const back = document.getElementById('backBtn');
+  if(currentScreen==='home'){
+    back.classList.remove('show');
+    document.getElementById('headerTitle').textContent = 'آب و فاضلاب استان فارس';
+    document.getElementById('headerSub').textContent = 'جداول دهگانه الگوی مصرف و ظرفیت قراردادی';
+  } else {
+    back.classList.add('show');
+    if(currentScreen==='calc'){
+      document.getElementById('headerTitle').textContent = 'ماشین‌حساب مصرف و صورتحساب';
+      document.getElementById('headerSub').textContent = 'محاسبه حجم و مبلغ بر اساس جداول دهگانه';
+    }
+  }
+  window.scrollTo(0,0);
+}
+document.getElementById('backBtn').onclick = ()=> showScreen('home');
+document.getElementById('fabCalc').onclick = ()=>{ resetCalcForm(); showScreen('calc'); };
+
+function resetCalcForm(){
+  selectedRow = null;
+  document.getElementById('selectedRowWrap').innerHTML = '';
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchResults').classList.remove('show');
+  document.getElementById('searchResults').innerHTML = '';
+  document.getElementById('qtyInput').value = '';
+  document.getElementById('extraQtyInput').value = '';
+  document.getElementById('illegalDaysInput').value = '';
+  document.getElementById('freeWaterPriceInput').value = '';
+  document.getElementById('cityCoefInput').value = '';
+  document.getElementById('extraQtyField').style.display = 'none';
+  document.getElementById('qtyLabel').textContent = 'تعداد واحد';
+  document.getElementById('resultsWrap').style.display = 'none';
+}
+
+/* ========================= جست‌وجوی دسته‌بندی در ماشین‌حساب ========================= */
+let selectedRow = null; // { table, row }
+
+const flatRows = [];
+TABLES.forEach(t=> t.rows.forEach(r=>{ if(!r.composite) flatRows.push({table:t, row:r}); }));
+
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+searchInput.addEventListener('input', ()=>{
+  const q = searchInput.value.trim();
+  if(!q){ searchResults.classList.remove('show'); searchResults.innerHTML=''; return; }
+  const matches = flatRows.filter(x => x.row.category.includes(q) || x.table.title.includes(q));
+  if(matches.length===0){
+    searchResults.innerHTML = `<div class="empty-state">نتیجه‌ای یافت نشد</div>`;
+  } else {
+    searchResults.innerHTML = matches.map((m,i)=>`
+      <div class="search-result-item" data-idx="${i}">
+        <div class="sr-icon">${m.table.icon}</div>
+        <div class="sr-text">
+          <div class="sr-cat">${m.row.category}</div>
+          <div class="sr-table">${m.table.title} · واحد: ${m.row.unit}</div>
+        </div>
+      </div>`).join('');
+    Array.from(searchResults.children).forEach((el,i)=>{
+      el.onclick = ()=> selectRow(matches[i]);
+    });
+  }
+  searchResults.classList.add('show');
+});
+
+function selectRow(m){
+  selectedRow = m;
+  searchInput.value = '';
+  searchResults.classList.remove('show');
+  searchResults.innerHTML = '';
+  const wrap = document.getElementById('selectedRowWrap');
+  const monthlyVal = m.row.m3PerMonth != null ? fa(m.row.m3PerMonth) + ' m³' : '—';
+  const extraInfo = m.row.extra ? ` • ${m.row.extra.label}: <b>${fa(m.row.extra.m3PerMonth)} m³</b>` : '';
+  wrap.innerHTML = `
+    <div class="selected-row-card">
+      <div class="sr-icon">${m.table.icon}</div>
+      <div class="sr-text">${m.row.category}<br><span style="font-weight:400;color:var(--muted);font-size:11px;">واحد محاسبه: ${m.row.unit}</span></div>
+      <button class="sr-clear" id="clearRowBtn">حذف</button>
+    </div>
+    <div class="row-info-note">واحد محاسبه: <b>${m.row.unit}</b> • مصرف ماهانه هر واحد (طبق جدول): <b>${monthlyVal}</b>${extraInfo}</div>`;
+  document.getElementById('clearRowBtn').onclick = ()=>{
+    selectedRow = null;
+    wrap.innerHTML = '';
+    document.getElementById('extraQtyField').style.display = 'none';
+  };
+  document.getElementById('qtyLabel').textContent = 'تعداد واحد (' + m.row.unit + ')';
+  const extraField = document.getElementById('extraQtyField');
+  if(m.row.extra){
+    extraField.style.display = 'block';
+    document.getElementById('extraQtyLabel').textContent = m.row.extra.label;
+  } else {
+    extraField.style.display = 'none';
+  }
+}
+
+/* ========================= محاسبه ========================= */
+function numOr0(id, fallback){
+  const v = document.getElementById(id).value;
+  if(v === '' || v === null || v === undefined) return fallback !== undefined ? fallback : 0;
+  const n = parseFloat(v);
+  return isNaN(n) ? (fallback !== undefined ? fallback : 0) : n;
+}
+
+document.getElementById('calcBtn').onclick = ()=>{
+  const qty        = numOr0('qtyInput', 0);
+  const extraQty   = numOr0('extraQtyInput', 0);
+  const illegalDays= numOr0('illegalDaysInput', 0);
+  const cityCoef   = numOr0('cityCoefInput', 1);
+  const freePrice  = numOr0('freeWaterPriceInput', 0);
+
+  const r = selectedRow ? selectedRow.row : null;
+
+  const litPerDay   = r && r.literPerDay   != null ? r.literPerDay   : 0;
+  const m3PerMonth  = r && r.m3PerMonth    != null ? r.m3PerMonth    : 0;
+  const extraLit    = r && r.extra ? r.extra.literPerDay : 0;
+  const extraM3     = r && r.extra ? r.extra.m3PerMonth  : 0;
+
+  // حجم دوره عادی (ماهانه)
+  let stdVolume = qty*m3PerMonth + extraQty*extraM3;
+  if(r && r.minMonthly != null && qty > 0){
+    stdVolume = Math.max(stdVolume, r.minMonthly);
+  }
+
+  // حجم دوره غیرمجاز (بر مبنای مصرف روزانه × تعداد روز)
+  const illVolume = illegalDays * ( qty*litPerDay + extraQty*extraLit ) / 1000;
+
+  const totalVolume = stdVolume + illVolume;
+
+  const stdCost = stdVolume * freePrice * cityCoef;
+  const illCost = illVolume * freePrice * cityCoef;
+  const totalCost = stdCost + illCost;
+
+  document.getElementById('stdVolOut').textContent  = fa(stdVolume.toFixed(3)) + ' m³';
+  document.getElementById('illVolOut').textContent  = fa(illVolume.toFixed(3)) + ' m³';
+
+  document.getElementById('illCostOut').innerHTML = rialFa(illCost) + ' <small>ریال</small>';
+
+  document.getElementById('resultsWrap').style.display = 'grid';
+  document.getElementById('resultsWrap').scrollIntoView({behavior:'smooth', block:'nearest'});
+};
+
+/* ========================= راه‌اندازی ========================= */
+renderHome();
+
+/* ========================= ثبت Service Worker برای PWA ========================= */
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+  <!-- ===================== پیام نصب PWA ===================== -->
+<div id="installBanner" style="display:none; position:fixed; bottom:85px; left:16px; right:16px; background:var(--card); border:2px solid var(--teal); border-radius:16px; padding:16px 18px; box-shadow:0 10px 30px rgba(10,77,104,0.2); z-index:50; direction:rtl; font-family:'Vazirmatn','Tahoma',sans-serif;">
+  <div style="display:flex; align-items:center; gap:14px;">
+    <div style="font-size:32px; flex-shrink:0;">💧</div>
+    <div style="flex:1;">
+      <strong style="font-size:15px;">اپلیکیشن آب و فاضلاب فارس</strong><br>
+      <span style="font-size:13px; color:var(--muted);">برای دسترسی سریع‌تر نصب کنید</span>
+    </div>
+    <button id="installBtn" style="padding:12px 24px; background:linear-gradient(135deg,var(--accent),var(--teal)); color:white; border:none; border-radius:12px; font-weight:700; font-size:14.5px; white-space:nowrap; font-family:'Vazirmatn','Tahoma',sans-serif;">نصب اپ</button>
+  </div>
+</div>
+
+<script>
+// نصب PWA
+let deferredPrompt = null;
+
+const installBanner = document.getElementById('installBanner');
+const installBtn = document.getElementById('installBtn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBanner.style.display = 'block';
+});
+
+installBtn.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    
+    if (outcome === 'accepted') {
+      installBanner.style.display = 'none';
+    }
+    deferredPrompt = null;
+  }
+});
+
+// مخفی کردن اگر قبلاً نصب شده باشد
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  installBanner.style.display = 'none';
+}
+</script>
+</body>
+</html>
+
