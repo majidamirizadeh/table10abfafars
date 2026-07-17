@@ -382,6 +382,13 @@
 
 <footer style="text-align:center;padding:10px 16px 90px;color:var(--muted);font-size:11px;line-height:2;">
   تهیه‌کننده: <span style="font-weight:700;">مجید امیری‌زاده</span> — شرکت آب و فاضلاب استان فارس
+<div style="text-align:center;font-size:10.5px;color:var(--muted);padding:0 16px 6px;">
+  نسخه <span id="appVersion">1.0.0</span> — آخرین به‌روزرسانی: <span id="lastUpdate"></span>
+</div>
+<script>
+  document.getElementById('lastUpdate').textContent =
+    new Date(document.lastModified).toLocaleDateString('fa-IR', { year:'numeric', month:'long', day:'numeric' });
+</script>
 </footer>
 
 <button class="fab" id="fabCalc" title="ماشین‌حساب">
