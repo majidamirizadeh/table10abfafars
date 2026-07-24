@@ -1,16 +1,19 @@
 {
+  "id": "./",
   "name": "آب و فاضلاب استان فارس - جداول الگوی مصرف",
-  "short_name": "جداول مصرف آب",
+  "short_name": "ABFA+",
   "description": "جداول دهگانه الگوی مصرف و ظرفیت قراردادی و ماشین‌حساب محاسبه حجم و مبلغ آب - شرکت آب و فاضلاب استان فارس",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "orientation": "portrait",
   "background_color": "#f4f9f9",
   "theme_color": "#0a4d68",
   "lang": "fa",
   "dir": "rtl",
   "icons": [
-    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
   ]
 }
