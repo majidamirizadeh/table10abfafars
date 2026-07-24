@@ -2632,15 +2632,22 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 
   installBtn.addEventListener('click', async () => {
     installBtn.disabled = true;
-    let accepted = true;
-    if (deferredPrompt) {
-      try{
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        accepted = choice.outcome === 'accepted';
-      }catch(e){ accepted = false; }
-      deferredPrompt = null;
+
+    if (!deferredPrompt) {
+      // مرورگر اجازه نصب واقعی (WebAPK) را هنوز صادر نکرده — به‌جای نمایش دروغین «نصب موفق»
+      // که فقط یک میانبر ساده روی صفحه اصلی می‌سازد، کاربر را به روش دستی مرورگر راهنمایی می‌کنیم
+      installBtn.disabled = false;
+      installModalDesc.textContent = 'نصب خودکار هم‌اکنون در دسترس نیست. از منوی مرورگر (⋮) گزینه «نصب برنامه / Install app» را انتخاب کنید، یا چند ثانیه صبر کرده و دوباره تلاش کنید.';
+      return;
     }
+
+    let accepted = false;
+    try{
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      accepted = choice.outcome === 'accepted';
+    }catch(e){ accepted = false; }
+    deferredPrompt = null;
     installBtn.disabled = false;
 
     if (accepted) {
