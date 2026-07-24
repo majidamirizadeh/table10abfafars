@@ -12,9 +12,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="جداول مصرف آب">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -2632,22 +2629,15 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 
   installBtn.addEventListener('click', async () => {
     installBtn.disabled = true;
-
-    if (!deferredPrompt) {
-      // مرورگر اجازه نصب واقعی (WebAPK) را هنوز صادر نکرده — به‌جای نمایش دروغین «نصب موفق»
-      // که فقط یک میانبر ساده روی صفحه اصلی می‌سازد، کاربر را به روش دستی مرورگر راهنمایی می‌کنیم
-      installBtn.disabled = false;
-      installModalDesc.textContent = 'نصب خودکار هم‌اکنون در دسترس نیست. از منوی مرورگر (⋮) گزینه «نصب برنامه / Install app» را انتخاب کنید، یا چند ثانیه صبر کرده و دوباره تلاش کنید.';
-      return;
+    let accepted = true;
+    if (deferredPrompt) {
+      try{
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        accepted = choice.outcome === 'accepted';
+      }catch(e){ accepted = false; }
+      deferredPrompt = null;
     }
-
-    let accepted = false;
-    try{
-      deferredPrompt.prompt();
-      const choice = await deferredPrompt.userChoice;
-      accepted = choice.outcome === 'accepted';
-    }catch(e){ accepted = false; }
-    deferredPrompt = null;
     installBtn.disabled = false;
 
     if (accepted) {
