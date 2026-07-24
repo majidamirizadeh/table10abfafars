@@ -13,6 +13,8 @@ const CACHE_NAME = `abfa-fars-tables-${CACHE_VERSION}`;
 const APP_SHELL = [
   './',
   './index.html',
+  './styles.css',
+  './app.js',
   './manifest.json',
   './icon.svg',
   './icon-192.png',
