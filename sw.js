@@ -6,7 +6,7 @@
    فقط کافیست عدد CACHE_VERSION را افزایش دهید (مثلاً v6 -> v7).
    با این کار کش قدیمی به‌طور خودکار حذف و نسخه جدید جایگزین می‌شود.
    ============================================================ */
-const CACHE_VERSION = 'v7';
+const CACHE_VERSION = 'v8';
 const CACHE_NAME = `abfa-fars-tables-${CACHE_VERSION}`;
 
 // فایل‌های اصلی برنامه (App Shell) که باید برای اجرای کامل آفلاین کش شوند
@@ -14,7 +14,10 @@ const APP_SHELL = [
   './',
   './index.html',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-512-maskable.png'
 ];
 
 // دامنه‌های فونت گوگل که به‌صورت پویا (Runtime) کش می‌شوند
