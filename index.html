@@ -12,6 +12,27 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="جداول مصرف آب">
+<!--
+  فونت وزیرمتن به‌صورت آنلاین از fonts.googleapis.com بارگذاری نمی‌شود
+  (باعث گیر کردن ثبت Service Worker پشت درخواست فونت مسدود‌شده می‌شد).
+  در صورت نیاز به فونت اختصاصی، فایل‌های woff2 را داخل پروژه قرار داده
+  و بلوک زیر را باز کنید:
+
+  <style>
+  @font-face{
+    font-family:'Vazirmatn';
+    src:url('./fonts/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight:400;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'Vazirmatn';
+    src:url('./fonts/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight:700;
+    font-display:swap;
+  }
+  </style>
+-->
 
 <style>
   :root{
@@ -709,35 +730,33 @@
   a.plain{color:inherit;text-decoration:none;}
 
   /* ---------- نشانگر پله‌ای مسیر (Step / Breadcrumb indicator) ---------- */
+  /* افقی، روی خط پایین هدر، از سمت راست صفحه شروع می‌شود */
   .step-nav{
-    position:fixed;top:50%;right:5px;transform:translateY(-50%);
-    display:flex;flex-direction:column;align-items:center;gap:0;
-    z-index:15;pointer-events:none;
+    position:absolute;right:18px;bottom:4px;
+    display:flex;flex-direction:row;align-items:center;gap:0;
+    z-index:5;pointer-events:none;
     opacity:0;transition:opacity .18s var(--ease);
   }
   .step-nav.show{opacity:1;}
   .step-nav .step-dot{
     width:7px;height:7px;border-radius:50%;flex-shrink:0;
-    background:var(--card);border:1.4px solid rgba(10,77,104,.28);
-    box-shadow:0 0 0 2px var(--bg);
+    background:rgba(255,255,255,.32);border:1.4px solid rgba(255,255,255,.55);
+    box-shadow:0 0 0 2px transparent;
     transition:background .16s var(--ease), border-color .16s var(--ease), transform .16s var(--ease);
   }
-  .step-nav .step-dot.filled{background:var(--step-color,var(--accent));border-color:var(--step-color,var(--accent));}
-  .step-nav .step-dot.current{transform:scale(1.2);box-shadow:0 0 0 1.6px var(--bg),0 0 0 2.4px color-mix(in srgb, var(--step-color,var(--accent)) 30%, transparent);}
+  .step-nav .step-dot.filled{background:#fff;border-color:#fff;}
+  .step-nav .step-dot.current{transform:scale(1.2);box-shadow:0 0 0 2.4px rgba(255,255,255,.3);}
   .step-nav .step-line{
-    width:1.6px;height:15px;background:rgba(10,77,104,.18);flex-shrink:0;
+    width:15px;height:1.6px;background:rgba(255,255,255,.32);flex-shrink:0;
   }
-  .step-nav .step-line.filled{background:var(--step-color,var(--accent));}
-  html[data-theme="dark"] .step-nav .step-dot{background:var(--card);border-color:rgba(255,255,255,.22);box-shadow:0 0 0 2px var(--bg);}
-  html[data-theme="dark"] .step-nav .step-line{background:rgba(255,255,255,.16);}
-  @media (max-width:380px){ .step-nav{right:3px;} }
+  .step-nav .step-line.filled{background:#fff;}
+  @media (max-width:380px){ .step-nav{right:10px;} .step-nav .step-line{width:11px;} }
 </style>
 </head>
 <body>
 
 <div class="top-progress" id="topProgressBar"></div>
 <div class="offline-indicator" id="offlineIndicator">آفلاین</div>
-<div class="step-nav" id="stepNav" aria-hidden="true"></div>
 
 <header class="appbar theme-neutral" id="appbar">
   <div class="appbar-row">
@@ -754,6 +773,7 @@
       <p id="headerSub">آیین‌نامه، جداول مصرف و ماشین‌حساب</p>
     </div>
   </div>
+  <div class="step-nav" id="stepNav" aria-hidden="true"></div>
 </header>
 
 <main>
@@ -2431,36 +2451,42 @@ try{ history.replaceState({screen:'mainhome', infoModal:false, installModal:fals
  }catch(e){ console.warn('خطا در راه‌اندازی کلید بازگشت:', e); }
 })();
 
-/* ========================= ثبت Service Worker برای PWA ========================= */
+/* ========================= ثبت Service Worker برای PWA =========================
+   نکته: این بلوک دیگر به window.addEventListener('load', ...) گره نخورده است.
+   دلیل حذف: در نسخه قبلی، اگر رویداد load صفحه (مثلاً به‌خاطر یک درخواست
+   شبکه‌ای معلق/مسدود مانند فونت گوگل) دیر اتفاق می‌افتاد یا اصلاً کامل
+   نمی‌شد، ثبت Service Worker هم به تعویق می‌افتاد یا هرگز اجرا نمی‌شد؛
+   همین باعث می‌شد مرورگر شرایط لازم برای پیشنهاد «نصب» را تشخیص ندهد
+   و به‌جای آن فقط گزینه «افزودن میانبر» را نشان دهد. حالا ثبت بلافاصله
+   پس از اجرای این اسکریپت (که خودش پایین صفحه و بعد از DOM قرار دارد)
+   انجام می‌شود، مستقل از تکمیل یا عدم تکمیل رویداد load. */
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
-  window.addEventListener('load', ()=>{
-    try{
-      // اگر پیش از ثبت، از قبل یک Service Worker صفحه را کنترل می‌کرده، یعنی این بازدید «اولین بار» نیست
-      // و اگر بعداً controllerchange رخ دهد، واقعاً یک بروزرسانی نسخه است؛ در غیر این صورت (اولین بازدید/اولین نصب)
-      // اولین controllerchange صرفاً به‌دست‌گرفتن کنترل اولیه است، نه بروزرسانی، و نباید صفحه را رفرش کند
-      const hadControllerBefore = !!navigator.serviceWorker.controller;
-      navigator.serviceWorker.register('sw.js').then((reg)=>{
-        // وقتی نسخه جدید Service Worker نصب شد، آن را فعال کن تا کاربر همیشه آخرین نسخه را ببیند
-        reg.addEventListener('updatefound', ()=>{
-          const newWorker = reg.installing;
-          if(!newWorker) return;
-          newWorker.addEventListener('statechange', ()=>{
-            if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-              newWorker.postMessage('SKIP_WAITING');
-            }
-          });
+  try{
+    // اگر پیش از ثبت، از قبل یک Service Worker صفحه را کنترل می‌کرده، یعنی این بازدید «اولین بار» نیست
+    // و اگر بعداً controllerchange رخ دهد، واقعاً یک بروزرسانی نسخه است؛ در غیر این صورت (اولین بازدید/اولین نصب)
+    // اولین controllerchange صرفاً به‌دست‌گرفتن کنترل اولیه است، نه بروزرسانی، و نباید صفحه را رفرش کند
+    const hadControllerBefore = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js').then((reg)=>{
+      // وقتی نسخه جدید Service Worker نصب شد، آن را فعال کن تا کاربر همیشه آخرین نسخه را ببیند
+      reg.addEventListener('updatefound', ()=>{
+        const newWorker = reg.installing;
+        if(!newWorker) return;
+        newWorker.addEventListener('statechange', ()=>{
+          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+            newWorker.postMessage('SKIP_WAITING');
+          }
         });
-      }).catch(()=>{});
-      // پس از فعال شدن نسخه جدید، صفحه یک‌بار به‌صورت خودکار تازه‌سازی می‌شود
-      let swRefreshed = false;
-      navigator.serviceWorker.addEventListener('controllerchange', ()=>{
-        if(swRefreshed) return;
-        if(!hadControllerBefore) return; // اولین بازدید: این تغییر، بروزرسانی واقعی نیست؛ رفرش لازم نیست
-        swRefreshed = true;
-        location.reload();
       });
-    }catch(e){ /* در محیط‌های محدود (مثل پیش‌نمایش درون‌برنامه‌ای) بی‌صدا نادیده گرفته شود */ }
-  });
+    }).catch(()=>{});
+    // پس از فعال شدن نسخه جدید، صفحه یک‌بار به‌صورت خودکار تازه‌سازی می‌شود
+    let swRefreshed = false;
+    navigator.serviceWorker.addEventListener('controllerchange', ()=>{
+      if(swRefreshed) return;
+      if(!hadControllerBefore) return; // اولین بازدید: این تغییر، بروزرسانی واقعی نیست؛ رفرش لازم نیست
+      swRefreshed = true;
+      location.reload();
+    });
+  }catch(e){ /* در محیط‌های محدود (مثل پیش‌نمایش درون‌برنامه‌ای) بی‌صدا نادیده گرفته شود */ }
 }
 </script>
 
@@ -2629,15 +2655,22 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 
   installBtn.addEventListener('click', async () => {
     installBtn.disabled = true;
-    let accepted = true;
-    if (deferredPrompt) {
-      try{
-        deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        accepted = choice.outcome === 'accepted';
-      }catch(e){ accepted = false; }
-      deferredPrompt = null;
+
+    if (!deferredPrompt) {
+      // مرورگر اجازه نصب واقعی (WebAPK) را هنوز صادر نکرده — به‌جای نمایش دروغین «نصب موفق»
+      // که فقط یک میانبر ساده روی صفحه اصلی می‌سازد، کاربر را به روش دستی مرورگر راهنمایی می‌کنیم
+      installBtn.disabled = false;
+      installModalDesc.textContent = 'نصب خودکار هم‌اکنون در دسترس نیست. از منوی مرورگر (⋮) گزینه «نصب برنامه / Install app» را انتخاب کنید، یا چند ثانیه صبر کرده و دوباره تلاش کنید.';
+      return;
     }
+
+    let accepted = false;
+    try{
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      accepted = choice.outcome === 'accepted';
+    }catch(e){ accepted = false; }
+    deferredPrompt = null;
     installBtn.disabled = false;
 
     if (accepted) {

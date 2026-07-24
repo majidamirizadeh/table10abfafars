@@ -1,4 +1,15 @@
-const CACHE_NAME = 'abfa-fars-v1';
+/* ============================================================
+   Service Worker - آب و فاضلاب استان فارس (جداول الگوی مصرف)
+   ------------------------------------------------------------
+   نحوه انتشار نسخه جدید:
+   هر بار که فایل‌های برنامه (index.html و ...) تغییر کردند،
+   فقط کافیست عدد CACHE_VERSION را افزایش دهید (مثلاً v6 -> v7).
+   با این کار کش قدیمی به‌طور خودکار حذف و نسخه جدید جایگزین می‌شود.
+   ============================================================ */
+const CACHE_VERSION = 'v9';
+const CACHE_NAME = `abfa-fars-tables-${CACHE_VERSION}`;
+
+// فایل‌های اصلی برنامه (App Shell) که باید برای اجرای کامل آفلاین کش شوند
 const APP_SHELL = [
   './',
   './index.html',
@@ -9,45 +20,106 @@ const APP_SHELL = [
   './icon-512-maskable.png'
 ];
 
+/* ---------------------- نصب: کش کردن App Shell ---------------------- */
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+      // به‌جای cache.addAll (که با خطای یک فایل، کل نصب را متوقف می‌کند)
+      // هر فایل جدا اضافه می‌شود تا خرابی یک مورد باعث شکست کل SW نشود
+      await Promise.allSettled(
+        APP_SHELL.map(async (url) => {
+          try {
+            const req = new Request(url, { cache: 'reload' });
+            const res = await fetch(req);
+            if (res && res.ok) {
+              await cache.put(url, res.clone());
+            }
+          } catch (err) {
+            // در صورت نبود اینترنت هنگام نصب، بی‌صدا رد می‌شود
+            // (کاربر در بازدید بعدی با اینترنت، کش کامل می‌شود)
+          }
+        })
+      );
+    })()
   );
+  self.skipWaiting();
 });
 
+/* ------------------- فعال‌سازی: حذف نسخه‌های قدیمی کش ------------------- */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((names) =>
-      Promise.all(
-        names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name))
-      )
-    ).then(() => self.clients.claim())
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+      );
+      await self.clients.claim();
+    })()
   );
 });
 
-// صفحه هنگام نصب نسخه جدید، این پیام را می‌فرستد تا SW جدید بلافاصله فعال شود
+/* --------- دریافت پیام از صفحه برای فعال‌سازی فوری نسخه جدید --------- */
 self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
 
+/* ------------------------- استراتژی واکشی ------------------------- */
+/* Stale-While-Revalidate: پاسخ کش‌شده فوراً نمایش داده می‌شود (سرعت بالا)
+   و هم‌زمان نسخه جدید از شبکه گرفته و برای دفعه بعد در کش ذخیره می‌شود.
+   فقط برای درخواست‌های هم‌مبدأ (فایل‌های داخلی برنامه) اجرا می‌شود. */
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  const { request } = event;
+  if (request.method !== 'GET') return;
+
+  let url;
+  try {
+    url = new URL(request.url);
+  } catch (e) {
+    return;
+  }
+
+  // فقط درخواست‌های http/https را مدیریت کن (chrome-extension و... نادیده گرفته شود)
+  if (url.protocol !== 'http:' && url.protocol !== 'https:') return;
+
+  const isSameOrigin = url.origin === self.location.origin;
+  if (!isSameOrigin) return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const network = fetch(event.request)
+    (async () => {
+      const cache = await caches.open(CACHE_NAME);
+
+      // برای درخواست‌های ناوبری (باز شدن مستقیم صفحه)، اگر در کش نبود از index.html استفاده کن
+      const cacheKey = request.mode === 'navigate' ? './index.html' : request;
+      const cached = await cache.match(request.mode === 'navigate' ? './index.html' : request);
+
+      const networkFetch = fetch(request)
         .then((response) => {
-          if (response && response.ok && response.type === 'basic') {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+          // پاسخ‌های موفق (200) کش می‌شوند
+          if (response && response.status === 200) {
+            cache.put(request.mode === 'navigate' ? './index.html' : request, response.clone());
           }
           return response;
         })
-        .catch(() => cached);
-      // cache-first: پاسخ سریع از حافظه پنهان، و در پس‌زمینه نسخه تازه را برای دفعه بعد ذخیره می‌کند
-      return cached || network;
-    })
+        .catch(() => null);
+
+      if (cached) {
+        // پاسخ فوری از کش + به‌روزرسانی خاموش در پس‌زمینه
+        event.waitUntil(networkFetch);
+        return cached;
+      }
+
+      // اگر در کش نبود، منتظر شبکه بمان؛ در صورت شکست کامل، خطا برگردان
+      const fresh = await networkFetch;
+      if (fresh) return fresh;
+
+      // آخرین راه‌حل برای ناوبری آفلاین بدون کش قبلی: پاسخ خطای قابل کنترل
+      return new Response(
+        '<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="utf-8"><body style="font-family:Tahoma,sans-serif;text-align:center;padding:40px;">اتصال اینترنت برقرار نیست و نسخه آفلاین هنوز کامل بارگذاری نشده است.</body></html>',
+        { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+      );
+    })()
   );
 });
