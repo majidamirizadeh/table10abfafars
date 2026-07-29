@@ -38,6 +38,19 @@
 </head>
 <body>
 
+<!-- ===================== اورلی بارگذاری اولیه (تا زمان fetch شدن داده‌های JSON) ===================== -->
+<div class="app-loader" id="appLoader">
+  <div class="app-loader-inner">
+    <div class="app-loader-icon">💧</div>
+    <div class="app-loader-spinner" aria-hidden="true"></div>
+    <p class="app-loader-text">در حال بارگذاری اطلاعات...</p>
+    <div class="app-loader-error" id="appLoaderError" style="display:none;">
+      <p>مشکلی در بارگذاری داده‌ها پیش آمد. اتصال اینترنت خود را بررسی کنید.</p>
+      <button id="appLoaderRetry" type="button">تلاش مجدد</button>
+    </div>
+  </div>
+</div>
+
 <div class="top-progress" id="topProgressBar"></div>
 <div class="offline-indicator" id="offlineIndicator">آفلاین</div>
 
