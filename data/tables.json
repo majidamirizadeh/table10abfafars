@@ -1,0 +1,928 @@
+[
+  {
+    "id": 1,
+    "icon": "🏨",
+    "title": "هتل، مسافرخانه، مهمانسرا، خوابگاه، پانسیون",
+    "rows": [
+      {
+        "row": 1,
+        "category": "هتل چهار ستاره و لوکس (تمام امکانات رفاهی)",
+        "unit": "اتاق یک تا دو تخته",
+        "literPerDay": 450,
+        "m3PerMonth": 13.5,
+        "minMonthly": null,
+        "extra": {
+          "label": "به ازای هر تخت اضافه بر دو تخت",
+          "literPerDay": 200,
+          "m3PerMonth": 6
+        },
+        "desc": "شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات هتل.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "هتل تا سه ستاره",
+        "unit": "اتاق یک تا دو تخته",
+        "literPerDay": 350,
+        "m3PerMonth": 10.5,
+        "minMonthly": null,
+        "extra": {
+          "label": "به ازای هر تخت اضافه بر دو تخت",
+          "literPerDay": 150,
+          "m3PerMonth": 4.5
+        },
+        "desc": "شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات هتل.",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "مسافرخانه و مهمان‌پذیر بدون حمام اختصاصی",
+        "unit": "تخت",
+        "literPerDay": 150,
+        "m3PerMonth": 4.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "پانسیون و خوابگاه دانشجویی یا دانش‌آموزی",
+        "unit": "دانشجو یا محصل",
+        "literPerDay": 150,
+        "m3PerMonth": 4.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات.",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "مراکز نگهداری معلولین، ایتام و آسایشگاه سالمندان",
+        "unit": "هر نفر خدمت‌گیرنده مقیم",
+        "literPerDay": 200,
+        "m3PerMonth": 6,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب، بهداشت، آشپزخانه، فضای سبز و سایر امکانات.",
+        "composite": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "icon": "🍽️",
+    "title": "رستوران، کبابی، پیتزا فروشی، بستنی فروشی و نانوائی",
+    "rows": [
+      {
+        "row": 1,
+        "category": "رستوران معمولی",
+        "unit": "متر مربع مساحت اعیان",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "کبابی، حلیم فروشی، طباخی، قهوه‌خانه",
+        "unit": "متر مربع مساحت اعیان",
+        "literPerDay": 67,
+        "m3PerMonth": 2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "ساندویچی، پیتزا فروشی، کافی شاپ، بستنی فروشی",
+        "unit": "متر مربع مساحت اعیان",
+        "literPerDay": 33,
+        "m3PerMonth": 1,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "آشپزخانه (محل طبخ و توزیع غذا)",
+        "unit": "متر مربع مساحت اعیان",
+        "literPerDay": 150,
+        "m3PerMonth": 4.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "نانوایی سنتی",
+        "unit": "هر کیلو آرد مصرفی روزانه",
+        "literPerDay": 1.5,
+        "m3PerMonth": 0.045,
+        "minMonthly": 20,
+        "extra": null,
+        "desc": "حداقل ۲۰ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "نانوایی فانتزی (نان ماشینی)",
+        "unit": "هر کیلو آرد مصرفی روزانه",
+        "literPerDay": 2,
+        "m3PerMonth": 0.06,
+        "minMonthly": 30,
+        "extra": null,
+        "desc": "حداقل ۳۰ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 7,
+        "category": "نانوایی صنعتی",
+        "unit": "ظرفیت تولید (کیلو در روز)",
+        "literPerDay": 2,
+        "m3PerMonth": 0.06,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "طبق پروانه.",
+        "composite": false
+      },
+      {
+        "row": 8,
+        "category": "کارگاه شیرینی‌پزی",
+        "unit": "هر متر مربع فضای کارگاه",
+        "literPerDay": 20,
+        "m3PerMonth": 0.6,
+        "minMonthly": 20,
+        "extra": null,
+        "desc": "حداقل ۲۰ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 9,
+        "category": "کلوچه‌پزی",
+        "unit": "هر متر مربع فضای کارگاه",
+        "literPerDay": 20,
+        "m3PerMonth": 0.6,
+        "minMonthly": 15,
+        "extra": null,
+        "desc": "حداقل ۱۵ متر مکعب در ماه.",
+        "composite": false
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "icon": "🕌",
+    "title": "مسجد، زیارتگاه، سایر معابد، سینما و تئاتر",
+    "rows": [
+      {
+        "row": 1,
+        "category": "اماکن مذهبی و عبادی (مسجد، حسینیه، تکیه، زیارتگاه و معابد سایر ادیان)",
+        "unit": "متر مربع اعیان (به‌استثنای فضاهای تجاری، اقتصادی و ورزشی)",
+        "literPerDay": 5,
+        "m3PerMonth": 0.15,
+        "minMonthly": 30,
+        "extra": null,
+        "desc": "حداقل ۳۰ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "گورستان",
+        "unit": "متر مربع مساحت عرصه",
+        "literPerDay": 0.5,
+        "m3PerMonth": 0.015,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف.",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "سالن‌های سینما و تئاتر",
+        "unit": "تعداد صندلی",
+        "literPerDay": 10,
+        "m3PerMonth": 0.3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "موزه، کتابخانه و سایر مکان‌های فرهنگی",
+        "unit": "متر مربع اعیان",
+        "literPerDay": 3.3,
+        "m3PerMonth": 0.1,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "مجتمع‌های سینمایی",
+        "unit": "—",
+        "literPerDay": null,
+        "m3PerMonth": null,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "ظرفیت قراردادی از تجمیع ظرفیت قراردادی سالن‌های سینما، رستوران‌ها، بوفه و سایر امکانات نظیر مراکز ورزشی مطابق جداول مربوطه محاسبه می‌شود.",
+        "composite": true
+      },
+      {
+        "row": 6,
+        "category": "فرهنگسرا",
+        "unit": "—",
+        "literPerDay": null,
+        "m3PerMonth": null,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "ظرفیت قراردادی از تجمیع ظرفیت قراردادی سالن‌های سینما، رستوران‌ها، بوفه و سایر امکانات نظیر مراکز ورزشی مطابق جداول مربوطه محاسبه می‌شود.",
+        "composite": true
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "icon": "🎓",
+    "title": "دانشگاه، دانشکده، مدارس دینی و مدارس معمولی",
+    "rows": [
+      {
+        "row": 1,
+        "category": "دانشگاه، دانشکده، مدارس عالی و مراکز فنی و حرفه‌ای",
+        "unit": "دانشجو - کارمند",
+        "literPerDay": 35,
+        "m3PerMonth": 1.05,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب - بهداشتی و تهیه و سرو.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "مدارس علوم دینی روزانه",
+        "unit": "طلبه - کارمند",
+        "literPerDay": 35,
+        "m3PerMonth": 1.05,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب.",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "مدارس علوم دینی",
+        "unit": "طلبه مقیم",
+        "literPerDay": 130,
+        "m3PerMonth": 3.9,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "مراکز فنی و حرفه‌ای و سایر مدارس عالی",
+        "unit": "دانش‌آموز مقیم",
+        "literPerDay": 130,
+        "m3PerMonth": 3.9,
+        "minMonthly": null,
+        "extra": {
+          "label": "کارمند - استاد",
+          "literPerDay": 35,
+          "m3PerMonth": 1.05
+        },
+        "desc": "شامل تمام مصارف شرب - بهداشتی و تهیه و سرو.",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "مدارس و آموزشگاه‌های غیر شبانه‌روزی",
+        "unit": "دانش‌آموز - کارمند",
+        "literPerDay": 30,
+        "m3PerMonth": 0.9,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل تمام مصارف شرب - بهداشتی.",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "مدارس و آموزشگاه‌های شبانه‌روزی",
+        "unit": "دانش‌آموز مقیم",
+        "literPerDay": 130,
+        "m3PerMonth": 3.9,
+        "minMonthly": null,
+        "extra": {
+          "label": "کارمند - استاد",
+          "literPerDay": 35,
+          "m3PerMonth": 1.05
+        },
+        "desc": "شامل تمام مصارف شرب - بهداشتی و تهیه و سرو.",
+        "composite": false
+      },
+      {
+        "row": 7,
+        "category": "آمادگی و مهد کودک",
+        "unit": "کودک",
+        "literPerDay": 70,
+        "m3PerMonth": 2.1,
+        "minMonthly": null,
+        "extra": {
+          "label": "معلم - مربی",
+          "literPerDay": 35,
+          "m3PerMonth": 1.05
+        },
+        "desc": "شامل تمام مصارف شرب.",
+        "composite": false
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "icon": "🏥",
+    "title": "بیمارستان، درمانگاه، آزمایشگاه، مطب و داروخانه",
+    "rows": [
+      {
+        "row": 1,
+        "category": "انواع بیمارستان (خصوصی، دولتی، معمولی، آموزشی، تخصصی و عمومی)",
+        "unit": "تعداد تخت",
+        "literPerDay": 350,
+        "m3PerMonth": 10.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل مصرف کلیه کارکنان، خدمه مقیم و کادر پزشکی، آتش‌نشانی و سایر مصارف.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "درمانگاه، آزمایشگاه، مجتمع درمانی",
+        "unit": "مساحت اعیان به متر مربع",
+        "literPerDay": 10,
+        "m3PerMonth": 0.3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "در صورت شبانه‌روزی بودن، ۱۳ لیتر در روز محاسبه می‌شود.",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "مطب پزشک عمومی، تخصصی، روانپزشک و داروخانه",
+        "unit": "یک مطب مستقل",
+        "literPerDay": 330,
+        "m3PerMonth": 10,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "هر واحد آپارتمان یک مطب محسوب می‌شود.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "مطب دندانپزشکی",
+        "unit": "یک مطب مستقل",
+        "literPerDay": 660,
+        "m3PerMonth": 20,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "هر واحد آپارتمان یک مطب محسوب می‌شود.",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "ساختمان پزشکان",
+        "unit": "تعداد مطب",
+        "literPerDay": 330,
+        "m3PerMonth": 10,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "دندانپزشک بر اساس جدول شماره ۱۲.",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "توضیح تکمیلی: کلینیک، پلی‌کلینیک و دی‌کلینیک",
+        "unit": "—",
+        "literPerDay": null,
+        "m3PerMonth": null,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "برای مراکز درمانی نظیر کلینیک، پلی‌کلینیک و دی‌کلینیک، با توجه به تعداد تخت موجود و مساحت اعیان ساختمان، با استفاده از ارقام ردیف‌های ۱ و ۲ همین جدول، ظرفیت قراردادی هر بخش محاسبه و مجموع آنها به عنوان ظرفیت قراردادی واحد منظور می‌گردد.",
+        "composite": true
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "icon": "🛒",
+    "title": "مجتمع‌های تجاری، سوپر مارکت و فروشگاه",
+    "rows": [
+      {
+        "row": 1,
+        "category": "پاساژ و مجتمع‌های فقط تجاری کم‌مصرف",
+        "unit": "تعداد واحد تجاری",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "مجتمع‌های مختلط تجاری، اداری و سایر کاربری‌ها",
+        "unit": "—",
+        "literPerDay": null,
+        "m3PerMonth": null,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "بر حسب نوع کاربری، به‌صورت مجموع ظرفیت‌های قراردادی با احتساب ۳ متر مکعب در ماه برای واحدهای کم‌مصرف.",
+        "composite": true
+      },
+      {
+        "row": 3,
+        "category": "سوپر مارکت و فروشگاه‌های بزرگ",
+        "unit": "هر متر مربع اعیان",
+        "literPerDay": 10,
+        "m3PerMonth": 0.3,
+        "minMonthly": 5,
+        "extra": null,
+        "desc": "حداقل سوپرمارکت تک‌واحدی ۵ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "فروشگاه گوشت قرمز و سفید (مرغ، ماهی، گوساله، گوسفند، شترمرغ، بوقلمون، بلدرچین)",
+        "unit": "متر مربع مساحت اعیان",
+        "literPerDay": 20,
+        "m3PerMonth": 0.6,
+        "minMonthly": 10,
+        "extra": null,
+        "desc": "حداقل ۱۰ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "فروشگاه میوه و سبزی، گل و آبمیوه‌فروشی",
+        "unit": "متر مربع مساحت اعیان",
+        "literPerDay": 10,
+        "m3PerMonth": 0.3,
+        "minMonthly": 10,
+        "extra": null,
+        "desc": "حداقل ۱۰ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "انشعاب مستقل برای انواع مغازه‌ها و واحدهای متعارف کم‌مصرف",
+        "unit": "واحد تجاری",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": 5,
+        "extra": null,
+        "desc": "در صورت استفاده از انشعاب مستقل، حداقل ظرفیت قراردادی هر واحد ۵ متر مکعب در ماه.",
+        "composite": false
+      },
+      {
+        "row": 7,
+        "category": "بازار روز",
+        "unit": "—",
+        "literPerDay": null,
+        "m3PerMonth": null,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "جمع مساحت غرفه‌ها در ۱۰ لیتر در روز ضرب شود و حداقل‌های ماهانه برای کل بازار در نظر گرفته شود، نه برای هر واحد.",
+        "composite": true
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "icon": "🏭",
+    "title": "کارخانه و کارگاه تولیدی، تعمیرگاه، خشکشویی",
+    "rows": [
+      {
+        "row": 1,
+        "category": "کارخانجات",
+        "unit": "تعداد کارکنان",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "فقط برای شرب و بهداشت کارکنان. در صورت نیاز به آب در فرایند، طبق موافقت اصولی و پروانه یا کاتالوگ ماشین‌آلات محاسبه می‌شود.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "انواع کارگاه‌ها نظیر قالی‌شویی و انواع گلخانه",
+        "unit": "تعداد کارکنان",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "کارخانه شیر پاستوریزه و فرآورده‌های لبنی",
+        "unit": "هر کیلو شیر مصرفی روزانه",
+        "literPerDay": 2,
+        "m3PerMonth": 0.06,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "ظرفیت طبق پروانه. شامل تمام موارد فرایندی، شرب و بهداشت کارکنان، فضای سبز و سایر مصارف.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "کارگاه ماست‌بندی و پنیرسازی",
+        "unit": "هر کیلو شیر مصرفی روزانه",
+        "literPerDay": 2,
+        "m3PerMonth": 0.06,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "ظرفیت طبق پروانه، شامل تمام مصارف فرایندی و جنبی.",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "مجتمع تعمیرگاهی",
+        "unit": "به ازای هر واحد",
+        "literPerDay": 133,
+        "m3PerMonth": 4,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "ظرفیت به‌صورت حاصل‌ضرب تعداد واحدها در عدد ۴ محاسبه می‌شود.",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "تعمیرگاه مستقل اتومبیل",
+        "unit": "هر واحد",
+        "literPerDay": 300,
+        "m3PerMonth": 9,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 7,
+        "category": "بنائی و کارگاه ساختمانی",
+        "unit": "متر مربع اعیان احداثی",
+        "literPerDay": null,
+        "m3PerMonth": null,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل شرب و بهداشت کارگران. کل میزان مصرف آب کارگاه ساختمانی و بنائی در طول مدت ساخت، به ازای هر متر مربع اعیانی احداثی، دو متر مکعب (۲۰۰۰ لیتر) است (رقم ثابت کل دوره، نه ماهانه).",
+        "composite": true
+      },
+      {
+        "row": 8,
+        "category": "شستشوی اتومبیل",
+        "unit": "هر جایگاه",
+        "literPerDay": 1000,
+        "m3PerMonth": 30,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 9,
+        "category": "خشکشویی",
+        "unit": "هر ماشین خشکشویی",
+        "literPerDay": 1200,
+        "m3PerMonth": 36,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "icon": "🏟️",
+    "title": "مصارف عمومی و مراکز خدماتی، استخر و گرمابه",
+    "rows": [
+      {
+        "row": 1,
+        "category": "زمین چمن ورزشگاه‌ها و فضای سبز مستقل پارک‌ها، میادین و بلوارها",
+        "unit": "متر مربع مساحت",
+        "literPerDay": 2,
+        "m3PerMonth": 0.06,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "آتش‌نشانی",
+        "unit": "هر تانکر فعال ایستگاه",
+        "literPerDay": 10000,
+        "m3PerMonth": 300,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "برای خدمه در هر شیفت، طبق جدول اداره و دفاتر محاسبه و اضافه شود.",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "کمپ توریستی و پلاژهای دارای دوش و سایر سرویس‌های بهداشتی",
+        "unit": "هر واحد",
+        "literPerDay": 600,
+        "m3PerMonth": 18,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "کمپ توریستی محل برپایی چادر مسافرتی و پلاژهای بدون دوش",
+        "unit": "هر چادر",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "استادیوم ورزشی",
+        "unit": "صندلی",
+        "literPerDay": 2,
+        "m3PerMonth": 0.06,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "تمام مصارف غیر از زمین چمن.",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "سالن‌های ورزشی محلی مانند بدنسازی و بیلیارد",
+        "unit": "متر مربع اعیان",
+        "literPerDay": 12,
+        "m3PerMonth": 0.36,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 7,
+        "category": "استخر",
+        "unit": "متر مربع مساحت استخر",
+        "literPerDay": 120,
+        "m3PerMonth": 3.6,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف استخر و شناگران، سونا و سایر تجهیزات.",
+        "composite": false
+      },
+      {
+        "row": 8,
+        "category": "گرمابه",
+        "unit": "هر دوش",
+        "literPerDay": 500,
+        "m3PerMonth": 15,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 9,
+        "category": "سرویس‌های بهداشتی عمومی",
+        "unit": "هر چشمه",
+        "literPerDay": 150,
+        "m3PerMonth": 5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 10,
+        "category": "آبخوری عمومی",
+        "unit": "هر شیر آب",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 11,
+        "category": "مصارف اشتراکی مجتمع‌های عمومی",
+        "unit": "هر واحد آپارتمان",
+        "literPerDay": 67,
+        "m3PerMonth": 2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "icon": "🏛️",
+    "title": "ادارات و مؤسسات دولتی و خصوصی",
+    "rows": [
+      {
+        "row": 1,
+        "category": "ادارات دولتی و خصوصی، دفاتر خدمات عمومی، دفاتر ازدواج و طلاق، دفاتر پستی، مراکز دولت الکترونیک، آژانس مسافرتی",
+        "unit": "تعداد کارمند",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": 5,
+        "extra": null,
+        "desc": "محاسبه ظرفیت قراردادی بر اساس تعداد کارمندان و افراد مقیم صورت می‌پذیرد و حداقل ۵ متر مکعب در ماه در نظر گرفته می‌شود (به استثنای مصرف فضاهای ورزشی).",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "مراکز نظامی و انتظامی — سرباز مقیم",
+        "unit": "هر سرباز مقیم",
+        "literPerDay": 150,
+        "m3PerMonth": 4.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "مراکز نظامی و انتظامی — پرسنل مقیم",
+        "unit": "پرسنل مقیم",
+        "literPerDay": 150,
+        "m3PerMonth": 4.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف.",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "مراکز نظامی و انتظامی — پرسنل غیر مقیم",
+        "unit": "پرسنل غیر مقیم",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف.",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "زندان",
+        "unit": "هر زندانی",
+        "literPerDay": 150,
+        "m3PerMonth": 4.5,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "شامل کلیه مصارف.",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "شهر بازی و پارک",
+        "unit": "مساحت عرصه (متر مربع)",
+        "literPerDay": 10,
+        "m3PerMonth": 0.3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "پایانه‌های مسافربری شهری",
+        "unit": "ظرفیت مسافر روزانه",
+        "literPerDay": 5,
+        "m3PerMonth": 0.15,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "برای واحدهای تجاری و خدماتی، طبق جداول مربوطه محاسبه و اضافه شود.",
+        "composite": false
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "icon": "🐄",
+    "title": "پرورش، نگهداری و کشتارگاه انواع دام و طیور",
+    "rows": [
+      {
+        "row": 1,
+        "category": "گاو شیری",
+        "unit": "رأس",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 2,
+        "category": "گوسفند",
+        "unit": "رأس",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 3,
+        "category": "اسب",
+        "unit": "رأس",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 4,
+        "category": "شترمرغ",
+        "unit": "قطعه",
+        "literPerDay": 10,
+        "m3PerMonth": 0.3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 5,
+        "category": "بوقلمون",
+        "unit": "هر ۱۰۰ قطعه",
+        "literPerDay": 40,
+        "m3PerMonth": 1.2,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 6,
+        "category": "مرغ و خروس",
+        "unit": "هر ۱۰۰ قطعه",
+        "literPerDay": 20,
+        "m3PerMonth": 0.6,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 7,
+        "category": "کشتارگاه دام بزرگ",
+        "unit": "رأس دام",
+        "literPerDay": 200,
+        "m3PerMonth": 6,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "تعداد کشتار بر اساس ظرفیت مشخص کشتارگاه تعیین می‌شود.",
+        "composite": false
+      },
+      {
+        "row": 8,
+        "category": "کشتارگاه دام کوچک",
+        "unit": "رأس دام",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      },
+      {
+        "row": 9,
+        "category": "کشتارگاه صنعتی مرغ و خروس",
+        "unit": "هر ۱۰۰ قطعه",
+        "literPerDay": 100,
+        "m3PerMonth": 3,
+        "minMonthly": null,
+        "extra": null,
+        "desc": "",
+        "composite": false
+      }
+    ]
+  }
+]
