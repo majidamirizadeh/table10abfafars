@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "aeen-nameh-tarefeha",
+    "title": "آیین‌نامه عملیاتی و شرایط عمومی تعرفه‌ها",
+    "sub": "هفت فصل کامل — تعاریف، مقررات، هزینه‌ها و شرایط عمومی",
+    "file": "./pdf/aeen-nameh-tarefeha.pdf",
+    "size": 649825
+  },
+  {
+    "slug": "jadaval-dahgane-olgooye-masraf",
+    "title": "جداول دهگانه الگوی مصرف",
+    "sub": "ظرفیت قراردادی و الگوی مصرف بر اساس نوع کاربری",
+    "file": "./pdf/jadaval-dahgane-olgooye-masraf.pdf",
+    "size": 231045
+  },
+  {
+    "slug": "ghavanin-ab-va-fazelab",
+    "title": "قوانین مهم آب و فاضلاب",
+    "sub": "سه قانون کلیدی — مواد و تبصره‌های کامل",
+    "file": "./pdf/ghavanin-ab-va-fazelab.pdf",
+    "size": 618363
+  },
+  {
+    "slug": "tarefeha-1405-bandha",
+    "title": "تعرفه‌های آب و فاضلاب ۱۴۰۵ — بندها",
+    "sub": "بندهای تعرفه و شرایط عمومی مصوب سال ۱۴۰۵",
+    "file": "./pdf/tarefeha-1405-bandha.pdf",
+    "size": 330001
+  },
+  {
+    "slug": "jadaval-nerkh-tarefeha-1405",
+    "title": "جداول نرخ‌گذاری تعرفه ۱۴۰۵",
+    "sub": "نه جدول نرخ‌گذاری آب و کارمزد دفع فاضلاب به همراه فرمول‌ها",
+    "file": "./pdf/jadaval-nerkh-tarefeha-1405.pdf",
+    "size": 216055
+  }
+]
