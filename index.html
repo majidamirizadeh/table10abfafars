@@ -4,10 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12787a">
-<title>آب و فاضلاب استان فارس | آیین‌نامه و جداول مصرف</title>
+<title>آبفا پلاس | راهنمای آموزشی تعرفه‌ها و جداول مصرف آب</title>
+<meta name="description" content="برنامه آموزشی و اطلاع‌رسانی غیررسمی برای آشنایی عموم با آیین‌نامه تعرفه‌ها، جداول الگوی مصرف و محاسبه صورتحساب آب و فاضلاب">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<!-- تصاویر اسپلش iOS (برای افزودن دستگاه جدید، فقط یک خط با ابعاد آن اضافه کنید) -->
+<link rel="apple-touch-startup-image" href="splash/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1179x2556.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1284x2778.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1290x2796.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+<link rel="apple-touch-startup-image" href="splash/splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -39,9 +52,11 @@
 <body>
 
 <!-- ===================== اورلی بارگذاری اولیه (تا زمان fetch شدن داده‌های JSON) ===================== -->
-<div class="app-loader" id="appLoader">
+<div class="app-loader splash" id="appLoader">
   <div class="app-loader-inner">
-    <div class="app-loader-icon">💧</div>
+    <img class="app-loader-logo" src="icon.svg" alt="" width="96" height="96">
+    <div class="app-loader-brand">آبفا پلاس</div>
+    <div class="app-loader-sub">راهنمای آموزشی جداول الگوی مصرف و تعرفه‌ها</div>
     <div class="app-loader-spinner" aria-hidden="true"></div>
     <p class="app-loader-text">در حال بارگذاری اطلاعات...</p>
     <div class="app-loader-error" id="appLoaderError" style="display:none;">
@@ -64,9 +79,9 @@
         </svg>
       </button>
     </div>
-    <div class="titles">
-      <h1 id="headerTitle">آب و فاضلاب استان فارس</h1>
-      <p id="headerSub">آیین‌نامه، جداول مصرف و ماشین‌حساب</p>
+    <div class="titles no-sub" id="headerTitles">
+      <h1 id="headerTitle">آبفا پلاس</h1>
+      <p id="headerSub"></p>
     </div>
   </div>
   <div class="step-nav" id="stepNav" aria-hidden="true"></div>
@@ -76,7 +91,7 @@
 
   <!-- ===================== MAIN HOME ===================== -->
   <section class="screen active" id="screen-mainhome">
-    <p class="home-intro">به اپلیکیشن آب و فاضلاب استان فارس خوش آمدید. یکی از بخش‌های زیر را انتخاب کنید، یا از دکمه شناور ماشین‌حساب (پایین چپ) برای محاسبه سریع حجم و مبلغ استفاده کنید.</p>
+    <p class="home-intro">به «آبفا پلاس» خوش آمدید؛ یک برنامه آموزشی و کاربردی برای عموم مردم که متن مصوبات و تعرفه‌های منتشرشده در منابع رسمی را به‌صورت خوانا و قابل جست‌وجو ارائه می‌کند. این برنامه مرجع رسمی نیست. یکی از بخش‌های زیر را انتخاب کنید، یا از دکمه شناور ماشین‌حساب (پایین چپ) برای محاسبه سریع حجم و مبلغ استفاده کنید.</p>
     <div class="table-grid main-grid">
       <div class="table-card main-card theme-blue-card" id="goRegs">
         <div class="icon icon-blue">📘</div>
@@ -102,15 +117,114 @@
         </div>
         <div class="chev">‹</div>
       </div>
-      <div class="table-card main-card empty disabled-card" aria-disabled="true">
+      <div class="table-card main-card theme-teal-card" id="goTariffs">
         <div class="icon">🧾</div>
         <div class="info">
-          <h3>تعرفه‌ها</h3>
+          <h3>تعرفه‌های آب و فاضلاب ۱۴۰۵</h3>
+          <span>بندهای تعرفه، جداول نرخ‌گذاری و شرایط عمومی</span>
+        </div>
+        <div class="chev">‹</div>
+      </div>
+    </div>
+
+    <!-- ===================== PDF DOWNLOADS (آکاردئون) ===================== -->
+    <div class="pdf-section pdf-acc" id="pdfAccordion">
+      <button type="button" class="pdf-acc-head" id="pdfAccBtn" aria-expanded="false" aria-controls="pdfAccPanel">
+        <span class="pdf-acc-ico">📥</span>
+        <span class="pdf-acc-txt">
+          <span class="pdf-section-title">دانلود نسخه PDF</span>
+          <span class="pdf-section-sub">قوانین، جداول، تعرفه‌ها و آیین‌نامه — پیش‌نمایش و دانلود آفلاین</span>
+        </span>
+        <span class="pdf-acc-chev">‹</span>
+      </button>
+
+      <div class="pdf-acc-panel" id="pdfAccPanel" hidden>
+        <div class="pdf-offline-box">
+          <button type="button" class="pdf-offline-btn" id="pdfOfflineAllBtn">📥 دانلود آفلاین همه PDF ها</button>
+          <div class="pdf-offline-note" id="pdfOfflineNote">با دریافت آفلاین، فایل‌ها بدون اینترنت هم قابل مشاهده هستند.</div>
+          <div class="pdf-progress" id="pdfOfflineProgressWrap" hidden>
+            <div class="pdf-progress-bar"><span id="pdfOfflineProgressBar"></span></div>
+            <div class="pdf-progress-text" id="pdfOfflineProgressText">۰٪</div>
+          </div>
+          <div class="pdf-offline-tools">
+            <span class="pdf-offline-stat" id="pdfOfflineStat">وضعیت آفلاین: در حال بررسی…</span>
+            <button type="button" class="pdf-clear-btn" id="pdfClearCacheBtn">🗑 حذف فایل‌های آفلاین</button>
+          </div>
+        </div>
+
+        <div class="pdf-grid">
+          <div class="pdf-card" data-pdf="./pdf/aeen-nameh-tarefeha.pdf" data-pdf-title="آیین‌نامه عملیاتی و شرایط عمومی تعرفه‌ها" role="button" tabindex="0">
+            <div class="pdf-icon">📘</div>
+            <div class="info">
+              <h3>آیین‌نامه عملیاتی و شرایط عمومی تعرفه‌ها</h3>
+              <span>هفت فصل کامل — PDF</span>
+              <span class="pdf-offline-badge" hidden>ذخیره‌شده آفلاین</span>
+              <div class="pdf-progress card" hidden>
+                <div class="pdf-progress-bar"><span></span></div>
+                <div class="pdf-progress-text">۰٪</div>
+              </div>
+            </div>
+            <div class="pdf-dl">⬇</div>
+          </div>
+          <div class="pdf-card" data-pdf="./pdf/jadaval-dahgane-olgooye-masraf.pdf" data-pdf-title="جداول دهگانه الگوی مصرف" role="button" tabindex="0">
+            <div class="pdf-icon">💧</div>
+            <div class="info">
+              <h3>جداول دهگانه الگوی مصرف</h3>
+              <span>ظرفیت قراردادی بر اساس کاربری — PDF</span>
+              <span class="pdf-offline-badge" hidden>ذخیره‌شده آفلاین</span>
+              <div class="pdf-progress card" hidden>
+                <div class="pdf-progress-bar"><span></span></div>
+                <div class="pdf-progress-text">۰٪</div>
+              </div>
+            </div>
+            <div class="pdf-dl">⬇</div>
+          </div>
+          <div class="pdf-card" data-pdf="./pdf/ghavanin-ab-va-fazelab.pdf" data-pdf-title="قوانین مهم آب و فاضلاب" role="button" tabindex="0">
+            <div class="pdf-icon">📜</div>
+            <div class="info">
+              <h3>قوانین مهم آب و فاضلاب</h3>
+              <span>مواد و تبصره‌های کامل — PDF</span>
+              <span class="pdf-offline-badge" hidden>ذخیره‌شده آفلاین</span>
+              <div class="pdf-progress card" hidden>
+                <div class="pdf-progress-bar"><span></span></div>
+                <div class="pdf-progress-text">۰٪</div>
+              </div>
+            </div>
+            <div class="pdf-dl">⬇</div>
+          </div>
+          <div class="pdf-card" data-pdf="./pdf/tarefeha-1405-bandha.pdf" data-pdf-title="تعرفه‌های آب و فاضلاب ۱۴۰۵ — بندها" role="button" tabindex="0">
+            <div class="pdf-icon">🧾</div>
+            <div class="info">
+              <h3>تعرفه‌های آب و فاضلاب ۱۴۰۵ — بندها</h3>
+              <span>بندهای تعرفه و نکات کلیدی — PDF</span>
+              <span class="pdf-offline-badge" hidden>ذخیره‌شده آفلاین</span>
+              <div class="pdf-progress card" hidden>
+                <div class="pdf-progress-bar"><span></span></div>
+                <div class="pdf-progress-text">۰٪</div>
+              </div>
+            </div>
+            <div class="pdf-dl">⬇</div>
+          </div>
+          <div class="pdf-card" data-pdf="./pdf/jadaval-nerkh-tarefeha-1405.pdf" data-pdf-title="جداول نرخ‌گذاری تعرفه ۱۴۰۵" role="button" tabindex="0">
+            <div class="pdf-icon">📊</div>
+            <div class="info">
+              <h3>جداول نرخ‌گذاری تعرفه ۱۴۰۵</h3>
+              <span>نه جدول نرخ به همراه فرمول‌ها — PDF</span>
+              <span class="pdf-offline-badge" hidden>ذخیره‌شده آفلاین</span>
+              <div class="pdf-progress card" hidden>
+                <div class="pdf-progress-bar"><span></span></div>
+                <div class="pdf-progress-text">۰٪</div>
+              </div>
+            </div>
+            <div class="pdf-dl">⬇</div>
+          </div>
         </div>
       </div>
     </div>
-    <p class="card-caption">به‌زودی</p>
+
+
   </section>
+
 
   <!-- ===================== TABLES HOME (green) ===================== -->
   <section class="screen" id="screen-tables">
@@ -263,22 +377,208 @@
     <div id="lawsItemsWrap"></div>
   </section>
 
+
+  <!-- ===================== تعرفه‌های ۱۴۰۵ — خانه (teal) ===================== -->
+  <section class="screen" id="screen-tariffs">
+    <p class="home-intro">تعرفه‌های آب‌بها، کارمزد دفع فاضلاب و سایر شرایط عمومی مصوب سال ۱۴۰۵. یکی از بخش‌های زیر را انتخاب کنید یا از جست‌وجوی سراسری برای یافتن سریع یک بند یا جدول استفاده کنید.</p>
+
+    <div class="calc-section">
+      <h4>🔍 جست‌وجوی سراسری در کل سند تعرفه</h4>
+      <div class="field search-box">
+        <input type="text" id="tfHomeSearchInput" placeholder="مثلاً: فضای سبز، ظرفیت قراردادی، ماه‌های گرم، جدول ۹ ...">
+        <div class="search-results" id="tfHomeSearchResults"></div>
+      </div>
+      <div id="tfHomeSelectedWrap"></div>
+    </div>
+
+    <div class="table-grid regs-grid">
+      <div class="table-card main-card theme-blue-card" id="goTfSections">
+        <div class="icon icon-blue">📜</div>
+        <div class="info">
+          <h3>بندهای تعرفه و شرایط عمومی</h3>
+          <span id="tfSectionsCountLbl">— بخش، شامل کلیه بندهای شماره‌گذاری‌شده</span>
+        </div>
+        <div class="chev">‹</div>
+      </div>
+      <div class="table-card main-card theme-green-card" id="goTfRateTables">
+        <div class="icon icon-green">📊</div>
+        <div class="info">
+          <h3>جداول نرخ‌گذاری (۱ تا ۹)</h3>
+          <span>آب‌بها، کارمزد فاضلاب و دسته‌بندی مصارف</span>
+        </div>
+        <div class="chev">‹</div>
+      </div>
+    </div>
+
+    <div class="calc-section" style="margin-top:14px;">
+      <h4>📌 نکات کلیدی سریع</h4>
+      <div class="facts-grid" id="tfFactsGrid"></div>
+      <div class="table-note" style="margin-top:12px;">این اعداد صرفاً برای مرور سریع‌اند؛ برای محاسبه رسمی همیشه به بند مرتبط در همین برنامه یا به متن اصلی ابلاغیه مراجعه شود.</div>
+    </div>
+  </section>
+
+  <!-- ===================== تعرفه — فهرست بخش‌ها (blue) ===================== -->
+  <section class="screen" id="screen-tfsections">
+    <div class="calc-section">
+      <h4>🔍 جست‌وجو در بندهای تعرفه</h4>
+      <div class="field search-box">
+        <input type="text" id="tfSecHomeSearchInput" placeholder="جست‌وجو در عنوان یا متن بندها ...">
+        <div class="search-results" id="tfSecHomeSearchResults"></div>
+      </div>
+      <div id="tfSecHomeSelectedWrap"></div>
+    </div>
+    <p class="home-intro">یکی از بخش‌های زیر را برای مشاهده بندهای کامل آن انتخاب کنید.</p>
+    <div class="table-grid regs-grid" id="tfSectionGrid"></div>
+  </section>
+
+  <!-- ===================== تعرفه — نمای یک بخش (blue) ===================== -->
+  <section class="screen" id="screen-tfsection">
+    <div class="calc-section">
+      <h4>🔍 جست‌وجو در همین بخش</h4>
+      <div class="field search-box">
+        <input type="text" id="tfSecSearchInput" placeholder="جست‌وجو در متن این بخش ...">
+        <div class="search-results" id="tfSecSearchResults"></div>
+      </div>
+      <div id="tfSecSelectedWrap"></div>
+    </div>
+    <p class="home-intro" id="tfSectionIntro"></p>
+    <p class="chapter-meta" id="tfSectionMeta"></p>
+    <div id="tfSectionItemsWrap"></div>
+  </section>
+
+  <!-- ===================== تعرفه — فهرست جداول نرخ (green) ===================== -->
+  <section class="screen" id="screen-tfratetables">
+    <p class="home-intro">هر جدول شامل نرخ‌های مصوب ۱۴۰۵ به همراه شماره بند مرتبط در سند تعرفه است.</p>
+    <div class="table-grid tables-grid" id="tfRateTableGrid"></div>
+  </section>
+
+  <!-- ===================== تعرفه — نمای یک جدول نرخ (green) ===================== -->
+  <section class="screen" id="screen-tfratetable">
+    <div class="data-table-wrap" id="tfRateTableWrap"></div>
+    <p class="scroll-hint">◂ برای مشاهده کامل جدول، به چپ و راست بکشید ▸</p>
+    <div id="tfRateTableNoteWrap"></div>
+  </section>
+
 </main>
 
-<footer style="text-align:center;padding:10px 16px 90px;color:var(--muted);font-size:11px;line-height:2;">
-  تهیه‌کننده: <span style="font-weight:700;">مجید امیری‌زاده</span> — شرکت آب و فاضلاب استان فارس
-  — تماس: <a href="https://t.me/blue828" target="_blank" rel="noopener" style="color:#0088cc;text-decoration:none;font-weight:600;">@blue828</a>
-<div style="text-align:center;padding:2px 0;">
-  <a href="javascript:void(0)" id="shareAppBtn" style="color:var(--teal);text-decoration:none;font-weight:700;">📤 اشتراک‌گذاری برنامه</a>
-</div>
-<div style="text-align:center;font-size:10.5px;color:var(--muted);padding:0 16px 6px;">
-  نسخه <span id="appVersion">2.0.0</span> — آخرین به‌روزرسانی: <span id="lastUpdate"></span>
-</div>
-<div style="text-align:center;font-size:10px;color:var(--muted);padding:0 16px 2px;opacity:.85;">
-  برای دریافت به‌روزرسانی‌های جدید، صفحه برنامه را به پایین بکشید
+<!-- ===================== PDF PREVIEW MODAL ===================== -->
+<div class="pdfview" id="pdfViewer" hidden>
+  <div class="pdfview-box" role="dialog" aria-modal="true" aria-labelledby="pdfViewerTitle">
+    <div class="pdfview-head">
+      <h3 id="pdfViewerTitle">فایل PDF</h3>
+      <button type="button" class="pdfview-close" id="pdfViewerClose" aria-label="بستن">✕</button>
+    </div>
+    <div class="pdfview-body">
+      <div class="pdfview-loading" id="pdfViewerLoading">
+        <div class="pdf-progress">
+          <div class="pdf-progress-bar"><span id="pdfViewerBar"></span></div>
+          <div class="pdf-progress-text" id="pdfViewerPct">۰٪</div>
+        </div>
+        <div class="pdfview-loading-note">در حال آماده‌سازی فایل…</div>
+      </div>
+    </div>
+    <div class="pdfview-foot">
+      <span class="pdfview-size" id="pdfViewerSize"></span>
+      <button type="button" class="pdfview-open" id="pdfViewerOpen">↗ باز کردن جداگانه</button>
+      <button type="button" class="pdfview-dl" id="pdfViewerDownload">⬇️ دانلود فایل</button>
+    </div>
+  </div>
 </div>
 
+<footer class="app-footer">
+<details class="about-acc" id="aboutAcc">
+  <summary class="about-acc-head">
+    <span class="about-acc-ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="9.2" stroke="currentColor" stroke-width="1.7"/>
+        <path d="M12 10.6v6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        <circle cx="12" cy="7.6" r="1.15" fill="currentColor"/>
+      </svg>
+    </span>
+    <span class="about-acc-txt">
+      <strong>درباره</strong>
+    </span>
+    <span class="about-acc-chev" aria-hidden="true">›</span>
+  </summary>
+  <div class="about-acc-body">
+
+  <!-- ===== بخش اشتراک‌گذاری (iOS / اندروید) ===== -->
+  <section class="share-block" aria-label="اشتراک‌گذاری برنامه">
+    <h4 class="share-title">اشتراک‌گذاری برنامه</h4>
+    <p class="share-sub">لینک مناسب دستگاه مخاطب را برای او بفرستید</p>
+
+    <div class="share-grid">
+      <!-- اندروید / مایکت -->
+      <button type="button" class="share-btn share-android" id="shareAndroidBtn" data-share-key="android">
+        <span class="share-btn-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.2 9.6h9.6c.44 0 .8.36.8.8v6.4a2.4 2.4 0 0 1-2.4 2.4H8.8a2.4 2.4 0 0 1-2.4-2.4v-6.4c0-.44.36-.8.8-.8Zm-2.7.2c.66 0 1.2.54 1.2 1.2v3.9a1.2 1.2 0 1 1-2.4 0v-3.9c0-.66.54-1.2 1.2-1.2Zm15 0c.66 0 1.2.54 1.2 1.2v3.9a1.2 1.2 0 1 1-2.4 0v-3.9c0-.66.54-1.2 1.2-1.2ZM9.3 19.9a1.2 1.2 0 0 1 2.4 0v1.5a1.2 1.2 0 0 1-2.4 0v-1.5Zm3 0a1.2 1.2 0 0 1 2.4 0v1.5a1.2 1.2 0 0 1-2.4 0v-1.5ZM8.4 4.2l.83 1.5A5.9 5.9 0 0 1 12 5.1c1 0 1.94.21 2.77.6l.83-1.5a.6.6 0 1 1 1.05.58l-.8 1.44A5.53 5.53 0 0 1 17.9 8.4H6.1a5.53 5.53 0 0 1 2.05-2.18l-.8-1.44a.6.6 0 1 1 1.05-.58ZM9.4 7.2a.65.65 0 1 0 0-1.3.65.65 0 0 0 0 1.3Zm5.2 0a.65.65 0 1 0 0-1.3.65.65 0 0 0 0 1.3Z"/>
+          </svg>
+        </span>
+        <span class="share-btn-txt">
+          <strong>اشتراک‌گذاری برای اندروید</strong>
+          <small id="shareAndroidHint">دریافت نسخه اندروید از مایکت</small>
+        </span>
+        <span class="share-btn-go" aria-hidden="true">‹</span>
+      </button>
+
+      <!-- iOS / وب اپ (همان لینک قبلی) -->
+      <button type="button" class="share-btn share-ios" id="shareIosBtn" data-share-key="ios">
+        <span class="share-btn-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.36 12.79c.02-2.03 1.66-3.01 1.73-3.06-0.95-1.39-2.42-1.58-2.94-1.6-1.25-.13-2.44.73-3.08.73-.65 0-1.63-.71-2.68-.69-1.38.02-2.65.8-3.36 2.03-1.43 2.49-.37 6.17 1.03 8.19.68.99 1.5 2.09 2.57 2.05 1.03-.04 1.42-.67 2.66-.67 1.23 0 1.59.67 2.67.65 1.1-.02 1.81-1 2.49-1.99.78-1.14 1.1-2.24 1.12-2.3-.02-.01-2.16-.83-2.18-3.29ZM14.3 6.6c.56-.68.94-1.63.83-2.6-.83.04-1.86.56-2.44 1.24-.52.6-.98 1.57-.86 2.5.93.07 1.9-.47 2.47-1.14Z"/>
+          </svg>
+        </span>
+        <span class="share-btn-txt">
+          <strong>اشتراک‌گذاری برای iOS</strong>
+          <small>نسخه وب — نصب روی آیفون و آیپد</small>
+        </span>
+        <span class="share-btn-go" aria-hidden="true">‹</span>
+      </button>
+
+      <!-- ویندوز (همان لینک نسخه وب) -->
+      <button type="button" class="share-btn share-windows" id="shareWindowsBtn" data-share-key="windows">
+        <span class="share-btn-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 5.8l7.4-1.02v6.7H3V5.8Zm0 12.4l7.4 1.02v-6.62H3v5.6Zm8.6 1.18L21 20.7v-8.9h-9.4v7.58ZM11.6 3.3v7.18H21V2l-9.4 1.3Z"/>
+          </svg>
+        </span>
+        <span class="share-btn-txt">
+          <strong>اشتراک‌گذاری برای ویندوز</strong>
+          <small>نسخه وب — اجرا و نصب روی ویندوز</small>
+        </span>
+        <span class="share-btn-go" aria-hidden="true">‹</span>
+      </button>
+    </div>
+    <div class="share-toast" id="shareToast" hidden></div>
+  </section>
+
+  <!-- ===== اطلاعات تهیه‌کننده ===== -->
+  <div class="footer-credit">
+    <span class="footer-credit-label">تهیه‌کننده</span>
+    <span class="footer-credit-name">مجید امیری‌زاده</span>
+    <span class="footer-credit-org">برنامه آموزشی و کاربردی در حوزه آب و فاضلاب</span>
+    <a class="footer-credit-tg" href="https://t.me/blue828" target="_blank" rel="noopener">
+      <span aria-hidden="true">✈</span> @blue828
+    </a>
+  </div>
+
+  <div class="footer-meta" style="line-height:2;">
+    <strong>منابع:</strong> آیین‌نامه عملیاتی و شرایط عمومی تعرفه‌های آب و فاضلاب (مصوب وزارت نیرو)؛ جداول دهگانه الگوی مصرف؛ تعرفه‌های مصوب سال ۱۴۰۵ ابلاغی وزارت نیرو؛ قوانین مصوب مجلس شورای اسلامی در حوزه آب و فاضلاب. متون قانونی از اسناد رسمیِ در دسترس عموم نقل شده‌اند و حق مالکیت آن‌ها متعلق به مراجع تصویب‌کننده است.
+  </div>
+  <div class="footer-meta" style="line-height:2;">
+    <strong>سلب مسئولیت:</strong> این برنامه صرفاً جنبه آموزشی و اطلاع‌رسانی دارد، مرجع رسمی محاسبه یا صدور صورتحساب نیست و ملاک عمل، اسناد و ابلاغیه‌های رسمی مراجع ذی‌ربط است.
+  </div>
+  <div class="footer-meta">
+    نسخه <span id="appVersion">2.4.0</span> — آخرین به‌روزرسانی: <span id="lastUpdate"></span>
+  </div>
+  <div class="footer-hint">
+    برای دریافت به‌روزرسانی‌های جدید، صفحه برنامه را به پایین بکشید
+  </div>
+  </div>
+</details>
 </footer>
+
 
 <button class="fab" id="fabCalc" title="ماشین‌حساب">
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -291,7 +591,9 @@
     <rect x="10.45" y="14.5" width="3.1" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
     <rect x="6.3" y="18" width="7.25" height="3.1" rx="0.9" fill="white" fill-opacity="0.55"/>
   </svg>
+  <span class="fab-label">ماشین‌حساب</span>
 </button>
+
 <button class="fab-back" id="backBtn" title="بازگشت">›</button>
 <button class="back-to-top" id="backToTopBtn" title="بازگشت به بالا" aria-label="بازگشت به بالا">↑</button>
 
@@ -314,9 +616,10 @@
     <button class="modal-close" id="infoModalClose" aria-label="بستن">✕</button>
     <div class="modal-header" id="infoModalHeader">
       <div class="modal-icon" id="infoModalIcon">💧</div>
-      <h3 id="infoModalTitle">آب و فاضلاب استان فارس</h3>
+      <h3 id="infoModalTitle">آبفا پلاس</h3>
       <p id="infoModalSub">آیین‌نامه، جداول مصرف و ماشین‌حساب</p>
     </div>
+    <div class="modal-thanks" id="infoModalThanks" hidden></div>
     <div class="modal-body">
       <div class="modal-desc" id="infoModalDesc" style="margin-top:0;"></div>
       <ul class="modal-features" id="infoModalFeatures"></ul>
@@ -332,7 +635,7 @@
   <div class="modal-card install-modal-card">
     <div class="modal-header">
       <div class="modal-icon" id="installModalIcon">💧</div>
-      <h3 id="installModalTitle">اپلیکیشن آب و فاضلاب فارس</h3>
+      <h3 id="installModalTitle">اپلیکیشن آبفا پلاس</h3>
       <p id="installModalDesc">برای دسترسی سریع‌تر، برنامه را روی صفحه اصلی گوشی نصب کنید</p>
     </div>
     <div class="modal-body install-modal-body">
@@ -363,5 +666,7 @@
 <!-- ===================== قابلیت‌های افزوده: تم تیره، نوار پیشرفت، آفلاین، تاریخچه، اشتراک‌گذاری، به‌روزرسانی PWA ===================== -->
 
 <script src="app.js"></script>
+<script src="search-enhance.js"></script>
+<script src="ui-enhance.js"></script>
 </body>
 </html>

@@ -809,3 +809,635 @@
     }
     html{scroll-behavior:auto;}
   }
+
+  /* ===================== بخش تعرفه‌های ۱۴۰۵ (استایل‌های افزوده‌شده) ===================== */
+  .main-card.theme-teal-card:hover{border-color:rgba(15,139,141,.35);}
+  .main-card.theme-teal-card:hover::after{background:var(--teal);}
+
+  .facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+  .fact-card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:12px 13px;box-shadow:var(--shadow-1);
+  }
+  .fact-card .fv{font-size:15.5px;font-weight:800;color:var(--deep);direction:ltr;text-align:right;}
+  .fact-card .fl{font-size:10.8px;color:var(--muted);margin-top:4px;line-height:1.7;}
+
+  table.data-table tbody td.cell-r{text-align:right;}
+  .formula-cell{
+    direction:ltr;text-align:center !important;font-family:'Courier New',monospace;
+    font-size:11.6px;line-height:1.9;color:var(--deep-2);unicode-bidi:plaintext;
+  }
+  .table-note{
+    margin-top:10px;font-size:11.3px;color:var(--muted);background:var(--teal-light);
+    border:1px dashed var(--teal);border-radius:var(--radius-sm);padding:10px 13px;line-height:1.9;
+  }
+  .table-note b{color:var(--deep);}
+
+  #tfSectionItemsWrap .art-table-link{
+    display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:11.3px;font-weight:700;
+    color:#fff;background:linear-gradient(135deg,var(--green),var(--green-2));padding:6px 11px;border-radius:10px;
+    cursor:pointer;box-shadow:0 3px 10px rgba(11,92,61,.22);
+  }
+  #tfSectionItemsWrap .art-table-link:hover{filter:brightness(1.05);}
+
+  html[data-theme="dark"] .fact-card{background:#0c1c23;}
+  html[data-theme="dark"] .formula-cell{color:var(--text);}
+  html[data-theme="dark"] .table-note{background:#0c1c23;}
+
+/* ===================== PDF DOWNLOADS (home) ===================== */
+.pdf-section{margin-top:26px;}
+.pdf-section-title{font-size:15.5px;font-weight:800;color:var(--ink,#0f3b4c);margin:0 4px 4px;}
+.pdf-section-sub{margin:0 4px 12px;color:var(--muted);font-size:12.5px;line-height:1.9;}
+.pdf-grid{display:grid;gap:10px;}
+.pdf-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;
+  background:var(--card,#fff);border:1px solid rgba(15,59,76,.10);text-decoration:none;
+  box-shadow:0 2px 10px rgba(15,59,76,.05);transition:transform .15s ease,box-shadow .15s ease;}
+.pdf-card:active{transform:scale(.99);}
+.pdf-card:hover{box-shadow:0 6px 18px rgba(15,59,76,.10);}
+.pdf-icon{width:40px;height:40px;flex:0 0 40px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:19px;background:rgba(190,30,45,.10);}
+.pdf-card .info{flex:1;min-width:0;}
+.pdf-card .info h3{margin:0;font-size:13.5px;font-weight:700;color:var(--ink,#0f3b4c);line-height:1.6;}
+.pdf-card .info span{display:block;margin-top:2px;font-size:11.5px;color:var(--muted);}
+.pdf-dl{width:32px;height:32px;flex:0 0 32px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:15px;color:#fff;background:linear-gradient(135deg,#d33b3b,#a11d2a);}
+html[data-theme="dark"] .pdf-card{background:var(--card,#132631);border-color:rgba(255,255,255,.08);}
+html[data-theme="dark"] .pdf-card .info h3{color:#e8f1f5;}
+
+/* ============================================================
+   PDF: پیش‌نمایش، نوار پیشرفت و دانلود آفلاین (افزودنی — بدون تغییر در استایل‌های قبلی)
+   ============================================================ */
+.pdf-offline-box{margin:0 0 12px;padding:12px 14px;border-radius:16px;background:var(--card,#fff);
+  border:1px solid rgba(15,59,76,.08);box-shadow:0 3px 12px rgba(15,59,76,.06);text-align:center;}
+.pdf-offline-btn{width:100%;border:0;cursor:pointer;font-family:inherit;font-size:13px;font-weight:800;color:#fff;
+  padding:11px 14px;border-radius:13px;background:linear-gradient(135deg,var(--teal,#0e7490),#0b5c3d);
+  box-shadow:0 4px 12px rgba(14,116,144,.22);}
+.pdf-offline-btn:active{transform:scale(.99);}
+.pdf-offline-btn[disabled]{opacity:.65;cursor:default;}
+.pdf-offline-note{margin-top:6px;font-size:10.5px;color:var(--muted);line-height:1.9;}
+.pdf-progress{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.pdf-progress-bar{flex:1;height:7px;border-radius:99px;background:rgba(15,59,76,.10);overflow:hidden;}
+.pdf-progress-bar>span{display:block;height:100%;width:0%;border-radius:99px;
+  background:linear-gradient(90deg,var(--teal,#0e7490),#0b5c3d);transition:width .18s ease;}
+.pdf-progress-text{font-size:10.5px;font-weight:700;color:var(--muted);min-width:34px;}
+.pdf-progress.card{margin-top:7px;}
+.pdf-card{cursor:pointer;}
+
+.pdfview{position:fixed;inset:0;z-index:120;background:rgba(8,26,34,.62);backdrop-filter:blur(3px);
+  display:flex;align-items:flex-end;justify-content:center;}
+.pdfview-box{width:100%;max-width:640px;height:92vh;display:flex;flex-direction:column;
+  background:var(--card,#fff);border-radius:20px 20px 0 0;overflow:hidden;box-shadow:0 -8px 30px rgba(0,0,0,.28);}
+.pdfview-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(15,59,76,.10);}
+.pdfview-head h3{margin:0;flex:1;font-size:13.5px;font-weight:800;color:var(--ink,#0f3b4c);line-height:1.7;}
+.pdfview-close{border:0;background:rgba(15,59,76,.08);color:var(--ink,#0f3b4c);width:30px;height:30px;
+  border-radius:50%;font-size:14px;cursor:pointer;font-family:inherit;}
+.pdfview-body{position:relative;flex:1;background:#eceff1;}
+.pdfview-body iframe{width:100%;height:100%;border:0;display:block;}
+.pdfview-loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:6px;padding:0 26px;background:var(--card,#fff);}
+.pdfview-loading .pdf-progress{width:100%;max-width:280px;}
+.pdfview-loading-note{font-size:11.5px;color:var(--muted);}
+.pdfview-foot{display:flex;align-items:center;gap:10px;padding:10px 14px 14px;border-top:1px solid rgba(15,59,76,.10);}
+.pdfview-size{flex:1;font-size:11px;color:var(--muted);}
+.pdfview-dl{border:0;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:800;color:#fff;
+  padding:10px 16px;border-radius:12px;background:linear-gradient(135deg,var(--green,#0b5c3d),var(--green-2,#12855a));
+  box-shadow:0 3px 10px rgba(11,92,61,.22);}
+html[data-theme="dark"] .pdf-offline-box{background:var(--card,#132631);border-color:rgba(255,255,255,.08);}
+html[data-theme="dark"] .pdf-progress-bar{background:rgba(255,255,255,.12);}
+html[data-theme="dark"] .pdfview-box{background:#132631;}
+html[data-theme="dark"] .pdfview-head h3{color:#e8f1f5;}
+html[data-theme="dark"] .pdfview-close{background:rgba(255,255,255,.10);color:#e8f1f5;}
+html[data-theme="dark"] .pdfview-loading{background:#132631;}
+html[data-theme="dark"] .pdfview-head,html[data-theme="dark"] .pdfview-foot{border-color:rgba(255,255,255,.10);}
+.pdfview[hidden],.pdf-progress[hidden],.pdfview-loading[hidden]{display:none !important;}
+.pdfview-open{border:1px solid rgba(15,59,76,.14);background:transparent;color:var(--ink,#0f3b4c);
+  cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;padding:9px 12px;border-radius:12px;}
+html[data-theme="dark"] .pdfview-open{color:#e8f1f5;border-color:rgba(255,255,255,.16);}
+
+/* ============================================================
+   PDF: باکس آکاردئون + وضعیت آفلاین + حذف کش
+   (افزودنی — استایل‌های قبلی تغییر نکرده‌اند)
+   ============================================================ */
+.pdf-acc{padding:0;overflow:hidden;border-radius:18px;background:var(--card,#fff);
+  border:1px solid rgba(15,59,76,.08);box-shadow:0 3px 12px rgba(15,59,76,.06);}
+.pdf-acc-head{width:100%;display:flex;align-items:center;gap:10px;padding:14px;border:0;cursor:pointer;
+  background:transparent;font-family:inherit;text-align:right;color:inherit;}
+.pdf-acc-ico{font-size:22px;line-height:1;}
+.pdf-acc-txt{flex:1;display:flex;flex-direction:column;gap:3px;}
+.pdf-acc-head .pdf-section-title{margin:0;font-size:14px;font-weight:800;}
+.pdf-acc-head .pdf-section-sub{margin:0;font-size:11.5px;opacity:.75;line-height:1.6;}
+.pdf-acc-chev{font-size:20px;opacity:.5;transform:rotate(-90deg);transition:transform .22s ease;}
+.pdf-acc-head[aria-expanded="true"] .pdf-acc-chev{transform:rotate(90deg);}
+.pdf-acc-panel{padding:0 12px 12px;}
+.pdf-acc-panel[hidden]{display:none !important;}
+.pdf-offline-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;flex-wrap:wrap;}
+.pdf-offline-stat{font-size:11px;opacity:.75;}
+.pdf-clear-btn{border:1px solid rgba(190,60,60,.35);background:transparent;color:#b23b3b;cursor:pointer;
+  font-family:inherit;font-size:11.5px;font-weight:700;padding:7px 11px;border-radius:11px;}
+.pdf-clear-btn:disabled{opacity:.55;cursor:default;}
+.pdf-offline-badge{display:inline-block;margin-top:4px;font-size:10.5px;font-weight:700;color:#0b5c3d;
+  background:rgba(16,150,100,.12);border-radius:8px;padding:2px 7px;width:fit-content;}
+.pdf-offline-badge[hidden]{display:none !important;}
+.dark .pdf-offline-badge, [data-theme="dark"] .pdf-offline-badge{color:#7fe3b6;background:rgba(16,150,100,.2);}
+.dark .pdf-acc, [data-theme="dark"] .pdf-acc{border-color:rgba(255,255,255,.08);}
+.dark .pdf-clear-btn, [data-theme="dark"] .pdf-clear-btn{color:#ff9b9b;border-color:rgba(255,155,155,.35);}
+
+/* ============================================================
+   نسخه ۲.۱ — بهبود ظاهری (فوتر حرفه‌ای، اشتراک‌گذاری، دکمه
+   ماشین‌حساب شاخص‌تر، خوانایی جداول)
+   ------------------------------------------------------------
+   این بلوک به‌صورت افزودنی نوشته شده است؛ هیچ قاعده قبلی حذف
+   نشده و برای توسعه آینده کافی است همین بخش را ویرایش کنید.
+   ============================================================ */
+
+/* ---------------------- فوتر حرفه‌ای ---------------------- */
+.app-footer{
+  padding:6px 14px calc(104px + env(safe-area-inset-bottom,0px));
+  color:var(--muted);
+  font-size:11.5px;
+  line-height:2;
+  text-align:center;
+}
+
+.share-block{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-1);
+  padding:16px 14px 14px;
+  margin:6px 0 14px;
+  text-align:right;
+}
+.share-title{
+  margin:0 0 2px;font-size:13.4px;font-weight:800;color:var(--deep);
+  display:flex;align-items:center;gap:8px;
+}
+.share-title::before{content:"📤";font-size:15px;}
+.share-title::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.share-sub{margin:0 0 12px;font-size:11.2px;color:var(--muted);}
+
+.share-grid{display:grid;gap:10px;}
+@media (min-width:560px){ .share-grid{grid-template-columns:1fr 1fr;} }
+
+.share-btn{
+  display:flex;align-items:center;gap:11px;width:100%;
+  padding:12px 13px;border-radius:var(--radius-sm);
+  border:1px solid var(--border);background:var(--bg);
+  color:var(--text);cursor:pointer;text-align:right;
+  font-family:inherit;
+  transition:transform .12s var(--ease), box-shadow .16s ease, border-color .16s ease, background .16s ease;
+}
+.share-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-2);}
+.share-btn:active{transform:scale(.985);}
+.share-btn:focus-visible{outline:none;box-shadow:var(--focus-ring);}
+.share-btn-ico{
+  width:40px;height:40px;flex-shrink:0;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;color:#fff;
+}
+.share-btn-ico svg{width:23px;height:23px;}
+.share-btn-txt{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.share-btn-txt strong{font-size:12.7px;font-weight:800;color:var(--text);}
+.share-btn-txt small{font-size:10.6px;color:var(--muted);font-weight:400;}
+.share-btn-go{font-size:17px;color:var(--muted);opacity:.55;flex-shrink:0;}
+.share-btn:hover .share-btn-go{opacity:1;transform:translateX(-3px);transition:transform .14s var(--ease);}
+
+.share-ios{border-color:rgba(20,30,40,.14);}
+.share-ios .share-btn-ico{background:linear-gradient(135deg,#3a4552,#11161c);}
+.share-ios:hover{border-color:rgba(20,30,40,.3);}
+.share-android .share-btn-ico{background:linear-gradient(135deg,#3ddc84,#0f8b57);}
+.share-android:hover{border-color:rgba(15,139,87,.4);}
+.share-btn.is-pending .share-btn-ico{filter:grayscale(.35);opacity:.9;}
+.share-btn.is-pending .share-btn-txt small{color:#b3701c;font-weight:600;}
+
+.share-toast{
+  margin-top:11px;padding:9px 12px;border-radius:var(--radius-sm);
+  font-size:11.3px;font-weight:600;line-height:1.8;text-align:center;
+  background:var(--teal-light);color:var(--deep);border:1px dashed var(--teal);
+  opacity:0;transform:translateY(4px);transition:opacity .2s ease, transform .2s ease;
+}
+.share-toast.show{opacity:1;transform:none;}
+.share-toast.warn{background:#fff5e8;border-color:#e0a057;color:#8a5518;}
+
+.footer-credit{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:6px 9px;font-size:11.2px;color:var(--muted);padding:2px 0 4px;
+}
+.footer-credit-label{opacity:.75;}
+.footer-credit-name{font-weight:800;color:var(--text);}
+.footer-credit-org{position:relative;padding-right:11px;}
+.footer-credit-org::before{content:"•";position:absolute;right:0;opacity:.5;}
+.footer-credit-tg{
+  display:inline-flex;align-items:center;gap:5px;text-decoration:none;font-weight:700;
+  color:#0088cc;background:rgba(0,136,204,.09);border-radius:999px;padding:3px 10px;font-size:11px;
+}
+.footer-meta{font-size:10.6px;padding:2px 0 1px;}
+.footer-hint{font-size:10px;opacity:.85;padding:0 0 2px;}
+
+html[data-theme="dark"] .share-block,
+.dark .share-block{background:var(--card);}
+html[data-theme="dark"] .share-btn,
+.dark .share-btn{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.09);}
+html[data-theme="dark"] .share-toast.warn,
+.dark .share-toast.warn{background:rgba(224,160,87,.12);color:#f0c48a;}
+
+/* ------------- دکمه شناور ماشین‌حساب (شاخص‌تر) ------------- */
+.fab{
+  width:auto;min-width:64px;height:64px;
+  padding:0 17px 0 15px;border-radius:22px;gap:9px;
+  box-shadow:0 14px 34px -6px rgba(226,70,31,.62), 0 0 0 6px rgba(226,70,31,.12);
+  animation:fabPulse 2.8s var(--ease) infinite;
+}
+.fab svg{width:31px;height:31px;flex-shrink:0;}
+.fab-label{
+  font-size:13px;font-weight:800;color:#fff;white-space:nowrap;letter-spacing:.2px;
+  text-shadow:0 1px 2px rgba(120,30,10,.35);
+}
+.fab:hover{
+  animation:none;
+  box-shadow:0 18px 40px -6px rgba(226,70,31,.68), 0 0 0 8px rgba(226,70,31,.16);
+  transform:translateY(-2px);
+}
+.fab:active{animation:none;transform:scale(.96);}
+@keyframes fabPulse{
+  0%,100%{box-shadow:0 14px 34px -6px rgba(226,70,31,.62), 0 0 0 6px rgba(226,70,31,.12);}
+  50%    {box-shadow:0 16px 38px -6px rgba(226,70,31,.68), 0 0 0 12px rgba(226,70,31,.05);}
+}
+@media (prefers-reduced-motion:reduce){ .fab{animation:none;} }
+@media (max-width:360px){
+  .fab{min-width:60px;height:60px;padding:0 13px;}
+  .fab-label{font-size:12px;}
+}
+
+/* ---------- خوانایی جداول دهگانه و جداول تعرفه ---------- */
+table.data-table{font-size:13.2px;}
+table.data-table thead th{
+  font-size:12.2px;padding:14px 10px;letter-spacing:.2px;
+}
+table.data-table tbody td{
+  padding:13px 10px;line-height:1.95;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+}
+/* ستون شرح: کمی روشن‌تر اما خواناتر از قبل */
+table.data-table tbody td:last-child{font-size:12.1px;color:#43626b;text-align:right;}
+html[data-theme="dark"] table.data-table tbody td:last-child,
+.dark table.data-table tbody td:last-child{color:#a9c4cb;}
+/* راه‌راه ملایم‌تر و کنتراست بیشتر برای ردیف‌ها */
+table.data-table tbody tr:nth-child(even){background:#f4f9fa;}
+table.data-table tbody tr:nth-child(odd){background:var(--card);}
+html[data-theme="dark"] table.data-table tbody tr:nth-child(even),
+.dark table.data-table tbody tr:nth-child(even){background:rgba(255,255,255,.035);}
+/* ستون اول (شماره ردیف) چسبان تا هنگام اسکرول افقی گم نشود */
+table.data-table thead th:first-child{z-index:7;}
+table.data-table tbody td:first-child{
+  font-weight:800;color:var(--deep);font-size:12.4px;
+  background:linear-gradient(180deg,var(--teal-light),#eef7f7);
+}
+html[data-theme="dark"] table.data-table tbody td:first-child,
+.dark table.data-table tbody td:first-child{background:rgba(18,120,122,.16);color:#bfe6e6;}
+/* عنوان دسته‌بندی برجسته‌تر */
+table.data-table tbody td:nth-child(2){font-weight:700;font-size:13px;color:var(--text);}
+/* جداکننده گروه‌ها و مکث بصری بین ردیف‌ها */
+table.data-table tbody tr{border-bottom:1px solid transparent;}
+table.data-table tbody tr:hover td{background:var(--teal-light);}
+table.data-table tbody tr.composite-row td{background:#fbfcfc;color:#42606a;}
+html[data-theme="dark"] table.data-table tbody tr.composite-row td,
+.dark table.data-table tbody tr.composite-row td{background:rgba(255,255,255,.02);color:#9fbcc4;}
+.data-table-wrap{max-height:76vh;}
+.scroll-hint{font-size:11.5px;opacity:.95;}
+
+/* --- عرض ستون‌ها: جلوگیری از فشرده شدن متن در موبایل ---
+   جدول به‌جای فشرده شدن در عرض صفحه، عرض طبیعی می‌گیرد و کاربر
+   به‌صورت افقی اسکرول می‌کند (راهنمای اسکرول زیر جدول موجود است). */
+table.data-table{width:max-content;min-width:100%;}
+table.data-table thead th,
+table.data-table tbody td{min-width:80px;}
+table.data-table thead th:first-child,
+table.data-table tbody td:first-child{min-width:46px;width:46px;}
+table.data-table thead th:nth-child(2),
+table.data-table tbody td:nth-child(2){min-width:150px;max-width:210px;}
+table.data-table thead th:last-child,
+table.data-table tbody td:last-child{min-width:230px;max-width:300px;}
+/* ستون شماره ردیف چسبان می‌ماند تا مرجع بصری حفظ شود (RTL: سمت راست) */
+table.data-table thead th:first-child{position:sticky;right:0;}
+table.data-table tbody td:first-child{
+  position:sticky;right:0;z-index:2;
+  box-shadow:-1px 0 0 var(--border);
+}
+
+/* ============================================================
+   نسخه 2.2 — جست‌وجوی بهبودیافته + اسپلش بهینه
+   ============================================================ */
+
+/* ---------- کادر جست‌وجو ---------- */
+.search-box input{padding-left:36px;}
+.search-input-wrap{position:relative;display:block;}
+.search-box .search-clear{
+  position:absolute;left:8px;top:50%;transform:translateY(-50%);
+  width:26px;height:26px;border:none;border-radius:50%;
+  background:rgba(15,107,118,.10);color:var(--muted);
+  font-size:18px;line-height:1;cursor:pointer;display:none;
+  align-items:center;justify-content:center;padding:0;
+  transition:background .15s ease,color .15s ease,transform .15s ease;
+}
+.search-box.has-value .search-clear{display:flex;}
+.search-box .search-clear:hover{background:rgba(15,107,118,.2);color:var(--text,#123);transform:translateY(-50%) scale(1.06);}
+
+.search-meta{
+  display:none;margin:6px 2px 0;font-size:11.4px;font-weight:600;color:var(--muted);
+}
+.search-meta.show{display:block;animation:dropIn .12s var(--ease);}
+.search-meta .sm-count{
+  display:inline-block;min-width:20px;padding:1px 7px;margin-inline-end:4px;border-radius:999px;
+  background:var(--teal-light,rgba(20,184,166,.14));color:#0f6b76;font-weight:800;
+}
+.search-meta .sm-none{color:var(--danger,#c0392b);}
+
+.search-result-item.kb-active{background:var(--teal-light,rgba(20,184,166,.14));}
+mark.sr-hit{
+  background:rgba(255,196,0,.34);color:inherit;border-radius:3px;padding:0 2px;font-weight:800;
+}
+
+/* لیست نتایج: اسکرول روان‌تر و سایه لبه */
+.search-results{max-height:min(56vh,380px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+
+html[data-theme="dark"] .search-box .search-clear{background:rgba(255,255,255,.08);}
+html[data-theme="dark"] .search-box .search-clear:hover{background:rgba(255,255,255,.16);color:#eaf6f7;}
+html[data-theme="dark"] .search-meta .sm-count{background:#14333a;color:#7ff2df;}
+html[data-theme="dark"] mark.sr-hit{background:rgba(255,196,0,.26);color:#ffe9a8;}
+html[data-theme="dark"] .search-result-item.kb-active{background:#14333a;}
+
+/* ---------- اسپلش (اورلی بارگذاری اولیه) ---------- */
+.app-loader.splash{
+  background:linear-gradient(160deg,#0f6b76 0%,#062c3d 100%);
+}
+.app-loader.splash .app-loader-inner{color:#eaf9f7;}
+.app-loader-logo{
+  width:96px;height:96px;display:block;margin:0 auto 16px;
+  filter:drop-shadow(0 10px 24px rgba(0,0,0,.35));
+  animation:splashPop .5s cubic-bezier(.2,.9,.25,1.05) both;
+}
+.app-loader-brand{
+  font-size:16.5px;font-weight:800;color:#ffffff;letter-spacing:.2px;
+  animation:splashFade .6s .1s ease both;
+}
+.app-loader-sub{
+  margin-top:5px;font-size:12.2px;color:rgba(234,249,247,.72);font-weight:600;
+  animation:splashFade .6s .2s ease both;
+}
+.app-loader.splash .app-loader-spinner{
+  margin:18px auto 10px;border-color:rgba(255,255,255,.22);border-top-color:#7ff2df;
+}
+.app-loader.splash .app-loader-text{color:rgba(234,249,247,.75);}
+.app-loader.splash .app-loader-error p{color:#ffd3cb;}
+.app-loader.splash{transition:opacity .32s ease,visibility .32s ease;}
+
+@keyframes splashPop{
+  from{opacity:0;transform:scale(.82) translateY(8px);}
+  to{opacity:1;transform:none;}
+}
+@keyframes splashFade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+
+@media (prefers-reduced-motion: reduce){
+  .app-loader-logo,.app-loader-brand,.app-loader-sub{animation:none;}
+}
+
+/* ============================================================
+   نسخه ۲.۳ — بهبودهای ظاهری (بدون تغییر در داده/فرمول)
+   ============================================================ */
+
+/* ---------- فقط برای صفحه‌خوان ---------- */
+.sr-only{
+  position:absolute !important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+
+/* ---------- ۱) آکاردئون «درباره» در فوتر ---------- */
+.about-acc{
+  border:1px solid rgba(15,59,76,.10);
+  border-radius:16px;background:var(--card);
+  box-shadow:0 3px 14px -8px rgba(15,59,76,.25);
+  overflow:hidden;margin:4px 0 10px;
+}
+.about-acc-head{
+  display:flex;align-items:center;gap:11px;
+  padding:13px 14px;cursor:pointer;list-style:none;
+  min-height:56px;user-select:none;
+  transition:background .14s ease;
+}
+.about-acc-head::-webkit-details-marker{display:none;}
+.about-acc-head:hover{background:rgba(18,120,122,.05);}
+.about-acc-head:focus-visible{outline:2px solid var(--teal);outline-offset:-2px;}
+.about-acc-ico{
+  width:36px;height:36px;flex-shrink:0;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(18,120,122,.16),rgba(18,120,122,.06));
+  color:var(--teal,#12787a);
+}
+.about-acc-ico svg{width:21px;height:21px;}
+.about-acc-txt{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.about-acc-txt strong{font-size:13.4px;font-weight:800;color:var(--text);}
+.about-acc-txt small{font-size:10.9px;color:var(--muted);}
+.about-acc-chev{
+  font-size:20px;line-height:1;color:var(--muted);flex-shrink:0;
+  transform:rotate(-90deg);transition:transform .2s var(--ease);
+}
+.about-acc[open] .about-acc-chev{transform:rotate(90deg);}
+.about-acc-body{
+  padding:2px 12px 12px;
+  animation:aboutIn .2s var(--ease);
+}
+@keyframes aboutIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:none;}}
+html[data-theme="dark"] .about-acc,.dark .about-acc{border-color:rgba(255,255,255,.09);}
+html[data-theme="dark"] .about-acc-head:hover,.dark .about-acc-head:hover{background:rgba(255,255,255,.04);}
+.about-acc .share-block{border:0;box-shadow:none;background:transparent;padding-left:0;padding-right:0;}
+
+/* ---------- ۳) راهنمای مسیر شکیل زیر هدر ---------- */
+.step-nav.step-nav-pro{
+  position:static;display:none;
+  margin:9px 0 0;padding:0;
+  align-items:center;gap:0;
+  opacity:1;pointer-events:auto;
+}
+.step-nav.step-nav-pro.show{
+  display:inline-flex;
+  padding:5px 11px 5px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.20);
+  backdrop-filter:blur(4px);
+  box-shadow:0 2px 10px -6px rgba(0,0,0,.4);
+  animation:crumbIn .22s var(--ease);
+}
+@keyframes crumbIn{from{opacity:0;transform:translateY(-3px);}to{opacity:1;transform:none;}}
+.step-nav.step-nav-pro .step-dot{width:6.5px;height:6.5px;border-width:1.3px;}
+.step-nav.step-nav-pro .step-line{width:12px;height:1.5px;opacity:.85;}
+.step-nav.step-nav-pro .step-label{
+  display:inline-flex;align-items:center;gap:7px;
+  margin-right:9px;padding-right:9px;
+  border-right:1px solid rgba(255,255,255,.24);
+  max-width:min(62vw,320px);
+}
+.step-nav.step-nav-pro .step-label-txt{
+  font-size:11.4px;font-weight:700;color:#fff;letter-spacing:.1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.step-nav.step-nav-pro .step-label-num{
+  flex-shrink:0;font-size:10px;font-weight:800;color:#fff;
+  background:rgba(255,255,255,.20);border-radius:999px;
+  padding:1px 6px;line-height:1.6;
+}
+@media (max-width:360px){
+  .step-nav.step-nav-pro .step-label{max-width:56vw;}
+  .step-nav.step-nav-pro .step-label-txt{font-size:11px;}
+}
+
+/* ---------- ۴) خوانایی فرمول‌ها در جداول نرخ‌گذاری ---------- */
+.formula-cell{
+  font-family:'Vazirmatn','Segoe UI',Tahoma,sans-serif;
+  font-size:12.6px !important;
+  font-weight:600;
+  line-height:2.15 !important;
+  letter-spacing:.15px;
+  text-align:right;
+  color:var(--text) !important;
+  background:rgba(18,120,122,.045);
+  border-right:2.5px solid rgba(18,120,122,.35) !important;
+  padding:12px 12px !important;
+  white-space:normal;
+  word-break:normal;
+  overflow-wrap:anywhere;
+  min-width:150px;
+  max-width:230px;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+  unicode-bidi:plaintext;
+}
+table.data-table tbody tr:nth-child(even) .formula-cell{background:rgba(18,120,122,.075);}
+table.data-table tbody tr:hover .formula-cell{background:rgba(18,120,122,.12);}
+html[data-theme="dark"] .formula-cell,.dark .formula-cell{
+  background:rgba(120,220,215,.07);
+  border-right-color:rgba(120,220,215,.35) !important;
+  color:#e6f4f5 !important;
+}
+html[data-theme="dark"] table.data-table tbody tr:nth-child(even) .formula-cell,
+.dark table.data-table tbody tr:nth-child(even) .formula-cell{background:rgba(120,220,215,.11);}
+/* راهنمای نمادها زیر جدول، خواناتر */
+#tfRateTableNoteWrap .table-note{
+  font-size:12px;line-height:2.15;
+  background:rgba(18,120,122,.05);
+  border-radius:12px;padding:12px 13px;
+}
+#tfRateTableNoteWrap .table-note b{color:var(--deep);}
+
+/* ---------- ۵) دکمه شناور ماشین‌حساب: کمی کوچک‌تر، هاور آرام‌تر، چشمک بیشتر ---------- */
+.fab{
+  min-width:59px;height:58px;
+  padding:0 15px 0 13px;border-radius:20px;gap:8px;
+  animation:fabPulse2 2.1s var(--ease) infinite;
+}
+.fab svg{width:28px;height:28px;}
+.fab-label{font-size:12.4px;}
+.fab:hover{
+  animation:fabPulse2 2.1s var(--ease) infinite;
+  box-shadow:0 14px 34px -6px rgba(226,70,31,.62), 0 0 0 7px rgba(226,70,31,.13);
+  transform:translateY(-1px);
+}
+@keyframes fabPulse2{
+  0%,100%{box-shadow:0 13px 30px -6px rgba(226,70,31,.60), 0 0 0 5px rgba(226,70,31,.14);}
+  50%    {box-shadow:0 17px 40px -6px rgba(226,70,31,.72), 0 0 0 14px rgba(226,70,31,.04);}
+}
+@media (prefers-reduced-motion:reduce){ .fab,.fab:hover{animation:none;} }
+@media (max-width:360px){
+  .fab{min-width:55px;height:55px;padding:0 12px;}
+  .fab svg{width:26px;height:26px;}
+  .fab-label{font-size:11.6px;}
+}
+
+/* ---------- ۷) کادرهای ورود اطلاعات ماشین‌حساب، واضح‌تر ---------- */
+#screen-calc .field label{font-size:12.8px;font-weight:700;color:var(--deep);}
+#screen-calc input[type=text],
+#screen-calc input[type=number]{
+  border:2px solid rgba(15,139,141,.28);
+  background:#fff;
+  border-radius:14px;
+  min-height:52px;
+  font-size:15.5px;
+  font-weight:700;
+  padding:14px 15px;
+  box-shadow:inset 0 1px 2px rgba(15,59,76,.05);
+  font-variant-numeric:tabular-nums;
+}
+#screen-calc input[type=number]{text-align:center;letter-spacing:.5px;}
+#screen-calc input[type=text]:hover,
+#screen-calc input[type=number]:hover{border-color:rgba(15,139,141,.45);}
+#screen-calc input[type=text]:focus,
+#screen-calc input[type=number]:focus{
+  border-color:var(--teal);
+  box-shadow:0 0 0 4px rgba(18,120,122,.16);
+}
+#screen-calc input::placeholder{color:#9bb4ba;font-weight:500;}
+html[data-theme="dark"] #screen-calc input[type=text],
+html[data-theme="dark"] #screen-calc input[type=number],
+.dark #screen-calc input[type=text],
+.dark #screen-calc input[type=number]{
+  background:rgba(255,255,255,.05);
+  border-color:rgba(120,220,215,.28);
+  color:#eaf6f7;
+}
+html[data-theme="dark"] #screen-calc .field label,.dark #screen-calc .field label{color:#bfe6e6;}
+
+/* ---------- ۸) پنجره فایل PDF بدون پیش‌نمایش ---------- */
+.pdfview-box{height:auto;max-height:88vh;}
+.pdfview-body{background:transparent;flex:0 0 auto;min-height:132px;}
+.pdfview-loading{position:relative;inset:auto;padding:22px 16px;gap:14px;background:transparent;}
+.pdfview-loading.is-ready .pdf-progress{display:none;}
+.pdfview-loading.is-ready .pdfview-loading-note{font-size:12.6px;font-weight:700;color:var(--deep);}
+html[data-theme="dark"] .pdfview-loading,.dark .pdfview-loading{background:transparent;}
+html[data-theme="dark"] .pdfview-loading.is-ready .pdfview-loading-note,
+.dark .pdfview-loading.is-ready .pdfview-loading-note{color:#bfe6e6;}
+.pdfview-foot{flex-wrap:wrap;gap:9px;}
+.pdfview-foot .pdfview-open,.pdfview-foot .pdfview-dl{flex:1 1 132px;min-height:46px;border-radius:13px;}
+
+/* ---------- دسترسی‌پذیری: تمرکز واضح روی نتایج جست‌وجو ---------- */
+.search-result-item.kb-active,
+.search-result-item:focus-visible{
+  outline:2px solid var(--teal);outline-offset:-2px;
+  background:var(--teal-light);
+}
+
+/* جداول نرخ‌گذاری: جا شدن در عرض صفحه و شکستن فرمول در چند خط (خواناتر از اسکرول افقی) */
+#screen-tfratetable table.data-table{width:100%;min-width:0;table-layout:auto;}
+#screen-tfratetable table.data-table thead th,
+#screen-tfratetable table.data-table tbody td{min-width:0;padding:11px 8px;}
+#screen-tfratetable table.data-table tbody td:first-child,
+#screen-tfratetable table.data-table thead th:first-child{width:34px;}
+#screen-tfratetable .formula-cell{max-width:none;min-width:0;font-size:12.2px !important;}
+#screen-tfratetable .scroll-hint{display:none;}
+
+
+/* ============================================================
+   نسخه 2.4 — اصلاحات ظاهری (بدون تغییر در داده‌ها و فرمول‌ها)
+   ============================================================ */
+/* ۱) راهنمای مسیر زیر هدر: بدون متن، فقط قرص شیشه‌ای */
+.step-nav.step-nav-pro .step-label{display:none !important;}
+.step-nav.step-nav-pro.show{padding:6px 11px;}
+
+/* ۲) متن جداول دهگانه: نیم‌درجه درشت‌تر و پررنگ‌تر */
+#screen-table table.data-table{font-size:14.2px;}
+#screen-table table.data-table thead th{font-size:13.1px;font-weight:800;}
+#screen-table table.data-table tbody td{font-weight:600;}
+#screen-table table.data-table tbody td:first-child{font-size:13.3px;font-weight:800;}
+#screen-table table.data-table tbody td:nth-child(2){font-size:14px;font-weight:800;}
+#screen-table table.data-table tbody td:last-child{font-size:13.1px;font-weight:600;}
+
+
+/* ===== اصلاحات نسخه ۱۴۰۵ v12 ===== */
+.titles.no-sub h1{font-size:20px;line-height:1.25;}
+.titles.no-sub p{display:none;}
+.modal-thanks{
+  margin:0 18px 2px;padding:10px 12px;border-radius:12px;
+  background:rgba(20,140,190,.09);color:var(--muted, #4a5a68);
+  font-size:12px;line-height:1.9;text-align:center;font-weight:600;
+}
+.modal-features[hidden]{display:none;}

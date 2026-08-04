@@ -1,13 +1,13 @@
 /* ============================================================
-   Service Worker - آب و فاضلاب استان فارس (جداول الگوی مصرف)
+   Service Worker - آبفا پلاس (جداول الگوی مصرف)
    ------------------------------------------------------------
    نحوه انتشار نسخه جدید:
    هر بار که فایل‌های برنامه (index.html و ...) تغییر کردند،
    فقط کافیست عدد CACHE_VERSION را افزایش دهید (مثلاً v6 -> v7).
    با این کار کش قدیمی به‌طور خودکار حذف و نسخه جدید جایگزین می‌شود.
    ============================================================ */
-const CACHE_VERSION = 'v13';
-const CACHE_NAME = `abfa-fars-tables-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v23';
+const CACHE_NAME = `abfaplus-tables-${CACHE_VERSION}`;
 
 // فایل‌های اصلی برنامه (App Shell) که باید برای اجرای کامل آفلاین کش شوند
 // نکته: از نسخه v11 به بعد، داده‌های جداول/آیین‌نامه/قوانین از app.js جدا شده
@@ -19,14 +19,23 @@ const APP_SHELL = [
   './index.html',
   './styles.css',
   './app.js',
+  './search-enhance.js',
+  './ui-enhance.js',
   './manifest.json',
   './icon.svg',
   './icon-192.png',
   './icon-512.png',
   './icon-512-maskable.png',
+  './apple-touch-icon.png',
   './data/tables.json',
   './data/chapters.json',
-  './data/laws.json'
+  './data/laws.json',
+  './data/tariffs.json',
+  './pdf/aeen-nameh-tarefeha.pdf',
+  './pdf/jadaval-dahgane-olgooye-masraf.pdf',
+  './pdf/ghavanin-ab-va-fazelab.pdf',
+  './pdf/tarefeha-1405-bandha.pdf',
+  './pdf/jadaval-nerkh-tarefeha-1405.pdf'
 ];
 
 /* ---------------------- نصب: کش کردن App Shell ---------------------- */
@@ -99,16 +108,25 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
+      const isNavigate = request.mode === 'navigate';
+      const cacheKey = isNavigate ? './index.html' : request;
 
-      // برای درخواست‌های ناوبری (باز شدن مستقیم صفحه)، اگر در کش نبود از index.html استفاده کن
-      const cacheKey = request.mode === 'navigate' ? './index.html' : request;
-      const cached = await cache.match(request.mode === 'navigate' ? './index.html' : request);
+      // نکته آفلاین: برای فایل‌های سنگین (PDF) و داده‌های JSON، اگر نسخه کش‌شده
+      // موجود باشد بدون تلاش شبکه پاسخ داده می‌شود تا مصرف داده و تأخیر کاهش یابد.
+      const isHeavyStatic = /\.(pdf|png|svg|woff2?|ttf)$/i.test(url.pathname);
+
+      // ignoreSearch تا لینک‌هایی مثل file.pdf?v=2 هم از کش پاسخ بگیرند
+      const cached =
+        (await cache.match(cacheKey)) ||
+        (await cache.match(cacheKey, { ignoreSearch: true }));
+
+      if (cached && isHeavyStatic) return cached;
 
       const networkFetch = fetch(request)
         .then((response) => {
           // پاسخ‌های موفق (200) کش می‌شوند
           if (response && response.status === 200) {
-            cache.put(request.mode === 'navigate' ? './index.html' : request, response.clone());
+            cache.put(cacheKey, response.clone()).catch(() => {});
           }
           return response;
         })
@@ -124,6 +142,13 @@ self.addEventListener('fetch', (event) => {
       const fresh = await networkFetch;
       if (fresh) return fresh;
 
+      // آفلاین و بدون کش برای این آدرس: اگر ناوبری است، پوسته برنامه را بده
+      if (isNavigate) {
+        const shell =
+          (await cache.match('./index.html')) || (await cache.match('./'));
+        if (shell) return shell;
+      }
+
       // آخرین راه‌حل برای ناوبری آفلاین بدون کش قبلی: پاسخ خطای قابل کنترل
       return new Response(
         '<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="utf-8"><body style="font-family:Tahoma,sans-serif;text-align:center;padding:40px;">اتصال اینترنت برقرار نیست و نسخه آفلاین هنوز کامل بارگذاری نشده است.</body></html>',
@@ -132,3 +157,4 @@ self.addEventListener('fetch', (event) => {
     })()
   );
 });
+

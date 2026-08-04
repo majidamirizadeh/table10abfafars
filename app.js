@@ -4,32 +4,101 @@
 document.getElementById('lastUpdate').textContent =
     new Date(document.lastModified).toLocaleDateString('fa-IR', { year:'numeric', month:'long', day:'numeric' });
 
+  /* =========================================================================
+     تنظیمات لینک‌های اشتراک‌گذاری (برای توسعه آینده فقط همین بلوک را ویرایش کنید)
+     ------------------------------------------------------------------------
+     ios      : لینک نسخه وب (همان لینک قبلی برنامه) — برای آیفون/آیپد
+     android  : آدرس صفحه برنامه در کافه بازار. تا زمانی که خالی باشد،
+                دکمه اندروید حالت «به‌زودی» را نشان می‌دهد و لینک وب را
+                به‌عنوان جانشین اشتراک می‌گذارد. کافی است لینک بازار را
+                اینجا بگذارید؛ هیچ تغییر دیگری لازم نیست.
+     برای افزودن فروشگاه جدید (مثلاً مایکت) یک کلید جدید به APP_LINKS و یک
+     دکمه با data-share-key متناظر در فوتر اضافه کنید.
+     ========================================================================= */
+  window.APP_LINKS = {
+    ios: {
+      url: 'https://majidamirizadeh.github.io/table10abfafars/',
+      title: 'آبفا پلاس (نسخه iOS / وب)',
+      text: 'جداول الگوی مصرف، تعرفه‌ها و ماشین‌حساب آبفا پلاس — قابل نصب روی آیفون و آیپد'
+    },
+    android: {
+      url: 'https://myket.ir/app/IR.ABFA.MAJIDAMIRIZADEH',
+      title: 'آبفا پلاس (نسخه اندروید)',
+      text: 'دریافت اپلیکیشن «آبفا پلاس» از مایکت'
+    },
+    windows: {
+      url: 'https://majidamirizadeh.github.io/table10abfafars/',
+      title: 'آبفا پلاس (نسخه ویندوز / وب)',
+      text: 'جداول الگوی مصرف، تعرفه‌ها و ماشین‌حساب آبفا پلاس — قابل اجرا و نصب روی ویندوز'
+    }
+  };
+
   (function(){
     try{
-      const shareAppBtn = document.getElementById('shareAppBtn');
-      if(!shareAppBtn) return;
-      const APP_URL = 'https://majidamirizadeh.github.io/table10abfafars/';
-      shareAppBtn.addEventListener('click', async ()=>{
+      const toast = document.getElementById('shareToast');
+      let toastTimer = null;
+      function showToast(msg, isWarn){
+        if(!toast){ return; }
+        toast.textContent = msg;
+        toast.classList.toggle('warn', !!isWarn);
+        toast.hidden = false;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(()=>{
+          toast.classList.remove('show');
+          setTimeout(()=>{ toast.hidden = true; }, 250);
+        }, 2200);
+      }
+
+      async function shareLink(cfg){
+        const url = cfg.url;
         if(navigator.share){
           try{
-            await navigator.share({title:'آب و فاضلاب استان فارس', text:'جداول الگوی مصرف و ماشین‌حساب آب و فاضلاب استان فارس', url:APP_URL});
+            await navigator.share({ title: cfg.title, text: cfg.text, url });
             return;
           }catch(e){
-            if(e && e.name === 'AbortError') return; // کاربر خودش انصراف داد؛ کاری انجام نشود
-            // در غیر این صورت به روش کپی ادامه بده
+            if(e && e.name === 'AbortError') return;
           }
         }
         try{
-          await navigator.clipboard.writeText(APP_URL);
-          const prevText = shareAppBtn.textContent;
-          shareAppBtn.textContent = '✔ لینک در کلیپ‌بورد کپی شد';
-          setTimeout(()=> shareAppBtn.textContent = prevText, 1600);
+          await navigator.clipboard.writeText(url);
+          showToast('✔ لینک در کلیپ‌بورد کپی شد');
         }catch(e){
-          window.prompt('برنامه‌ای برای اشتراک‌گذاری یا دسترسی به کلیپ‌بورد یافت نشد؛ لینک زیر را کپی کنید:', APP_URL);
+          window.prompt('لینک زیر را کپی کنید:', url);
         }
+      }
+
+      // پشتیبانی از هر تعداد دکمه اشتراک‌گذاری بر اساس data-share-key
+      document.querySelectorAll('[data-share-key]').forEach((btn)=>{
+        const key = btn.getAttribute('data-share-key');
+        const cfg = (window.APP_LINKS || {})[key];
+        if(!cfg) return;
+        const hasUrl = !!(cfg.url && cfg.url.trim());
+        if(!hasUrl) btn.classList.add('is-pending');
+        btn.addEventListener('click', ()=>{
+          if(!hasUrl){
+            showToast('لینک این نسخه هنوز ثبت نشده است؛ به‌جای آن لینک نسخه وب ارسال می‌شود.', true);
+            shareLink(window.APP_LINKS.ios);
+            return;
+          }
+          shareLink(cfg);
+        });
       });
+
+      // سازگاری با نسخه‌های قبلی (اگر جایی به شناسه قدیمی ارجاع داشت)
+      const legacy = document.getElementById('shareAppBtn');
+      if(legacy && !legacy.hasAttribute('data-share-key')){
+        legacy.addEventListener('click', ()=> shareLink(window.APP_LINKS.ios));
+      }
+
+      // اگر لینک بازار تنظیم شده بود، توضیح دکمه اندروید به‌روزرسانی شود
+      const hint = document.getElementById('shareAndroidHint');
+      if(hint && window.APP_LINKS.android.url && window.APP_LINKS.android.url.trim()){
+        hint.textContent = 'دریافت نسخه اندروید از مایکت';
+      }
     }catch(e){}
   })();
+
 
 
 /* ===== بخش ۲: منطق اصلی برنامه (داده جداول، آیین‌نامه، قوانین، ناوبری، ماشین‌حساب، ثبت Service Worker) ===== */
@@ -70,7 +139,7 @@ function highlight(text, q){
 
 /* ========================= ناوبری یکپارچه بین صفحات ========================= */
 const SCREEN_META = {
-  mainhome: { theme:'neutral', icon:'💧', title:'آب و فاضلاب استان فارس', sub:'آیین‌نامه، جداول مصرف و ماشین‌حساب', back:false, parent:null },
+  mainhome: { theme:'neutral', icon:'💧', title:'آبفا پلاس', sub:'آیین‌نامه، جداول مصرف و ماشین‌حساب', back:false, parent:null },
   tables:   { theme:'green',   icon:'💧', title:'جداول دهگانه الگوی مصرف', sub:'ظرفیت قراردادی بر اساس نوع کاربری', back:true, parent:'mainhome' },
   table:    { theme:'green',   icon:'💧', back:true, parent:'tables', help:false },
   regs:     { theme:'blue',    icon:'📘', title:'آیین‌نامه آب و فاضلاب', sub:'هفت فصل آیین‌نامه عملیاتی و شرایط تعرفه‌ها', back:true, parent:'mainhome' },
@@ -78,6 +147,12 @@ const SCREEN_META = {
   calc:     { theme:'orange',  icon:'🧮', title:'ماشین‌حساب مصرف و صورتحساب', sub:'محاسبه حجم و مبلغ بر اساس جداول دهگانه', back:true, parent:'mainhome' },
   lawshome: { theme:'orange',  icon:'📜', title:'قوانین مهم آب و فاضلاب', sub:'سه قانون کلیدی حوزه آب و فاضلاب', back:true, parent:'mainhome' },
   lawschapter: { theme:'orange', icon:'📜', back:true, parent:'lawshome', help:false },
+  /* --- بخش تعرفه‌های ۱۴۰۵ (افزوده‌شده؛ کاملاً مستقل از بخش‌های بالا) --- */
+  tariffs:      { theme:'neutral', icon:'🧾', title:'تعرفه‌های آب و فاضلاب ۱۴۰۵', sub:'بندهای تعرفه، جداول نرخ‌گذاری و شرایط عمومی', back:true, parent:'mainhome' },
+  tfsections:   { theme:'blue',    icon:'📜', title:'بندهای تعرفه و شرایط عمومی', sub:'کلیه بندهای شماره‌گذاری‌شده تعرفه ۱۴۰۵', back:true, parent:'tariffs' },
+  tfsection:    { theme:'blue',    icon:'📜', back:true, parent:'tfsections', help:false },
+  tfratetables: { theme:'green',   icon:'📊', title:'جداول نرخ‌گذاری تعرفه ۱۴۰۵', sub:'آب‌بها، کارمزد فاضلاب و دسته‌بندی مصارف', back:true, parent:'tariffs' },
+  tfratetable:  { theme:'green',   icon:'📊', back:true, parent:'tfratetables', help:false },
 };
 let currentScreen = 'mainhome';
 
@@ -91,7 +166,10 @@ function showScreen(name, opts){
   header.className = 'appbar theme-' + meta.theme;
   document.getElementById('brandMark').textContent = meta.icon;
   if(meta.title) document.getElementById('headerTitle').textContent = meta.title;
-  if(meta.sub) document.getElementById('headerSub').textContent = meta.sub;
+  const subEl = document.getElementById('headerSub');
+  subEl.textContent = (name === 'mainhome') ? '' : (meta.sub || subEl.textContent);
+  const titlesEl = document.getElementById('headerTitles');
+  if(titlesEl) titlesEl.classList.toggle('no-sub', name === 'mainhome');
   document.getElementById('backBtn').classList.toggle('show', !!meta.back);
   const brandHelpBtn = document.getElementById('brandMark');
   if(brandHelpBtn) brandHelpBtn.style.display = (meta.help === false) ? 'none' : '';
@@ -154,6 +232,7 @@ document.getElementById('backBtn').onclick = ()=>{
 document.getElementById('goRegs').onclick = ()=> showScreen('regs');
 document.getElementById('goTables').onclick = ()=> showScreen('tables');
 document.getElementById('goLaws').onclick = ()=> showScreen('lawshome');
+(function(){ const el=document.getElementById('goTariffs'); if(el) el.onclick = ()=> showScreen('tariffs'); })();
 document.getElementById('fabCalc').onclick = ()=>{ resetCalcForm(); showScreen('calc'); };
 
 /* ========================= جداول دهگانه: رندر و نمایش ========================= */
@@ -907,29 +986,34 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
       // آماده‌بودن SW به مرورگر سیگنال می‌دهد که معیارهای نصب PWA برقرار است
       try{ navigator.serviceWorker.ready.catch(function(){}); }catch(_e){}
     }).catch(()=>{});
-    // پس از فعال شدن نسخه جدید، صفحه یک‌بار به‌صورت خودکار تازه‌سازی می‌شود
+    // نسخه جدید به‌جای رفرش خودکار و بی‌خبر، با یک اعلان قابل‌مشاهده به کاربر خبر داده می‌شود
     let swRefreshed = false;
     function isInstallFlowOpen(){
       const io = document.getElementById('installModalOverlay');
       const po = document.getElementById('installProgressOverlay');
       return (io && io.classList.contains('show')) || (po && po.classList.contains('show'));
     }
+    function announceSwUpdate(kind){
+      try{
+        if(typeof window.abfaAnnounceUpdate === 'function'){ window.abfaAnnounceUpdate(kind); return; }
+        const b = document.getElementById('updateBanner');
+        if(b) b.classList.add('show');
+      }catch(_e){}
+    }
+    window.abfaIsInstallFlowOpen = isInstallFlowOpen;
     navigator.serviceWorker.addEventListener('controllerchange', ()=>{
       if(swRefreshed) return;
-      if(!hadControllerBefore) return; // اولین بازدید: این تغییر، بروزرسانی واقعی نیست؛ رفرش لازم نیست
+      if(!hadControllerBefore) return; // اولین بازدید: این تغییر، بروزرسانی واقعی نیست
       swRefreshed = true;
-      // اگر همین لحظه پنجره نصب PWA باز است، رفرش فوری باعث از بین رفتن deferredPrompt و نیمه‌کاره
-      // ماندن نصب (و در نتیجه ساخته شدن یک میانبر ساده به‌جای نصب کامل) می‌شود؛ پس صبر می‌کنیم تا
-      // کاربر جریان نصب را ببندد و سپس صفحه را تازه‌سازی می‌کنیم
       if(isInstallFlowOpen()){
         const waitForInstallClose = setInterval(()=>{
           if(!isInstallFlowOpen()){
             clearInterval(waitForInstallClose);
-            location.reload();
+            announceSwUpdate('activated');
           }
         }, 400);
       } else {
-        location.reload();
+        announceSwUpdate('activated');
       }
     });
   }catch(e){ /* در محیط‌های محدود (مثل پیش‌نمایش درون‌برنامه‌ای) بی‌صدا نادیده گرفته شود */ }
@@ -1146,14 +1230,11 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 
   const HELP = {
     mainhome: {
-      icon:'💧', title:'آب و فاضلاب استان فارس',
-      sub:'با سپاس از حمایت جناب مهندس علی شبانی، مدیرعامل محترم آبفا فارس',
-      desc:'این برنامه به شما کمک می‌کند به‌سرعت به آیین‌نامه عملیاتی، جداول الگوی مصرف و ماشین‌حساب صورتحساب دسترسی داشته باشید.',
-      features:[
-        '📘 آیین‌نامه: مطالعه و جست‌وجوی هفت فصل مقررات و شرایط تعرفه‌ها',
-        '💧 جداول دهگانه: ظرفیت قراردادی بر اساس نوع کاربری مشترکین',
-        '🧮 ماشین‌حساب: محاسبه حجم و مبلغ آب مصرفی از دکمه شناور پایین صفحه'
-      ]
+      icon:'💧', title:'آبفا پلاس',
+      sub:'برنامه آموزشی و کاربردی برای عموم در حوزه مشترکین آب و فاضلاب',
+      thanks:'با تشکر از حمایت مهندس علی شبانی، مدیرعامل محترم آبفا فارس',
+      desc:'در «آبفا پلاس» می‌توانید متن آیین‌نامه عملیاتی و شرایط عمومی تعرفه‌ها، تعرفه‌های مصوب سال ۱۴۰۵، جداول دهگانه الگوی مصرف و قوانین مهم حوزه آب و فاضلاب را به‌صورت خوانا و قابل جست‌وجو مطالعه کنید و با ماشین‌حساب برنامه، حجم و مبلغ آب مصرفی را بر اساس همین تعرفه‌ها و جداول محاسبه کنید. منابع مطالب، مصوبات و ابلاغیه‌های وزارت نیرو و قوانین مصوب مجلس شورای اسلامی است؛ این برنامه مرجع رسمی نیست و ملاک عمل، اسناد رسمی مراجع ذی‌ربط است.',
+      features:[]
     },
     tables: {
       icon:'💧', title:'جداول دهگانه الگوی مصرف',
@@ -1186,6 +1267,16 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
         '📤 نتیجه را می‌توانید ذخیره یا با دیگران به اشتراک بگذارید'
       ]
     },
+    tariffs: {
+      icon:'🧾', title:'تعرفه‌های آب و فاضلاب ۱۴۰۵',
+      sub:'راهنمای این بخش',
+      desc:'تعرفه‌های آب‌بها، کارمزد دفع فاضلاب و شرایط عمومی مصوب سال ۱۴۰۵ در این بخش قرار دارد.',
+      features:[
+        '📜 بندهای تعرفه: متن کامل بندهای شماره‌گذاری‌شده در چهار بخش',
+        '📊 جداول نرخ‌گذاری: جداول ۱ تا ۹ به همراه فرمول‌های مصوب',
+        '🔍 با جست‌وجوی سراسری، هر بند یا موضوع را سریع پیدا کنید'
+      ]
+    },
     lawshome: {
       icon:'📜', title:'قوانین مهم آب و فاضلاب',
       sub:'راهنمای این بخش',
@@ -1196,7 +1287,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
       ]
     }
   };
-  const GROUP = {mainhome:'mainhome', tables:'tables', table:'tables', regs:'regs', chapter:'regs', calc:'calc', lawshome:'lawshome', lawschapter:'lawshome'};
+  const GROUP = {mainhome:'mainhome', tables:'tables', table:'tables', regs:'regs', chapter:'regs', calc:'calc', lawshome:'lawshome', lawschapter:'lawshome', tariffs:'tariffs', tfsections:'tariffs', tfsection:'tariffs', tfratetables:'tariffs', tfratetable:'tariffs'};
 
   function openModal(){
     const key = GROUP[typeof currentScreen !== 'undefined' ? currentScreen : 'mainhome'] || 'mainhome';
@@ -1205,7 +1296,14 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
     document.getElementById('infoModalTitle').textContent = h.title;
     document.getElementById('infoModalSub').textContent = h.sub;
     document.getElementById('infoModalDesc').textContent = h.desc;
-    document.getElementById('infoModalFeatures').innerHTML = h.features.map(f=>{
+    const thanksEl = document.getElementById('infoModalThanks');
+    if(thanksEl){
+      thanksEl.textContent = h.thanks || '';
+      thanksEl.hidden = !h.thanks;
+    }
+    const featEl = document.getElementById('infoModalFeatures');
+    featEl.hidden = !(h.features && h.features.length);
+    featEl.innerHTML = (h.features || []).map(f=>{
       const parts = f.split(' ');
       const ico = parts.shift();
       return `<li><span class="mf-ico">${ico}</span><span>${parts.join(' ')}</span></li>`;
@@ -1437,7 +1535,7 @@ document.addEventListener('click', function(e){
       const r = currentResultText();
       const summaryEl = document.getElementById('calcSummaryCard');
       const summaryLine = (summaryEl && summaryEl.style.display !== 'none' && summaryEl.textContent) ? summaryEl.textContent + '\n' : '';
-      const text = `آب و فاضلاب استان فارس\n${summaryLine}${r.category ? 'دسته‌بندی: ' + r.category + '\n' : ''}ظرفیت قراردادی: ${r.stdVol}\nحجم دوره غیرمجاز: ${r.illVol}\nمبلغ دوره غیرمجاز: ${r.illCost}`;
+      const text = `آبفا پلاس\n${summaryLine}${r.category ? 'دسته‌بندی: ' + r.category + '\n' : ''}ظرفیت قراردادی: ${r.stdVol}\nحجم دوره غیرمجاز: ${r.illVol}\nمبلغ دوره غیرمجاز: ${r.illCost}`;
       if(navigator.share){
         try{
           await navigator.share({title:'نتیجه محاسبه', text});
@@ -1461,4 +1559,604 @@ document.addEventListener('click', function(e){
 
   renderHistory();
  }catch(e){}
+})();
+
+
+/* =========================================================================
+   بخش ۵: تعرفه‌های آب و فاضلاب ۱۴۰۵ (افزوده‌شده)
+   ------------------------------------------------------------------------
+   این بخش کاملاً مستقل و «افزودنی» است: هیچ متغیر، تابع یا فرمول موجود در
+   بخش‌های بالا (جداول دهگانه، آیین‌نامه، قوانین، ماشین‌حساب) را تغییر نمی‌دهد.
+   همه نام‌ها با پیشوند TF/tf مشخص شده‌اند تا تداخلی پیش نیاید.
+   داده‌ها از data/tariffs.json خوانده می‌شوند (سه کلید: facts, sections, tables)
+   و فرمول‌های داخل جداول عیناً و به‌صورت متن نمایش داده می‌شوند، بدون محاسبه.
+   ========================================================================= */
+(function(){
+ try{
+  let TF_FACTS = [], TF_SECTIONS = [], TF_TABLES = [], TF_FLAT = [];
+  let tfCurrentSectionIndex = null;
+
+  const $ = id => document.getElementById(id);
+
+  function tfBuildFlat(){
+    TF_FLAT = [];
+    TF_SECTIONS.forEach((c, ci)=> c.items.forEach((it, ii)=> TF_FLAT.push({ci, ii, chapter:c, item:it})));
+  }
+
+  function tfMatch(x, q){
+    const it = x.item;
+    return it.title.includes(q) || it.text.includes(q) || it.code.includes(q);
+  }
+
+  /* ---------- صفحه خانه تعرفه‌ها: نکات کلیدی ---------- */
+  function tfRenderHome(){
+    const fg = $('tfFactsGrid');
+    if(fg){
+      fg.innerHTML = TF_FACTS.map(f=>`
+        <div class="fact-card">
+          <div class="fv">${escapeHtml(f.v)}</div>
+          <div class="fl">${escapeHtml(f.l)}</div>
+        </div>`).join('');
+    }
+    const lbl = $('tfSectionsCountLbl');
+    if(lbl){
+      const count = TF_SECTIONS.reduce((a,c)=> a + c.items.length, 0);
+      lbl.textContent = toFa(TF_SECTIONS.length) + ' بخش • ' + toFa(count) + ' بند';
+    }
+  }
+
+  /* ---------- فهرست بخش‌های تعرفه ---------- */
+  function tfRenderSectionsHome(){
+    const grid = $('tfSectionGrid');
+    if(!grid) return;
+    grid.innerHTML = TF_SECTIONS.map((c, ci)=>{
+      const empty = c.items.length===0;
+      return `
+      <div class="table-card ${empty?'empty':''}" data-ci="${ci}">
+        <div class="icon icon-blue">${c.icon}</div>
+        <div class="info">
+          <h3>${escapeHtml(c.title)}</h3>
+          <span>${empty ? 'به‌زودی تکمیل می‌شود' : toFa(c.items.length) + ' بند'}</span>
+        </div>
+        <div class="chev">‹</div>
+      </div>`;
+    }).join('');
+    Array.from(grid.children).forEach(el=>{
+      el.onclick = ()=> tfOpenSection(parseInt(el.dataset.ci,10));
+    });
+  }
+
+  /* ---------- کارت جزئیات یک بند ---------- */
+  function tfDetailCardHtml(m, q, withGoto){
+    return `
+      <div class="selected-row-card">
+        <div class="sel-head">
+          <div class="sr-icon">${m.chapter.icon}</div>
+          <div class="sel-code">${m.item.code}</div>
+          <div class="sel-title">${escapeHtml(m.item.title)}</div>
+        </div>
+        <div class="sel-chapter">${escapeHtml(m.chapter.title)}</div>
+        <div class="sel-text">${highlight(m.item.text, q||'')}</div>
+        <div class="sel-actions">
+          ${withGoto ? '<button class="btn-mini btn-goto">↗ مشاهده در بخش</button>' : ''}
+          <button class="btn-mini btn-copy">📋 کپی متن و کد</button>
+          <button class="btn-mini btn-clear">حذف</button>
+        </div>
+      </div>`;
+  }
+  function tfBindDetailCard(container, m, onClear){
+    const copyBtn = container.querySelector('.btn-copy');
+    if(copyBtn) copyBtn.onclick = ()=> copyToClipboard(m.item.code + ' — ' + m.item.title + '\n' + (m.item.text || ''), copyBtn);
+    const clearBtn = container.querySelector('.btn-clear');
+    if(clearBtn) clearBtn.onclick = onClear;
+  }
+
+  /* ---------- جست‌وجوی سراسری (صفحه خانه تعرفه‌ها) ---------- */
+  const tfHomeInput = $('tfHomeSearchInput');
+  const tfHomeResults = $('tfHomeSearchResults');
+  const tfHomeSelectedWrap = $('tfHomeSelectedWrap');
+  if(tfHomeInput){
+    tfHomeInput.addEventListener('input', ()=>{
+      const q = normalizeDigits(tfHomeInput.value.trim());
+      tfHomeSelectedWrap.innerHTML = '';
+      if(!q){ tfHomeResults.classList.remove('show'); tfHomeResults.innerHTML=''; return; }
+      const matches = TF_FLAT.filter(x=> tfMatch(x,q));
+      renderResultsList(tfHomeResults, matches, q, (m)=>{
+        tfHomeInput.value = '';
+        tfHomeResults.classList.remove('show');
+        tfHomeResults.innerHTML = '';
+        tfHomeSelectedWrap.innerHTML = tfDetailCardHtml(m, q, true);
+        tfBindDetailCard(tfHomeSelectedWrap, m, ()=> tfHomeSelectedWrap.innerHTML = '');
+        const goto = tfHomeSelectedWrap.querySelector('.btn-goto');
+        if(goto) goto.onclick = ()=> tfOpenSection(m.ci, m.ii);
+        tfHomeSelectedWrap.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+      tfHomeResults.classList.add('show');
+    });
+  }
+
+  /* ---------- جست‌وجو در فهرست بخش‌ها ---------- */
+  const tfSecHomeInput = $('tfSecHomeSearchInput');
+  const tfSecHomeResults = $('tfSecHomeSearchResults');
+  const tfSecHomeSelectedWrap = $('tfSecHomeSelectedWrap');
+  if(tfSecHomeInput){
+    tfSecHomeInput.addEventListener('input', ()=>{
+      const q = normalizeDigits(tfSecHomeInput.value.trim());
+      tfSecHomeSelectedWrap.innerHTML = '';
+      if(!q){ tfSecHomeResults.classList.remove('show'); tfSecHomeResults.innerHTML=''; return; }
+      const matches = TF_FLAT.filter(x=> tfMatch(x,q));
+      renderResultsList(tfSecHomeResults, matches, q, (m)=>{
+        tfSecHomeInput.value = '';
+        tfSecHomeResults.classList.remove('show');
+        tfSecHomeResults.innerHTML = '';
+        tfSecHomeSelectedWrap.innerHTML = tfDetailCardHtml(m, q, true);
+        tfBindDetailCard(tfSecHomeSelectedWrap, m, ()=> tfSecHomeSelectedWrap.innerHTML = '');
+        const goto = tfSecHomeSelectedWrap.querySelector('.btn-goto');
+        if(goto) goto.onclick = ()=> tfOpenSection(m.ci, m.ii);
+        tfSecHomeSelectedWrap.scrollIntoView({behavior:'smooth', block:'nearest'});
+      });
+      tfSecHomeResults.classList.add('show');
+    });
+  }
+
+  /* ---------- نمای یک بخش ---------- */
+  function tfOpenSection(ci, focusItemIndex){
+    tfCurrentSectionIndex = ci;
+    const c = TF_SECTIONS[ci];
+    if(!c) return;
+    $('tfSectionIntro').textContent = c.intro || '';
+    if(c.items.length === 0){
+      $('tfSectionMeta').textContent = c.title + ' • در حال تکمیل';
+      $('tfSectionItemsWrap').innerHTML = `<div class="empty-state">📭 محتوای این بخش هنوز اضافه نشده است.<br>به‌زودی تکمیل خواهد شد.</div>`;
+    } else {
+      $('tfSectionMeta').textContent = c.title + ' • ' + toFa(c.items.length) + ' بند';
+      $('tfSectionItemsWrap').innerHTML = c.items.map((it, ii)=>`
+        <div class="article-card" id="tfart-${ci}-${ii}" data-ci="${ci}" data-ii="${ii}">
+          <div class="article-code">${it.code}</div>
+          <div class="article-body">
+            <h5>${escapeHtml(it.title)}</h5>
+            <p class="art-text">${escapeHtml(it.text)}</p>
+            ${it.tableRef ? `<span class="art-table-link" data-table="${it.tableRef}">📊 مشاهده جدول (${toFa(it.tableRef)})</span>` : ''}
+          </div>
+        </div>`).join('');
+      Array.from(document.querySelectorAll('#tfSectionItemsWrap .article-card')).forEach(el=>{
+        el.onclick = ()=> tfSelectSectionItem(parseInt(el.dataset.ci,10), parseInt(el.dataset.ii,10));
+      });
+      Array.from(document.querySelectorAll('#tfSectionItemsWrap .art-table-link')).forEach(el=>{
+        el.onclick = (ev)=>{ ev.stopPropagation(); tfOpenRateTable(parseInt(el.dataset.table,10)); };
+      });
+    }
+
+    if(tfSecInput){ tfSecInput.value = ''; }
+    if(tfSecResults){ tfSecResults.classList.remove('show'); tfSecResults.innerHTML = ''; }
+    if(tfSecSelectedWrap){ tfSecSelectedWrap.innerHTML = ''; }
+
+    showScreen('tfsection');
+    document.getElementById('headerTitle').textContent = c.title;
+    document.getElementById('headerSub').textContent = 'بخش ' + toFa(ci+1) + ' از ' + toFa(TF_SECTIONS.length) + ' بخش تعرفه';
+
+    if(focusItemIndex !== undefined && c.items.length > 0){
+      setTimeout(()=> tfSelectSectionItem(ci, focusItemIndex, true), 200);
+    }
+  }
+
+  /* ---------- جست‌وجو داخل یک بخش ---------- */
+  const tfSecInput = $('tfSecSearchInput');
+  const tfSecResults = $('tfSecSearchResults');
+  const tfSecSelectedWrap = $('tfSecSelectedWrap');
+  if(tfSecInput){
+    tfSecInput.addEventListener('input', ()=>{
+      const q = normalizeDigits(tfSecInput.value.trim());
+      if(!q){
+        tfSecResults.classList.remove('show'); tfSecResults.innerHTML = '';
+        tfClearSectionHighlighting();
+        return;
+      }
+      const matches = TF_FLAT.filter(x=> x.ci === tfCurrentSectionIndex && tfMatch(x,q));
+      renderResultsList(tfSecResults, matches, q, (m)=> tfSelectSectionItem(m.ci, m.ii, true, q));
+      tfSecResults.classList.add('show');
+      tfApplySectionHighlighting(q);
+    });
+  }
+
+  function tfApplySectionHighlighting(q){
+    let firstMatch = null;
+    document.querySelectorAll('#tfSectionItemsWrap .article-card').forEach(card=>{
+      const ii = parseInt(card.dataset.ii,10);
+      const it = TF_SECTIONS[tfCurrentSectionIndex].items[ii];
+      const isMatch = it.title.includes(q) || it.text.includes(q) || it.code.includes(q);
+      card.querySelector('.art-text').innerHTML = highlight(it.text, q);
+      card.classList.toggle('match', isMatch);
+      card.classList.toggle('dimmed', !isMatch);
+      if(isMatch && !firstMatch) firstMatch = card;
+    });
+    if(firstMatch) firstMatch.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  function tfClearSectionHighlighting(){
+    document.querySelectorAll('#tfSectionItemsWrap .article-card').forEach(card=>{
+      const ii = parseInt(card.dataset.ii,10);
+      const it = TF_SECTIONS[tfCurrentSectionIndex] ? TF_SECTIONS[tfCurrentSectionIndex].items[ii] : null;
+      if(!it) return;
+      card.querySelector('.art-text').innerHTML = escapeHtml(it.text);
+      card.classList.remove('match','dimmed');
+    });
+  }
+
+  function tfSelectSectionItem(ci, ii, scrollTo, q){
+    const m = {ci, ii, chapter:TF_SECTIONS[ci], item:TF_SECTIONS[ci].items[ii]};
+    tfSecInput.value = q || '';
+    tfSecResults.classList.remove('show');
+    tfSecResults.innerHTML = '';
+    tfSecSelectedWrap.innerHTML = tfDetailCardHtml(m, q, false);
+    tfBindDetailCard(tfSecSelectedWrap, m, ()=> tfSecSelectedWrap.innerHTML = '');
+
+    const card = document.getElementById(`tfart-${ci}-${ii}`);
+    if(card){
+      document.querySelectorAll('#tfSectionItemsWrap .article-card').forEach(c=>c.classList.remove('flash'));
+      card.classList.add('flash');
+      setTimeout(()=> card.classList.remove('flash'), 1800);
+    }
+    if(scrollTo) tfSecSelectedWrap.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  /* ---------- جداول نرخ‌گذاری ---------- */
+  function tfRenderRateTablesHome(){
+    const grid = $('tfRateTableGrid');
+    if(!grid) return;
+    grid.innerHTML = TF_TABLES.map(t=>{
+      const empty = !t.rows || t.rows.length === 0;
+      return `
+      <div class="table-card ${empty?'empty':''}" data-id="${t.id}">
+        <div class="icon icon-green">${t.icon}</div>
+        <div class="info">
+          <h3>${escapeHtml(t.title)}</h3>
+          <span>${empty ? 'به‌زودی تکمیل می‌شود' : toFa(t.rows.length) + ' ردیف • بند ' + t.refCode}</span>
+        </div>
+        <div class="chev">‹</div>
+      </div>`;
+    }).join('');
+    Array.from(grid.children).forEach(el=>{
+      el.onclick = ()=> tfOpenRateTable(parseInt(el.dataset.id,10));
+    });
+  }
+
+  function tfOpenRateTable(id){
+    const t = TF_TABLES.find(x=> x.id === id);
+    if(!t) return;
+    $('tfRateTableWrap').innerHTML = `<table class="data-table">
+      <thead><tr>${t.columns.map(c=>`<th>${escapeHtml(c)}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${t.rows.map(r=>`<tr>${r.map((cell,ci)=>{
+          const isLast = ci === r.length-1;
+          const isFormula = isLast && t.id !== 9; /* جدول ۹ توصیفی است، فرمول ندارد */
+          let cls = (ci===1 && t.id!==9 && t.id!==5) ? 'cell-r' : (isFormula ? 'formula-cell' : (t.id===9 && ci>=1 ? 'cell-r' : ''));
+          /* فقط ظاهری: هر سلولی که شکل فرمول دارد (× ÷ [ ]) هم با همان استایل خوانا نمایش داده می‌شود */
+          if(t.id !== 9 && ci >= 1 && !cls.includes('formula-cell') && /[×÷\[\]]/.test(String(cell))){
+            cls = (cls ? cls + ' ' : '') + 'formula-cell';
+          }
+          return `<td class="${cls}">${escapeHtml(cell)}</td>`;
+        }).join('')}</tr>`).join('')}
+      </tbody></table>`;
+    $('tfRateTableNoteWrap').innerHTML = t.id === 9 ? '' :
+      `<div class="table-note"><b>راهنمای نمادها:</b> C = قیمت غیریارانه‌ای آب (۱۴۳٬۰۰۰ ریال) &nbsp;|&nbsp; X = متوسط مصرف ماهانه &nbsp;|&nbsp; S = الگوی مصرف &nbsp;|&nbsp; L = مصرف مجاز ماهانه &nbsp;|&nbsp; K = ضریب تبعیض قیمتی. فرمول‌ها عیناً از متن ابلاغیه نقل شده‌اند؛ در صورت هرگونه ابهام، به سند اصل مراجعه شود.</div>`;
+    showScreen('tfratetable');
+    document.getElementById('headerTitle').textContent = t.title;
+    document.getElementById('headerSub').textContent = 'جدول ' + toFa(t.id) + ' از ' + toFa(TF_TABLES.length) + ' جدول • بند ' + t.refCode;
+  }
+
+  /* ---------- ناوبری کارت‌های صفحه تعرفه‌ها ---------- */
+  const goTfSections = $('goTfSections');
+  if(goTfSections) goTfSections.onclick = ()=> showScreen('tfsections');
+  const goTfRateTables = $('goTfRateTables');
+  if(goTfRateTables) goTfRateTables.onclick = ()=> showScreen('tfratetables');
+
+  /* ---------- بارگذاری داده تعرفه‌ها (مستقل از loadAppData، بدون اثر بر آن) ---------- */
+  async function tfLoadData(){
+    try{
+      const res = await fetch('./data/tariffs.json');
+      if(!res.ok) throw new Error('پاسخ شبکه نامعتبر بود');
+      const data = await res.json();
+      TF_FACTS = data.facts || [];
+      TF_SECTIONS = data.sections || [];
+      TF_TABLES = data.tables || [];
+      tfBuildFlat();
+      tfRenderHome();
+      tfRenderSectionsHome();
+      tfRenderRateTablesHome();
+    }catch(err){
+      console.error('خطا در بارگذاری داده‌های تعرفه:', err);
+    }
+  }
+  tfLoadData();
+ }catch(e){ console.error('خطا در بخش تعرفه‌ها:', e); }
+})();
+
+/* ============================================================
+   بخش افزودنی: پیش‌نمایش PDF + نوار پیشرفت + دانلود آفلاین
+   (کاملاً مستقل — هیچ منطق، فرمول یا داده‌ای از بخش‌های قبلی را تغییر نمی‌دهد)
+   ============================================================ */
+(function(){
+ try{
+  const FAD = '۰۱۲۳۴۵۶۷۸۹';
+  const faNum = (v)=> String(v).replace(/\d/g, d=> FAD[+d]);
+  const fmtSize = (bytes)=>{
+    if(!bytes || bytes<0) return '';
+    const mb = bytes/1048576;
+    return (mb>=1 ? faNum(mb.toFixed(1))+' مگابایت' : faNum(Math.max(1,Math.round(bytes/1024)))+' کیلوبایت');
+  };
+  const PDF_CACHE = 'abfa-pdf-offline-v1';
+
+  const cards = Array.from(document.querySelectorAll('.pdf-card[data-pdf]'));
+  if(!cards.length) return;
+
+  /* --- دریافت فایل با گزارش پیشرفت --- */
+  async function fetchWithProgress(url, onProgress){
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('دریافت فایل ناموفق بود');
+    const total = Number(res.headers.get('content-length')) || 0;
+    if(!res.body || !total){
+      const blob = await res.blob();
+      onProgress && onProgress(1, blob.size);
+      return blob;
+    }
+    const reader = res.body.getReader();
+    const chunks = []; let loaded = 0;
+    for(;;){
+      const { done, value } = await reader.read();
+      if(done) break;
+      chunks.push(value); loaded += value.length;
+      onProgress && onProgress(Math.min(1, loaded/total), total);
+    }
+    return new Blob(chunks, { type: 'application/pdf' });
+  }
+
+  function setProgress(wrap, ratio){
+    if(!wrap) return;
+    wrap.hidden = false;
+    const bar = wrap.querySelector('.pdf-progress-bar > span');
+    const txt = wrap.querySelector('.pdf-progress-text');
+    const pct = Math.round(ratio*100);
+    if(bar) bar.style.width = pct + '%';
+    if(txt) txt.textContent = faNum(pct) + '٪';
+  }
+
+  function saveBlob(blob, name){
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=> URL.revokeObjectURL(url), 4000);
+  }
+
+  /* --- ذخیره در کش برای استفاده آفلاین --- */
+  async function cachePut(url, blob){
+    try{
+      if(!('caches' in window)) return;
+      const cache = await caches.open(PDF_CACHE);
+      await cache.put(url, new Response(blob, { headers: { 'Content-Type':'application/pdf' } }));
+    }catch(e){ /* بی‌صدا */ }
+  }
+  async function cacheGet(url){
+    try{
+      if(!('caches' in window)) return null;
+      const cache = await caches.open(PDF_CACHE);
+      const hit = await cache.match(url);
+      return hit ? await hit.blob() : null;
+    }catch(e){ return null; }
+  }
+
+  async function getPdfBlob(url, onProgress){
+    const cached = await cacheGet(url);
+    if(cached){ onProgress && onProgress(1, cached.size); return cached; }
+    const blob = await fetchWithProgress(url, onProgress);
+    cachePut(url, blob);
+    return blob;
+  }
+
+  /* ---------------------- پیش‌نمایش ---------------------- */
+  const viewer   = document.getElementById('pdfViewer');
+  const vTitle   = document.getElementById('pdfViewerTitle');
+  const vFrame   = document.getElementById('pdfViewerFrame');
+  const vLoading = document.getElementById('pdfViewerLoading');
+  const vBar     = document.getElementById('pdfViewerBar');
+  const vPct     = document.getElementById('pdfViewerPct');
+  const vSize    = document.getElementById('pdfViewerSize');
+  const vClose   = document.getElementById('pdfViewerClose');
+  const vDl      = document.getElementById('pdfViewerDownload');
+  let currentBlobUrl = null, current = null;
+
+  function closeViewer(){
+    if(!viewer) return;
+    viewer.hidden = true;
+    if(vFrame) vFrame.removeAttribute('src');
+    if(currentBlobUrl){ URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
+    document.body.style.overflow = '';
+  }
+
+  async function openViewer(url, title, fileName){
+    if(!viewer) return;
+    current = { url, title, fileName };
+    viewer.hidden = false;
+    document.body.style.overflow = 'hidden';
+    if(vTitle) vTitle.textContent = title || 'فایل PDF';
+    if(vSize) vSize.textContent = '';
+    if(vLoading) vLoading.hidden = false;
+    if(vBar) vBar.style.width = '0%';
+    if(vPct) vPct.textContent = '۰٪';
+    if(vFrame) vFrame.removeAttribute('src');
+    try{
+      const blob = await getPdfBlob(url, (r)=>{
+        if(vBar) vBar.style.width = Math.round(r*100) + '%';
+        if(vPct) vPct.textContent = faNum(Math.round(r*100)) + '٪';
+      });
+      if(currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+      currentBlobUrl = URL.createObjectURL(blob);
+      current.blob = blob;
+      if(vSize) vSize.textContent = fmtSize(blob.size);
+      if(vFrame) vFrame.src = currentBlobUrl;
+      if(vLoading){
+        vLoading.hidden = false;
+        const note = vLoading.querySelector('.pdfview-loading-note');
+        if(note) note.textContent = 'فایل آماده است — یکی از گزینه‌های زیر را انتخاب کنید.';
+        vLoading.classList.add('is-ready');
+      }
+    }catch(err){
+      console.error('خطا در پیش‌نمایش PDF:', err);
+      if(vLoading){
+        vLoading.hidden = false;
+        const note = vLoading.querySelector('.pdfview-loading-note');
+        if(note) note.textContent = 'پیش‌نمایش در دسترس نیست. می‌توانید فایل را دانلود کنید.';
+      }
+    }
+  }
+
+  const vOpen = document.getElementById('pdfViewerOpen');
+  if(vOpen) vOpen.onclick = ()=>{
+    if(currentBlobUrl) window.open(currentBlobUrl, '_blank');
+    else if(current) window.open(current.url, '_blank');
+  };
+
+  if(vClose) vClose.onclick = closeViewer;
+  if(viewer) viewer.addEventListener('click', (e)=>{ if(e.target === viewer) closeViewer(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && viewer && !viewer.hidden) closeViewer(); });
+
+  if(vDl) vDl.onclick = async ()=>{
+    if(!current) return;
+    try{
+      const blob = current.blob || await getPdfBlob(current.url);
+      saveBlob(blob, current.fileName);
+    }catch(err){ console.error('خطا در دانلود PDF:', err); }
+  };
+
+  /* ---------------- کارت‌ها: پیش‌نمایش / دانلود ---------------- */
+  cards.forEach((card)=>{
+    const url  = card.getAttribute('data-pdf');
+    const name = url.split('/').pop();
+    const title = card.getAttribute('data-pdf-title') || name;
+    const prog = card.querySelector('.pdf-progress');
+    const dlBtn = card.querySelector('.pdf-dl');
+
+    card.addEventListener('click', (e)=>{
+      if(dlBtn && (e.target === dlBtn || dlBtn.contains(e.target))) return;
+      openViewer(url, title, name);
+    });
+    card.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openViewer(url, title, name); }
+    });
+
+    if(dlBtn) dlBtn.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      try{
+        const blob = await getPdfBlob(url, (r)=> setProgress(prog, r));
+        saveBlob(blob, name);
+        setTimeout(()=>{ if(prog) prog.hidden = true; }, 1200);
+      }catch(err){
+        console.error('خطا در دانلود PDF:', err);
+        if(prog) prog.hidden = true;
+      }
+    });
+  });
+
+  /* ---------------- دانلود آفلاین همه فایل‌ها ---------------- */
+  const allBtn  = document.getElementById('pdfOfflineAllBtn');
+  const allWrap = document.getElementById('pdfOfflineProgressWrap');
+  const allNote = document.getElementById('pdfOfflineNote');
+  if(allBtn) allBtn.addEventListener('click', async ()=>{
+    const urls = cards.map(c=> c.getAttribute('data-pdf'));
+    allBtn.disabled = true;
+    const prevLabel = allBtn.textContent;
+    allBtn.textContent = 'در حال دریافت آفلاین…';
+    let done = 0;
+    setProgress(allWrap, 0);
+    for(const u of urls){
+      try{
+        await getPdfBlob(u, (r)=> setProgress(allWrap, (done + r)/urls.length));
+      }catch(err){ console.error('خطا در دریافت آفلاین:', u, err); }
+      done++;
+      setProgress(allWrap, done/urls.length);
+    }
+    allBtn.textContent = '✔ همه فایل‌ها آفلاین ذخیره شدند';
+    if(allNote) allNote.textContent = 'اکنون بدون اینترنت هم می‌توانید این فایل‌ها را ببینید.';
+    setTimeout(()=>{ allBtn.disabled = false; allBtn.textContent = prevLabel; }, 4000);
+  });
+ }catch(e){ console.error('خطا در بخش دانلود PDF:', e); }
+})();
+
+/* ============================================================
+   بخش افزودنی: آکاردئون دانلود + وضعیت آفلاین + حذف کش آفلاین
+   (کاملاً مستقل — هیچ منطق، فرمول یا داده‌ای تغییر نمی‌کند)
+   ============================================================ */
+(function(){
+ try{
+  const FAD = '۰۱۲۳۴۵۶۷۸۹';
+  const faNum = (v)=> String(v).replace(/\d/g, d=> FAD[+d]);
+  const PDF_CACHE = 'abfa-pdf-offline-v1';
+  const cards = Array.from(document.querySelectorAll('.pdf-card[data-pdf]'));
+
+  /* ---------------- آکاردئون ---------------- */
+  const accBtn = document.getElementById('pdfAccBtn');
+  const accPanel = document.getElementById('pdfAccPanel');
+  if(accBtn && accPanel){
+    accBtn.addEventListener('click', ()=>{
+      const open = accBtn.getAttribute('aria-expanded') === 'true';
+      accBtn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      accPanel.hidden = open;
+      if(!open) refreshStatus();
+    });
+  }
+
+  /* ---------------- وضعیت کش آفلاین ---------------- */
+  const stat = document.getElementById('pdfOfflineStat');
+  const clearBtn = document.getElementById('pdfClearCacheBtn');
+
+  async function cachedInfo(){
+    if(!('caches' in window)) return { count:0, bytes:0, total:cards.length };
+    let count = 0, bytes = 0;
+    try{
+      const cache = await caches.open(PDF_CACHE);
+      for(const c of cards){
+        const hit = await cache.match(c.getAttribute('data-pdf'));
+        const badge = c.querySelector('.pdf-offline-badge');
+        if(hit){
+          count++;
+          try{ bytes += (await hit.clone().blob()).size; }catch(e){}
+          if(badge) badge.hidden = false;
+        }else if(badge){ badge.hidden = true; }
+      }
+    }catch(e){}
+    return { count, bytes, total: cards.length };
+  }
+
+  async function refreshStatus(){
+    const info = await cachedInfo();
+    if(stat){
+      const mb = info.bytes/1048576;
+      const size = info.bytes ? ' — ' + (mb>=1 ? faNum(mb.toFixed(1))+' مگابایت' : faNum(Math.max(1,Math.round(info.bytes/1024)))+' کیلوبایت') : '';
+      stat.textContent = 'وضعیت آفلاین: ' + faNum(info.count) + ' از ' + faNum(info.total) + ' فایل' + size;
+    }
+    if(clearBtn) clearBtn.disabled = info.count === 0;
+  }
+
+  if(clearBtn) clearBtn.addEventListener('click', async ()=>{
+    clearBtn.disabled = true;
+    const prev = clearBtn.textContent;
+    clearBtn.textContent = 'در حال حذف…';
+    try{ if('caches' in window) await caches.delete(PDF_CACHE); }catch(e){ console.error('خطا در حذف کش:', e); }
+    clearBtn.textContent = '✔ کش آفلاین حذف شد';
+    cards.forEach(c=>{ const b = c.querySelector('.pdf-offline-badge'); if(b) b.hidden = true; });
+    setTimeout(()=>{ clearBtn.textContent = prev; refreshStatus(); }, 2000);
+  });
+
+  /* بهینه‌سازی بارگذاری آفلاین: فایل‌های ذخیره‌شده دوباره دانلود نمی‌شوند
+     و پس از هر دریافت، وضعیت و نشان‌ها به‌روزرسانی می‌شوند. */
+  const allBtn = document.getElementById('pdfOfflineAllBtn');
+  if(allBtn) allBtn.addEventListener('click', ()=>{ setTimeout(refreshStatus, 800); setTimeout(refreshStatus, 4000); });
+  cards.forEach(c=>{
+    const dl = c.querySelector('.pdf-dl');
+    if(dl) dl.addEventListener('click', ()=> setTimeout(refreshStatus, 1200));
+    c.addEventListener('click', ()=> setTimeout(refreshStatus, 1500));
+  });
+
+  refreshStatus();
+ }catch(e){ console.error('خطا در بخش آکاردئون/کش PDF:', e); }
 })();
