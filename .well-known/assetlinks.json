@@ -1,0 +1,26 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "IR.ABFA.MAJIDAMIRIZADEH",
+      "sha256_cert_fingerprints": [
+        "E3:40:07:96:D1:FA:1D:92:49:B8:89:56:73:ED:4F:BF:2D:03:91:22:53:B6:07:8B:46:42:37:B7:0B:19:DE:07"
+      ]
+    }
+  },
+  {
+    "relation": [
+      "check_validation"
+    ],
+    "target": {
+      "namespace": "cafebazaar_twa",
+      "package_name": "IR.ABFA.MAJIDAMIRIZADEH",
+      "sha256_cert_fingerprints": [
+        "E3:40:07:96:D1:FA:1D:92:49:B8:89:56:73:ED:4F:BF:2D:03:91:22:53:B6:07:8B:46:42:37:B7:0B:19:DE:07"
+      ]
+    }
+  }
+]
