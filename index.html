@@ -25,27 +25,25 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="جداول مصرف آب">
-<!--
-  فونت وزیرمتن به‌صورت آنلاین از fonts.googleapis.com بارگذاری نمی‌شود
-  (باعث گیر کردن ثبت Service Worker پشت درخواست فونت مسدود‌شده می‌شد).
-  در صورت نیاز به فونت اختصاصی، فایل‌های woff2 را داخل پروژه قرار داده
-  و بلوک زیر را باز کنید:
+<style>
+@font-face {
+    font-family: "Vazirmatn";
+    src: url("./fonts/Vazirmatn[wght].woff2") format("woff2 supports variations"),
+         url("./fonts/Vazirmatn[wght].woff2") format("woff2-variations");
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+}
 
-  <style>
-  @font-face{
-    font-family:'Vazirmatn';
-    src:url('./fonts/Vazirmatn-Regular.woff2') format('woff2');
-    font-weight:400;
-    font-display:swap;
-  }
-  @font-face{
-    font-family:'Vazirmatn';
-    src:url('./fonts/Vazirmatn-Bold.woff2') format('woff2');
-    font-weight:700;
-    font-display:swap;
-  }
-  </style>
--->
+html,
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Vazirmatn", Tahoma, Arial, sans-serif;
+}
+</style>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -91,7 +89,7 @@
 
   <!-- ===================== MAIN HOME ===================== -->
   <section class="screen active" id="screen-mainhome">
-    <p class="home-intro">به «آبفا پلاس» خوش آمدید؛ یک برنامه آموزشی و کاربردی برای عموم، مدیران، کارشناسان و پیمانکاران امور مشترکین حوزه آب و فاضلاب که متن مصوبات و تعرفه‌های منتشرشده در منابع رسمی را به‌صورت خوانا و قابل جست‌وجو ارائه می‌کند. این برنامه مرجع رسمی نیست. یکی از بخش‌های زیر را انتخاب کنید، یا از دکمه شناور ماشین‌حساب (پایین چپ) برای محاسبه سریع حجم و مبلغ استفاده کنید.</p>
+    <p class="home-intro">به «آبفا پلاس» خوش آمدید؛ یک برنامه آموزشی و کاربردی برای عموم،مدیران، کارشناسان و پیمانکاران حوزه مشترکین آب و فاضلاب که متن مصوبات و تعرفه‌های منتشرشده در منابع رسمی را به‌صورت خوانا و قابل جست‌وجو ارائه می‌کند. این برنامه مرجع رسمی نیست. یکی از بخش‌های زیر را انتخاب کنید، یا از دکمه شناور ماشین‌حساب (پایین چپ) برای محاسبه سریع حجم و مبلغ استفاده کنید.</p>
     <div class="table-grid main-grid">
       <div class="table-card main-card theme-blue-card" id="goRegs">
         <div class="icon icon-blue">📘</div>
