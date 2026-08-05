@@ -125,6 +125,14 @@
         </div>
         <div class="chev">‹</div>
       </div>
+      <div class="table-card main-card theme-quiz-card" id="goQuiz">
+        <div class="icon">🎓</div>
+        <div class="info">
+          <h3>سامانه تعیین سطح امور مشترکین</h3>
+          <span>آزمون تصادفی ۱۵ سؤالی از بانک سؤالات تخصصی (درحال توسعه)</span>
+        </div>
+        <div class="chev">‹</div>
+      </div>
     </div>
 
     <!-- ===================== PDF DOWNLOADS (آکاردئون) ===================== -->
@@ -459,6 +467,52 @@
     <div id="tfRateTableNoteWrap"></div>
   </section>
 
+  <!-- ===================== سامانه تعیین سطح امور مشترکین — خانه ===================== -->
+  <section class="screen" id="screen-quizhome">
+    <p class="home-intro">این آزمون با هدف ارزیابی میزان تسلط شما بر مهم‌ترین منابع تخصصی حوزه امور مشترکین طراحی شده است. در هر نوبت، ۱۵ سؤال به‌صورت کاملاً تصادفی از بانک سؤالات انتخاب می‌شود و ترتیب گزینه‌ها نیز به‌صورت تصادفی تغییر می‌کند؛ بنابراین هر آزمون متفاوت خواهد بود. <b>(درحال توسعه)</b></p>
+    <div id="quizHomeStats"></div>
+    <div class="quiz-levels" id="quizLevelsBox"></div>
+    <div class="quiz-home-actions">
+      <button type="button" class="quiz-primary-btn" id="quizStartBtn">🚀 شروع آزمون</button>
+      <button type="button" class="quiz-ghost-btn" id="quizHistoryBtn">🗂️ سوابق نتایج</button>
+    </div>
+    <p class="quiz-hint" id="quizHomeHistoryHint"></p>
+  </section>
+
+  <!-- ===================== آزمون در جریان ===================== -->
+  <section class="screen" id="screen-quizplay">
+    <div class="quiz-progress-box">
+      <div class="quiz-progress-track"><span id="quizProgressFill"></span></div>
+      <div class="quiz-progress-text" id="quizProgressText"></div>
+    </div>
+    <div id="quizPlayWrap"></div>
+    <div class="quiz-play-actions">
+      <button type="button" class="quiz-primary-btn" id="quizSubmitBtn">✅ ثبت نهایی آزمون</button>
+      <button type="button" class="quiz-ghost-btn" id="quizCancelBtn">انصراف از آزمون</button>
+    </div>
+  </section>
+
+  <!-- ===================== نتیجه آزمون ===================== -->
+  <section class="screen" id="screen-quizresult">
+    <div class="quiz-result-head" id="quizResultHead"></div>
+    <div class="quiz-sec-list" id="quizResultSections"></div>
+    <div id="quizReviewWrap"></div>
+    <div class="quiz-play-actions">
+      <button type="button" class="quiz-primary-btn" id="quizAgainBtn">🔄 آزمون جدید</button>
+      <button type="button" class="quiz-ghost-btn" id="quizResultHistoryBtn">🗂️ سوابق نتایج</button>
+    </div>
+  </section>
+
+  <!-- ===================== سوابق نتایج ===================== -->
+  <section class="screen" id="screen-quizhistory">
+    <p class="home-intro">نتایج آزمون‌های شما به‌صورت آفلاین و فقط در همین دستگاه ذخیره می‌شود.</p>
+    <div id="quizHistorySummary"></div>
+    <div id="quizHistoryWrap"></div>
+    <div class="quiz-play-actions">
+      <button type="button" class="quiz-danger-btn" id="quizHistoryClearBtn" hidden>🗑 پاک کردن همه سوابق</button>
+    </div>
+  </section>
+
 </main>
 
 <!-- ===================== PDF PREVIEW MODAL ===================== -->
@@ -668,5 +722,6 @@
 <script src="app.js"></script>
 <script src="search-enhance.js"></script>
 <script src="ui-enhance.js"></script>
+<script src="quiz.js"></script>
 </body>
 </html>

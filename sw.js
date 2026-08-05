@@ -6,7 +6,7 @@
    فقط کافیست عدد CACHE_VERSION را افزایش دهید (مثلاً v6 -> v7).
    با این کار کش قدیمی به‌طور خودکار حذف و نسخه جدید جایگزین می‌شود.
    ============================================================ */
-const CACHE_VERSION = 'v23';
+const CACHE_VERSION = 'v25';
 const CACHE_NAME = `abfaplus-tables-${CACHE_VERSION}`;
 
 // فایل‌های اصلی برنامه (App Shell) که باید برای اجرای کامل آفلاین کش شوند
@@ -21,6 +21,7 @@ const APP_SHELL = [
   './app.js',
   './search-enhance.js',
   './ui-enhance.js',
+  './quiz.js',
   './manifest.json',
   './icon.svg',
   './icon-192.png',
@@ -31,6 +32,7 @@ const APP_SHELL = [
   './data/chapters.json',
   './data/laws.json',
   './data/tariffs.json',
+  './data/quiz/index.json',
   './pdf/aeen-nameh-tarefeha.pdf',
   './pdf/jadaval-dahgane-olgooye-masraf.pdf',
   './pdf/ghavanin-ab-va-fazelab.pdf',
@@ -43,10 +45,19 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
+      // فایل‌های بانک سؤال به‌صورت خودکار از روی data/quiz/index.json خوانده
+      // می‌شوند تا افزودن/حذف بانک نیازی به ویرایش این فهرست نداشته باشد.
+      const shell = APP_SHELL.slice();
+      try {
+        const man = await (await fetch('./data/quiz/index.json', { cache: 'reload' })).json();
+        (man.sections || []).forEach((sec) => {
+          if (sec && sec.file) shell.push('./data/quiz/' + sec.file);
+        });
+      } catch (err) {}
       // به‌جای cache.addAll (که با خطای یک فایل، کل نصب را متوقف می‌کند)
       // هر فایل جدا اضافه می‌شود تا خرابی یک مورد باعث شکست کل SW نشود
       await Promise.allSettled(
-        APP_SHELL.map(async (url) => {
+        shell.map(async (url) => {
           try {
             const req = new Request(url, { cache: 'reload' });
             const res = await fetch(req);
