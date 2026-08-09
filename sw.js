@@ -6,7 +6,7 @@
    فقط کافیست عدد CACHE_VERSION را افزایش دهید (مثلاً v6 -> v7).
    با این کار کش قدیمی به‌طور خودکار حذف و نسخه جدید جایگزین می‌شود.
    ============================================================ */
-const CACHE_VERSION = 'v26';
+const CACHE_VERSION = 'v27';
 const CACHE_NAME = `abfaplus-tables-${CACHE_VERSION}`;
 
 // فایل‌های اصلی برنامه (App Shell) که باید برای اجرای کامل آفلاین کش شوند
@@ -98,7 +98,13 @@ self.addEventListener('message', (event) => {
 /* ------------------------- استراتژی واکشی ------------------------- */
 /* Stale-While-Revalidate: پاسخ کش‌شده فوراً نمایش داده می‌شود (سرعت بالا)
    و هم‌زمان نسخه جدید از شبکه گرفته و برای دفعه بعد در کش ذخیره می‌شود.
-   فقط برای درخواست‌های هم‌مبدأ (فایل‌های داخلی برنامه) اجرا می‌شود. */
+   فقط برای درخواست‌های هم‌مبدأ (فایل‌های داخلی برنامه) اجرا می‌شود.
+
+   استثناها:
+   - PDF: Network-First (تا نسخه جدید از سرور بیاید؛ آفلاین از کش)
+   - فایل‌های واقعی (pdf/json/تصویر/فونت/...) هرگز به index.html نگاشت نمی‌شوند
+     تا باز کردن مستقیم لینک PDF باعث نمایش صفحهٔ برنامه نشود.
+*/
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -120,13 +126,40 @@ self.addEventListener('fetch', (event) => {
     (async () => {
       const cache = await caches.open(CACHE_NAME);
       const isNavigate = request.mode === 'navigate';
-      const cacheKey = isNavigate ? './index.html' : request;
 
-      // نکته آفلاین: برای فایل‌های سنگین (PDF) و داده‌های JSON، اگر نسخه کش‌شده
-      // موجود باشد بدون تلاش شبکه پاسخ داده می‌شود تا مصرف داده و تأخیر کاهش یابد.
-      const isHeavyStatic = /\.(pdf|png|svg|woff2?|ttf)$/i.test(url.pathname);
+      // فایل واقعی استاتیک — نباید مثل route برنامه به index.html برود
+      const isPdf = /\.pdf$/i.test(url.pathname);
+      const isRealFile =
+        /\.(pdf|json|png|svg|jpe?g|gif|webp|woff2?|ttf|ico|css|js|map)$/i.test(url.pathname) ||
+        /\/(data|pdf|fonts|splash)\//i.test(url.pathname);
 
-      // ignoreSearch تا لینک‌هایی مثل file.pdf?v=2 هم از کش پاسخ بگیرند
+      // فقط ناوبری صفحات برنامه → index.html ؛ لینک مستقیم PDF و سایر فایل‌ها دست‌نخورده
+      const cacheKey = (isNavigate && !isRealFile) ? './index.html' : request;
+
+      // ---------- PDF: Network-First ----------
+      if (isPdf) {
+        try {
+          const fresh = await fetch(request, { cache: 'no-store' });
+          if (fresh && fresh.ok) {
+            cache.put(request, fresh.clone()).catch(() => {});
+            return fresh;
+          }
+        } catch (e) {}
+
+        const cachedPdf =
+          (await cache.match(request)) ||
+          (await cache.match(request, { ignoreSearch: true }));
+        if (cachedPdf) return cachedPdf;
+
+        return new Response('فایل PDF در دسترس نیست (آفلاین یا خطا در دریافت).', {
+          status: 503,
+          headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+        });
+      }
+
+      // تصاویر / فونت: اگر در کش بود همان را بده (مثل قبل، بدون PDF)
+      const isHeavyStatic = /\.(png|svg|woff2?|ttf)$/i.test(url.pathname);
+
       const cached =
         (await cache.match(cacheKey)) ||
         (await cache.match(cacheKey, { ignoreSearch: true }));
@@ -135,7 +168,6 @@ self.addEventListener('fetch', (event) => {
 
       const networkFetch = fetch(request)
         .then((response) => {
-          // پاسخ‌های موفق (200) کش می‌شوند
           if (response && response.status === 200) {
             cache.put(cacheKey, response.clone()).catch(() => {});
           }
@@ -144,23 +176,20 @@ self.addEventListener('fetch', (event) => {
         .catch(() => null);
 
       if (cached) {
-        // پاسخ فوری از کش + به‌روزرسانی خاموش در پس‌زمینه
         event.waitUntil(networkFetch);
         return cached;
       }
 
-      // اگر در کش نبود، منتظر شبکه بمان؛ در صورت شکست کامل، خطا برگردان
       const fresh = await networkFetch;
       if (fresh) return fresh;
 
-      // آفلاین و بدون کش برای این آدرس: اگر ناوبری است، پوسته برنامه را بده
-      if (isNavigate) {
+      // آفلاین: فقط برای صفحات برنامه پوسته را بده، نه برای فایل واقعی
+      if (isNavigate && !isRealFile) {
         const shell =
           (await cache.match('./index.html')) || (await cache.match('./'));
         if (shell) return shell;
       }
 
-      // آخرین راه‌حل برای ناوبری آفلاین بدون کش قبلی: پاسخ خطای قابل کنترل
       return new Response(
         '<!DOCTYPE html><html lang="fa" dir="rtl"><meta charset="utf-8"><body style="font-family:Tahoma,sans-serif;text-align:center;padding:40px;">اتصال اینترنت برقرار نیست و نسخه آفلاین هنوز کامل بارگذاری نشده است.</body></html>',
         { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
@@ -168,4 +197,3 @@ self.addEventListener('fetch', (event) => {
     })()
   );
 });
-

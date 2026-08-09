@@ -1005,6 +1005,9 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
       if(swRefreshed) return;
       if(!hadControllerBefore) return; // اولین بازدید: این تغییر، بروزرسانی واقعی نیست
       swRefreshed = true;
+      // نسخه جدید Service Worker فعال شد: کش PDFهای دانلودشدهٔ آفلاین هم پاک می‌شود
+      // تا در بازدید بعدی دوباره از سرور گرفته شوند و همیشه به‌روز بمانند
+      try{ if('caches' in window) caches.delete('abfa-pdf-offline-v1'); }catch(_e){}
       if(isInstallFlowOpen()){
         const waitForInstallClose = setInterval(()=>{
           if(!isInstallFlowOpen()){
