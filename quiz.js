@@ -212,6 +212,9 @@
     if (hb) hb.textContent = hist.length ? 'تا کنون ' + faNum(hist.length) + ' آزمون در این دستگاه ثبت شده است.' : 'هنوز آزمونی در این دستگاه ثبت نشده است.';
   }
 
+  // دسترسی کنترل‌شده برای تب اصلی: همان صفحه آزمون را بدون ایجاد کارت/مسیر اضافی بازسازی می‌کند.
+  window.renderQuizHome = renderHome;
+
   /* ---------------------- صفحه آزمون ---------------------- */
   async function startExam() {
     const ok = await loadBank();
@@ -399,13 +402,10 @@
   /* ---------------------- ثبت صفحات و رویدادها ---------------------- */
   function register() {
     if (typeof SCREEN_META === 'undefined' || typeof showScreen !== 'function') return;
-    SCREEN_META.quizhome = { theme: 'blue', icon: '🎓', title: 'سامانه تعیین سطح امور مشترکین', sub: 'آزمون تصادفی ۱۵ سؤالی از بانک سؤالات تخصصی', back: true, parent: 'mainhome' };
+    SCREEN_META.quizhome = { theme: 'blue', icon: '🎓', title: 'آزمون صلاحیت امور مشترکین', sub: 'آزمون تصادفی ۱۵ سؤالی از بانک سؤالات تخصصی', back: true, parent: 'mainhome' };
     SCREEN_META.quizplay = { theme: 'teal', icon: '📝', title: 'آزمون در جریان', sub: 'به همه سؤال‌ها پاسخ دهید و سپس ثبت کنید', back: true, parent: 'quizhome', help: false };
     SCREEN_META.quizresult = { theme: 'green', icon: '📊', title: 'نتیجه آزمون', sub: 'نمره، درصد موفقیت و پاسخ‌های صحیح', back: true, parent: 'quizhome', help: false };
     SCREEN_META.quizhistory = { theme: 'orange', icon: '🗂️', title: 'سوابق نتایج آزمون', sub: 'ذخیره‌شده به‌صورت آفلاین در همین دستگاه', back: true, parent: 'quizhome', help: false };
-
-    const goQuiz = $('goQuiz');
-    if (goQuiz) goQuiz.onclick = () => { showScreen('quizhome'); renderHome(); };
 
     const startBtn = $('quizStartBtn');
     if (startBtn) startBtn.onclick = startExam;
