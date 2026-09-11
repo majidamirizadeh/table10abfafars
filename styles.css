@@ -677,13 +677,13 @@
   }
 
   .offline-indicator{
-    position:fixed;top:10px;left:12px;z-index:65;
+    position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;z-index:65;
     background:rgba(0,0,0,.28);color:#fff;text-align:center;font-size:10px;font-weight:700;
     padding:3px 10px;border-radius:20px;letter-spacing:.25px;
-    opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity .14s ease, transform .14s ease;
+    opacity:0;pointer-events:none;transform:translateX(-50%) translateY(-6px);transition:opacity .14s ease, transform .14s ease;
     backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
   }
-  .offline-indicator.show{opacity:1;transform:translateY(0);}
+  .offline-indicator.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
   .result-actions{grid-column:1 / -1;display:flex;gap:8px;flex-wrap:wrap;margin-top:2px;}
   .result-actions .btn-mini{flex:1;min-width:150px;justify-content:center;}
@@ -707,13 +707,14 @@
   .back-to-top{
     position:fixed;left:50%;transform:translateX(-50%) translateY(10px);bottom:calc(22px + env(safe-area-inset-bottom,0px));
     width:46px;height:46px;border-radius:50%;border:none;
-    background:linear-gradient(135deg,var(--deep),var(--deep-2));color:#fff;font-size:18px;cursor:pointer;z-index:29;
+    background:linear-gradient(135deg,var(--deep),var(--deep-2));color:#fff;font-size:18px;cursor:pointer;z-index:38;
     box-shadow:0 7px 18px -4px rgba(10,77,104,.35), 0 0 0 4px rgba(10,77,104,.05);opacity:0;pointer-events:none;
     transition:opacity .14s ease, transform .14s var(--ease);
   }
   .back-to-top.show{opacity:.78;pointer-events:auto;transform:translateX(-50%) translateY(0);}
   .back-to-top:hover{opacity:.95;}
   .back-to-top:active{transform:translateX(-50%) scale(0.94);}
+  body.has-tabbar .back-to-top{bottom:calc(96px + env(safe-area-inset-bottom,0px));}
 
   .update-banner{
     display:none;position:fixed;bottom:calc(85px + env(safe-area-inset-bottom,0px));left:16px;right:16px;
@@ -1529,4 +1530,409 @@ html[data-theme="dark"] .pdfview-loading.is-ready .pdfview-loading-note,
 .quiz-hist-del{background:transparent;border:1px solid var(--border);border-radius:10px;font-size:14px;padding:6px 9px;cursor:pointer;color:var(--danger);}
 @media (min-width:640px){
   .quiz-home-actions,.quiz-play-actions{grid-template-columns:1fr 1fr;}
+}
+
+/* ============================================================
+   نسخه ۲.۵ — بازطراحی ظاهری هدر + منوی همبرگری + نوار تب شیشه‌ای
+   ------------------------------------------------------------
+   این بخش کاملاً افزودنی است: هیچ داده، فرمول، مسیر ناوبری یا
+   منطق محاسباتی موجود تغییر نکرده؛ فقط ظاهر هدر/فوتر/دسترسی‌های
+   سریع صفحه اول بازطراحی شده است. برای برگرداندن ظاهر قبلی،
+   کافی است همین بلوک انتهایی فایل حذف شود.
+   ============================================================ */
+
+/* ---------- ۱) حذف کامل نوار راهنمای پله‌ای صفحات از هدر ---------- */
+.step-nav{display:none !important;}
+
+/* ---------- ۲) هدر باریک‌تر: به‌جای نوار تمام‌عرض، یک کپسول رنگی فقط دور عنوان ---------- */
+header.appbar{
+  overflow:visible;
+  box-shadow:none;
+  padding:calc(8px + env(safe-area-inset-top,0px)) 14px 8px;
+}
+header.appbar::before,
+header.appbar::after{content:none;}
+header.appbar.theme-neutral,
+header.appbar.theme-blue,
+header.appbar.theme-green,
+header.appbar.theme-orange{background:transparent;}
+
+.appbar-row{
+  position:relative;isolation:isolate;overflow:hidden;
+  display:flex;align-items:center;
+  width:100%;
+  min-height:63px;
+  margin:0;
+  padding:11px 18px;
+  border-radius:0 0 20px 20px;
+  box-shadow:0 8px 22px -7px rgba(10,60,80,.4), inset 0 1px 0 rgba(255,255,255,.14);
+  transition:background .2s var(--ease);
+}
+.appbar-row::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(220px 90px at 88% -40%, rgba(255,255,255,.22), transparent 65%);
+  pointer-events:none;
+}
+header.theme-neutral .appbar-row{background:linear-gradient(135deg,var(--head-teal-1) 0%,var(--head-teal-2) 100%);}
+header.theme-blue .appbar-row{background:linear-gradient(135deg,var(--head-blue-1) 0%,var(--head-blue-2) 100%);}
+header.theme-green .appbar-row{background:linear-gradient(135deg,var(--head-green-1) 0%,var(--head-green-2) 100%);}
+header.theme-orange .appbar-row{background:linear-gradient(135deg,var(--head-copper-1) 0%,var(--head-copper-2) 100%);}
+
+.appbar-row .brand-col{flex-direction:row;}
+.appbar-row .brand-mark{width:32px;height:32px;border-radius:10px;font-size:15px;}
+.appbar-row .titles{text-align:right;padding-inline-end:38px;}
+.appbar-row .titles h1{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;text-overflow:ellipsis;
+}
+.appbar-row .titles p{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.appbar-row .titles.no-sub h1{font-size:17.5px;-webkit-line-clamp:1;}
+
+/* دکمه همبرگر: مطلق در گوشه بالا-چپ هدر، مستقل از جهت RTL و مستقل از عرض کپسول */
+.menu-burger-btn{
+  position:absolute;
+  left:14px;
+  top:calc(8px + env(safe-area-inset-top,0px));
+  width:38px;height:38px;border-radius:12px;
+  background:rgba(10,60,80,.82);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.18);
+  display:none;align-items:center;justify-content:center;
+  cursor:pointer;z-index:5;padding:0;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+  transition:background .12s ease, transform .1s var(--ease);
+}
+.menu-burger-btn svg{width:19px;height:19px;}
+.menu-burger-btn:hover{background:rgba(10,60,80,.95);}
+.menu-burger-btn:active{transform:scale(.94);}
+
+/* ---------- ۳) منوی همبرگری (پنل) — حالت تیره/روشن + بخش «درباره» ---------- */
+.main-menu-overlay{
+  position:fixed;inset:0;z-index:62;
+  background:rgba(6,24,32,.5);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  display:none;align-items:flex-start;justify-content:center;
+  padding:calc(64px + env(safe-area-inset-top,0px)) 16px 16px;
+  opacity:0;transition:opacity .16s ease;
+}
+.main-menu-overlay.show{display:flex;opacity:1;}
+.main-menu-panel{
+  width:100%;max-width:400px;max-height:80vh;
+  display:flex;flex-direction:column;
+  background:var(--card);
+  border-radius:22px;
+  box-shadow:var(--shadow-3);
+  overflow:hidden;
+  transform:translateY(-8px) scale(0.98);opacity:0;
+  transition:transform .18s var(--ease), opacity .18s var(--ease);
+}
+.main-menu-overlay.show .main-menu-panel{transform:translateY(0) scale(1);opacity:1;}
+.main-menu-head{
+  flex-shrink:0;
+  background:linear-gradient(135deg,var(--head-teal-1) 0%, var(--head-teal-2) 100%);
+  color:#fff;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;
+  font-weight:800;font-size:14.5px;
+}
+.main-menu-close{
+  width:32px;height:32px;border-radius:10px;border:none;
+  background:rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .1s ease, transform .1s var(--ease);
+}
+.main-menu-close:hover{background:rgba(255,255,255,.3);}
+.main-menu-close:active{transform:scale(.94);}
+.main-menu-body{padding:16px 16px 18px;overflow-y:auto;flex:1;}
+
+.menu-row{
+  width:100%;display:flex;align-items:center;gap:12px;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:13px 14px;margin:0 0 14px;cursor:pointer;font-family:inherit;
+  font-size:13.6px;font-weight:700;color:var(--text);
+  box-shadow:var(--shadow-1);
+  transition:background .12s ease, transform .1s var(--ease);
+}
+.menu-row:hover{background:var(--teal-light);}
+.menu-row:active{transform:scale(.99);}
+.menu-row-ico{
+  width:34px;height:34px;border-radius:11px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(18,120,122,.16),rgba(18,120,122,.06));
+  color:var(--teal);
+}
+.menu-row-ico svg{width:17px;height:17px;}
+.menu-row-txt{flex:1;text-align:right;}
+html[data-theme="dark"] .menu-row{background:#0c1c23;border-color:rgba(255,255,255,.08);}
+html[data-theme="dark"] .menu-row:hover{background:#14333a;}
+
+/* بخش «درباره» داخل منو، بدون سایه/حاشیه اضافه (چون خودش داخل کارت پنل است) */
+.main-menu-body .about-acc{margin:0;}
+
+/* ---------- ۴) نوار تب شیشه‌ای ۴ تایی (فقط صفحه اول) ---------- */
+.glass-tabbar{
+  position:fixed;left:16px;right:16px;margin:0 auto;
+  max-width:480px;
+  bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  z-index:34;
+  display:none;align-items:center;gap:6px;justify-content:space-between;
+  padding:8px;
+  border-radius:24px;
+  background:rgba(214,241,240,.46);
+  backdrop-filter:blur(16px) saturate(170%);
+  -webkit-backdrop-filter:blur(16px) saturate(170%);
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:0 12px 34px -10px rgba(10,60,80,.32), 0 2px 8px rgba(10,60,80,.07);
+}
+.glass-tabbar.show{display:flex;}
+.gtab{
+  flex:1 1 0;
+  width:auto;height:54px;border:none;border-radius:17px;
+  background:transparent;color:var(--deep);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-family:inherit;padding:0;
+  transition:background .14s ease, color .14s ease, transform .1s var(--ease);
+}
+.gtab svg{width:23px;height:23px;}
+.gtab:hover{background:rgba(10,77,104,.08);}
+.gtab:active{transform:scale(.94);}
+.gtab.active{
+  background:linear-gradient(135deg,var(--teal),var(--deep));
+  color:#fff;
+  box-shadow:0 6px 16px -4px rgba(15,139,141,.5);
+}
+html[data-theme="dark"] .glass-tabbar{
+  background:rgba(15,45,48,.48);
+  border-color:rgba(255,255,255,.09);
+}
+html[data-theme="dark"] .gtab{color:#bfe6e6;}
+html[data-theme="dark"] .gtab:hover{background:rgba(255,255,255,.07);}
+
+/* دکمه شناور قبلی ماشین‌حساب دیگر نمایش داده نمی‌شود (جایگزین: تب سوم نوار شیشه‌ای) */
+#fabCalc{display:none !important;}
+
+/* ---------- ۵) آیکون حالت خطا/خالی بخش کنتور ---------- */
+.meter-guide-ico{font-size:34px;margin-bottom:10px;}
+
+/* ============================================================
+   نسخه ۲.۶ — بخش کنتور: مرجع فنی + شناخت صفحه + پیشنهاد کنتور
+   ------------------------------------------------------------
+   کاملاً افزودنی: هیچ داده، فرمول یا مسیر ناوبری موجود را تغییر
+   نمی‌دهد؛ فقط ظاهر تب چهارم (کنتور) را تکمیل می‌کند.
+   ============================================================ */
+
+/* ---------- تب‌های محلی صفحه کنتور ---------- */
+.meter-subtabs{
+  display:flex;gap:3px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:3px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow-1);
+  position:sticky;top:0;z-index:8;
+}
+.meter-subtab{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:6px 4px 5px;border:none;border-radius:9px;background:transparent;
+  color:var(--muted);font-family:inherit;font-size:11.2px;font-weight:800;
+  cursor:pointer;transition:background .14s ease,color .14s ease;
+}
+.meter-subtab-ico{font-size:15px;line-height:1;}
+.meter-subtab.active{
+  background:linear-gradient(135deg,var(--head-teal-1) 0%,var(--head-teal-2) 100%);
+  color:#fff;box-shadow:0 6px 16px -6px rgba(10,60,80,.5);
+}
+html[data-theme="dark"] .meter-subtabs{background:#0c1c23;}
+
+/* ---------- بارگذاری/خطا ---------- */
+.meter-loading{display:flex;flex-direction:column;align-items:center;gap:12px;padding:50px 16px;color:var(--muted);font-size:13px;}
+.meter-loading-spin{
+  width:34px;height:34px;border-radius:50%;
+  border:3px solid var(--border);border-top-color:var(--teal);
+  animation:meter-spin .8s linear infinite;
+}
+@keyframes meter-spin{to{transform:rotate(360deg);}}
+.meter-load-error{display:none;flex-direction:column;align-items:center;gap:10px;padding:40px 16px;text-align:center;color:var(--muted);font-size:13px;}
+.meter-load-error:not([hidden]){display:flex;}
+
+/* ---------- پنل‌ها ---------- */
+.meter-panel{display:none;}
+.meter-panel.active{display:block;}
+
+/* ---------- مرجع فنی: چیدمان محتوای فصل ---------- */
+.tech-disclaimer{
+  background:var(--teal-light);border:1px solid rgba(15,139,141,.22);
+  border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:16px;
+  font-size:12px;line-height:1.9;color:var(--deep-2);
+}
+.tech-standards-title{margin:18px 2px 10px;font-size:13px;font-weight:800;color:var(--deep-2);}
+.tech-chapter-head{margin-bottom:14px;}
+.tech-chapter-num{display:inline-block;background:linear-gradient(135deg,var(--head-teal-1) 0%,var(--head-teal-2) 100%);color:#fff;font-size:15px;font-weight:800;padding:6px 18px;border-radius:999px;margin-bottom:10px;box-shadow:0 6px 16px -5px rgba(15,139,141,.5);}
+.tech-chapter-head h2{margin:0 0 8px;font-size:17px;font-weight:800;color:var(--deep-2);line-height:1.5;}
+.tech-goals{margin:0;font-size:12.6px;color:var(--muted);line-height:1.9;}
+.tech-back-link{
+  display:inline-flex;align-items:center;gap:6px;background:none;border:none;
+  color:var(--teal);font-family:inherit;font-size:12.8px;font-weight:700;
+  cursor:pointer;padding:6px 2px;margin-bottom:10px;
+}
+.tech-blocks{display:flex;flex-direction:column;gap:12px;margin-bottom:16px;}
+.tech-h4{margin:6px 0 0;font-size:13.6px;font-weight:800;color:var(--deep-2);}
+.tech-p{margin:0;font-size:13.3px;line-height:1.95;color:var(--text);}
+.tech-formula{
+  background:#0c2b33;color:#a8f0e6;border-radius:var(--radius-sm);
+  padding:13px 14px;font-size:12.6px;line-height:2.1;text-align:center;
+  direction:ltr;letter-spacing:.2px;overflow-x:auto;white-space:pre-line;
+  font-family:'Courier New',monospace;
+}
+.tech-callout{border-radius:var(--radius-sm);padding:12px 14px;font-size:12.4px;line-height:1.9;}
+.tech-callout.warn{background:#fff3ea;color:#8a4a12;border:1px solid #f4c99a;}
+.tech-callout.info{background:var(--teal-light);color:var(--deep-2);border:1px solid rgba(15,139,141,.22);}
+html[data-theme="dark"] .tech-callout.warn{background:#2a1c0e;color:#f0b672;border-color:#4a3216;}
+.tech-list{margin:0;padding-inline-start:20px;font-size:13px;line-height:1.95;color:var(--text);}
+.tech-list li{margin-bottom:5px;}
+.tech-table-wrap{max-height:none;}
+table.tech-data-table{font-size:11.8px;}
+table.tech-data-table thead th{background:linear-gradient(135deg,var(--head-teal-1) 0%,var(--head-teal-2) 100%);}
+.tech-summary{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--shadow-1);}
+.tech-summary h5{margin:0 0 8px;font-size:12.6px;font-weight:800;color:var(--deep-2);}
+.tech-summary ul{margin:0;padding-inline-start:20px;font-size:12.6px;line-height:1.9;color:var(--muted);}
+.tech-chapter-nav{display:flex;justify-content:space-between;gap:10px;margin-top:14px;}
+
+/* ---------- شناخت صفحه: تصویر تعاملی + اسپات‌لایت ---------- */
+.dial-frame{
+  position:relative;width:100%;border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow-2);background:#eef2f2;
+  --fx:50%;--fy:50%;--fr:40px;--frInner:28px;
+  isolation:isolate;touch-action:manipulation;
+}
+/* زوم ثابت و کنترل‌شده: تصویر و لایه انتخاب دقیقاً با هم بزرگ می‌شوند،
+   پس تغییر رزولوشن یا DPR باعث جابه‌جایی محدوده کلیک نمی‌شود. */
+.dial-canvas{
+  position:absolute;inset:-4%;width:108%;height:108%;
+  transform-origin:center center;
+}
+.dial-svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible;}
+.dial-svg-img{display:block;user-select:none;-webkit-user-drag:none;}
+.dial-svg-gray{opacity:1;}
+.dial-svg-color{opacity:1;transition:opacity .15s ease;}
+.dial-hotspot-layer{position:absolute;inset:0;z-index:3;}
+.dial-dim{
+  position:absolute;inset:0;z-index:4;pointer-events:none;opacity:0;
+  background:rgba(5,18,24,.58);
+  transition:opacity .16s ease;
+  -webkit-mask-image:radial-gradient(circle var(--fr) at var(--fx) var(--fy), transparent 0, transparent var(--frInner), rgba(0,0,0,.20) calc(var(--frInner) + 1px), black var(--fr));
+  mask-image:radial-gradient(circle var(--fr) at var(--fx) var(--fy), transparent 0, transparent var(--frInner), rgba(0,0,0,.20) calc(var(--frInner) + 1px), black var(--fr));
+}
+.dial-frame.focus .dial-dim{opacity:.22;}
+.dial-professional-head{margin-bottom:8px;}
+.dial-guide-note{margin:0;color:var(--muted);font-size:12.2px;line-height:1.9;}
+.dial-category-filter{display:flex;gap:6px;overflow-x:auto;padding:4px 1px 9px;margin-bottom:8px;scrollbar-width:none;}
+.dial-category-filter::-webkit-scrollbar{display:none;}
+.dial-filter-chip{flex:0 0 auto;border:1px solid var(--border);background:var(--card);color:var(--text);
+  border-radius:999px;padding:6px 10px;font-family:inherit;font-size:10.8px;font-weight:800;cursor:pointer;}
+.dial-filter-chip.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+.dial-hotspot{
+  position:absolute;z-index:5;border:none;background:transparent;cursor:pointer;padding:0;
+  border-radius:0;transition:filter .12s ease,transform .12s ease,opacity .12s ease;
+  -webkit-tap-highlight-color:transparent;outline:none;
+}
+.dial-hotspot.is-circle{border-radius:50%;}
+.dial-hotspot.is-hidden{opacity:.01;pointer-events:none;}
+.dial-hotspot:not(.is-hidden):hover,
+.dial-hotspot:not(.is-hidden):focus-visible{filter:brightness(1.08) saturate(1.12);transform:scale(1.008);}
+.dial-hotspot:not(.is-hidden):focus-visible{box-shadow:0 0 0 2px rgba(255,255,255,.95),0 0 0 4px rgba(0,190,255,.72);}
+.dial-hotspot-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  display:none;max-width:95%;padding:3px 6px;border-radius:7px;background:rgba(5,25,32,.78);
+  color:#fff;font-size:9px;font-weight:800;white-space:nowrap;pointer-events:none;}
+.dial-frame:not(.focus) .dial-hotspot:hover .dial-hotspot-label{display:block;}
+.dial-info-card{
+  margin-top:14px;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px;box-shadow:var(--shadow-1);min-height:64px;
+}
+.dial-info-empty{color:var(--muted);font-size:12.8px;text-align:center;padding:14px 4px;line-height:1.9;}
+.dial-info-chip{
+  display:inline-block;background:var(--teal);color:#fff;font-size:10.8px;font-weight:700;
+  padding:3px 10px;border-radius:999px;margin-bottom:9px;
+}
+.dial-info-card h4{margin:0 0 8px;font-size:14px;font-weight:800;color:var(--deep-2);}
+.dial-info-card p{margin:0 0 12px;font-size:12.8px;line-height:1.95;color:var(--text);}
+.dial-info-actions{display:flex;gap:8px;flex-wrap:wrap;}
+@media (max-width:430px){
+  .dial-canvas{inset:-3.5%;width:107%;height:107%;}
+  .dial-hotspot-label{font-size:8px;padding:2px 4px;}
+}
+
+/* ---------- پیشنهاد کنتور: فرم + نتیجه ---------- */
+.adv-group{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow-1);margin-bottom:16px;overflow:hidden;
+}
+.adv-group-head{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;
+  background:linear-gradient(135deg,rgba(18,120,122,.1),rgba(18,120,122,.02));
+  border-bottom:1px solid var(--border);
+}
+.adv-group-num{
+  flex-shrink:0;width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,var(--head-teal-1) 0%,var(--head-teal-2) 100%);
+  color:#fff;font-size:12.5px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.adv-group-ico{font-size:17px;flex-shrink:0;}
+.adv-group-head h4{margin:0;font-size:14.5px;font-weight:800;color:var(--deep-2);}
+.adv-group-body{padding:16px;}
+.adv-group-body .field{margin-bottom:16px;}
+.adv-group-body .field:last-child{margin-bottom:0;}
+.adv-group-body .field label{display:block;margin-bottom:9px;font-size:13.5px;font-weight:700;color:var(--text);line-height:1.6;}
+.choice-group{display:flex;flex-wrap:wrap;gap:8px;}
+.choice-chip{
+  padding:9px 16px;border-radius:999px;border:1.5px solid var(--border);
+  background:var(--bg,var(--card));color:var(--text);font-family:inherit;font-size:12.6px;font-weight:600;
+  cursor:pointer;transition:all .12s ease;
+}
+.choice-chip:active{transform:scale(.96);}
+.choice-chip.selected{
+  background:linear-gradient(135deg,var(--teal) 0%,var(--deep) 100%);
+  border-color:transparent;color:#fff;box-shadow:0 4px 12px -3px rgba(15,139,141,.5);
+}
+html[data-theme="dark"] .choice-chip{background:#0c1c23;}
+html[data-theme="dark"] .adv-group-head{background:linear-gradient(135deg,rgba(18,120,122,.16),rgba(18,120,122,.04));}
+.adv-submit-btn{
+  background:linear-gradient(135deg,var(--head-teal-1) 0%,var(--head-teal-2) 100%) !important;
+  box-shadow:0 10px 26px -6px rgba(15,139,141,.48) !important;
+  margin-bottom:16px;
+}
+.adv-result-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-2);margin-top:4px;
+}
+.adv-result-card h4{margin:0 0 14px;font-size:14.5px;font-weight:800;color:var(--deep-2);}
+.adv-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.adv-result-item{
+  background:var(--teal-light);border-radius:var(--radius-sm);padding:10px 12px;
+}
+.adv-result-item span{display:block;font-size:10.6px;color:var(--muted);margin-bottom:4px;}
+.adv-result-item b{font-size:12.6px;color:var(--deep-2);font-weight:800;}
+.adv-result-note{font-size:12px;line-height:1.85;color:var(--muted);background:var(--card);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;}
+.adv-result-smart{background:linear-gradient(135deg,rgba(18,120,122,.1),rgba(18,120,122,.03));border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:14px;}
+.adv-result-smart h5{margin:0 0 6px;font-size:12.8px;font-weight:800;color:var(--deep-2);}
+.adv-result-smart p{margin:0;font-size:12.2px;line-height:1.85;color:var(--text);}
+.adv-result-notes{margin-bottom:14px;}
+.adv-result-notes h5{margin:0 0 8px;font-size:12.6px;font-weight:800;color:var(--deep-2);}
+.adv-result-notes ul{margin:0;padding-inline-start:20px;font-size:12.2px;line-height:1.9;color:var(--text);}
+.adv-result-notes li{margin-bottom:6px;}
+.adv-result-card .tech-callout{margin-bottom:14px;}
+
+@media (max-width:360px){
+  .adv-result-grid{grid-template-columns:1fr;}
+}
+
+@media (max-width:600px){
+  .meter-subtabs{gap:2px;padding:2px;border-radius:10px;margin-bottom:11px;}
+  .meter-subtab{padding:5px 2px 4px;font-size:10.3px;font-weight:900;border-radius:8px;}
+  .meter-subtab-ico{font-size:13px;}
+  .dial-scale-grid{grid-template-columns:1fr 1fr;}
+  .dial-filter-chip{font-size:10.2px;padding:5px 9px;}
 }

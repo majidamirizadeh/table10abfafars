@@ -126,4 +126,120 @@
       if (old) old.remove();
     } catch (e) {}
   })();
+
+  /* ============================================================
+     نسخه ۲.۵ — بازطراحی ظاهری (بدون تغییر در داده/فرمول/مسیر ناوبری)
+     ------------------------------------------------------------
+     ۴) نمایش دکمه «درباره» + دکمه همبرگر + نوار تب شیشه‌ای فقط در
+        صفحه اول (mainhome) — دقیقاً همان الگوی بخش ۱ (آکاردئون
+        «درباره») که در بالا برای همین فایل استفاده شده است.
+     ۵) باز/بسته‌شدن منوی همبرگری، هماهنگ با کلید فیزیکی برگشت
+        (یک ورودی تاریخچه به‌ازای هر بار باز شدن — دقیقاً هم‌الگو
+        با پاپ‌آپ راهنما در app.js).
+     ۶) کلیک روی تب‌های نوار شیشه‌ای: فقط از توابع موجود ناوبری
+        (showScreen / resetCalcForm) استفاده می‌شود؛ هیچ منطق
+        جدیدی اضافه نشده است.
+     ۷) ثبت صفحه «راهنمای کنتور» در SCREEN_META — دقیقاً به همان
+        شیوه‌ای که quiz.js صفحات آزمون را ثبت می‌کند.
+     ============================================================ */
+
+  /* ---------- ۴) نمایش عناصر مخصوص صفحه اول ---------- */
+  (function () {
+    try {
+      var brandBtn = document.getElementById('brandMark');
+      var burgerBtn = document.getElementById('menuBurgerBtn');
+      var tabbar = document.getElementById('glassTabbar');
+      if (!brandBtn && !burgerBtn && !tabbar) return;
+      var HOME_SCREENS = ['mainhome'];
+
+      function syncHomeOnlyUI() {
+        var isHome = HOME_SCREENS.some(function (id) {
+          var el = document.getElementById('screen-' + id);
+          return el && el.classList.contains('active');
+        });
+        if (brandBtn) brandBtn.style.display = isHome ? '' : 'none';
+        if (burgerBtn) burgerBtn.style.display = isHome ? 'flex' : 'none';
+        if (tabbar) tabbar.style.display = isHome ? 'flex' : 'none';
+        document.body.classList.toggle('has-tabbar', isHome);
+      }
+      var screens = document.querySelectorAll('.screen');
+      var obs2 = new MutationObserver(function () { syncHomeOnlyUI(); });
+      Array.prototype.forEach.call(screens, function (sc) {
+        obs2.observe(sc, { attributes: true, attributeFilter: ['class'] });
+      });
+      syncHomeOnlyUI();
+    } catch (e) {}
+  })();
+
+  /* ---------- ۵) منوی همبرگری: باز/بسته‌شدن + هماهنگی با کلید برگشت ---------- */
+  (function () {
+    try {
+      var overlay = document.getElementById('mainMenuOverlay');
+      var openBtn = document.getElementById('menuBurgerBtn');
+      var closeBtn = document.getElementById('mainMenuClose');
+      if (!overlay || !openBtn || !closeBtn) return;
+
+      function setOpen(isOpen) {
+        overlay.classList.toggle('show', isOpen);
+        openBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      }
+      function openMenu() {
+        setOpen(true);
+        try {
+          var base = window.history.state || {};
+          var next = {};
+          for (var k in base) { if (Object.prototype.hasOwnProperty.call(base, k)) next[k] = base[k]; }
+          next.mainMenu = true;
+          history.pushState(next, '', location.href);
+        } catch (e) {}
+      }
+      function closeMenu() {
+        if (!overlay.classList.contains('show')) return;
+        if (history.state && history.state.mainMenu) {
+          history.back();
+        } else {
+          setOpen(false);
+        }
+      }
+      openBtn.addEventListener('click', openMenu);
+      closeBtn.addEventListener('click', closeMenu);
+      overlay.addEventListener('click', function (e) { if (e.target === overlay) closeMenu(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('show')) closeMenu();
+      });
+      window.addEventListener('popstate', function (ev) {
+        var st = ev.state || {};
+        if (overlay.classList.contains('show') && !st.mainMenu) setOpen(false);
+      });
+    } catch (e) {}
+  })();
+
+  /* ---------- ۶) کلیک روی تب‌های نوار شیشه‌ای ---------- */
+  (function () {
+    try {
+      var tabHome = document.getElementById('gtabHome');
+      var tabQuiz = document.getElementById('gtabQuiz');
+      var tabCalc = document.getElementById('gtabCalc');
+      var tabMeter = document.getElementById('gtabMeter');
+      if (tabHome) tabHome.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      if (tabQuiz) tabQuiz.addEventListener('click', function () {
+        if (typeof showScreen === 'function') showScreen('quizhome');
+        if (typeof renderQuizHome === 'function') renderQuizHome();
+      });
+      if (tabCalc) tabCalc.addEventListener('click', function () {
+        if (typeof resetCalcForm === 'function') resetCalcForm();
+        if (typeof showScreen === 'function') showScreen('calc');
+      });
+      if (tabMeter) tabMeter.addEventListener('click', function () {
+        if (typeof showScreen === 'function') showScreen('meter');
+      });
+    } catch (e) {}
+  })();
+
+  /* توجه: ثبت SCREEN_META.meter از این‌جا به فایل meter-guide.js منتقل شد
+     تا کل منطق بخش «کنتور» (فهرست فصل‌ها، تصویر تعاملی، فرم پیشنهاد) در
+     یک فایل مستقل و هم‌الگو با quiz.js نگه‌داری شود. */
 })();

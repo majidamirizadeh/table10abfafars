@@ -6,7 +6,7 @@
    فقط کافیست عدد CACHE_VERSION را افزایش دهید (مثلاً v6 -> v7).
    با این کار کش قدیمی به‌طور خودکار حذف و نسخه جدید جایگزین می‌شود.
    ============================================================ */
-const CACHE_VERSION = 'v27';
+const CACHE_VERSION = 'v32';
 const CACHE_NAME = `abfaplus-tables-${CACHE_VERSION}`;
 
 // فایل‌های اصلی برنامه (App Shell) که باید برای اجرای کامل آفلاین کش شوند
@@ -22,6 +22,7 @@ const APP_SHELL = [
   './search-enhance.js',
   './ui-enhance.js',
   './quiz.js',
+  './meter-guide.js',
   './manifest.json',
   './icon.svg',
   './icon-192.png',
@@ -32,7 +33,9 @@ const APP_SHELL = [
   './data/chapters.json',
   './data/laws.json',
   './data/tariffs.json',
+  './data/meter-guide.json',
   './data/quiz/index.json',
+  './images/water-meter-face.jpg',
   './pdf/aeen-nameh-tarefeha.pdf',
   './pdf/jadaval-dahgane-olgooye-masraf.pdf',
   './pdf/ghavanin-ab-va-fazelab.pdf',
